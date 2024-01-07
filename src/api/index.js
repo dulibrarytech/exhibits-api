@@ -5,8 +5,7 @@ const search = require('./search/routes');
 // const repository = require('./repository/routes');
 
 router.get('/', (req, res) => {
-  //res.sendStatus(403);
-  res.status(403).send("root") // temp
+  res.sendStatus(200);
 });
 
 router.use('/exhibit', exhibit);
