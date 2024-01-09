@@ -22,22 +22,19 @@ catch (error) {
     console.error(`Could not connect to Elastic cluster at ${elasticDomain}. Error: ${error}`);
 }
 
-exports.query = async (query={}, facets=null) => {
+exports.query = async (query={}, aggs=null, sort=null) => {
     let data = [];
-
-    // TODO build aggs from facets
     
     let response = await elastic_client.search({
         index: elasticIndex,
         body: {
-            query
-
-            // TODO aggs 
+            query,
+            sort: sort || undefined
+            //aggs: aggs || undefined
         }
     });
 
     let results = response.body.hits.hits;
-
     data = results.map(function(result){
         return result['_source']; 
     });

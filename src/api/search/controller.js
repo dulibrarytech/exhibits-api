@@ -2,17 +2,17 @@
 
 const Search = require('./service');
 
-// TODO middleware to sanitize query strings for ES => rem {}, []
+// TODO middleware to sanitize query strings 
 
 exports.searchIndex = async (req, res) => {
     let terms = req.query.q ? req.query.q.replace(/,/g, ' ').toLowerCase() : null;
+    let facets = req.query.f || null;
+    let sort = req.query.sort ? req.query.sort.split(',') : null;
     let exhibitId = req.query.exhibitId || null;
     let results = [];
 
     if(terms) {
-        if(exhibitId) results = await Search.exhibit(exhibitId, terms);
-        else results = await Search.index(terms);
-        
+        results = await Search.index(terms, facets, sort, exhibitId);
         if(!results) res.status(500);
     }
     else res.status(400);
