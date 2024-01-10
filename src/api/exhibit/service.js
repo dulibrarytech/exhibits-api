@@ -4,11 +4,15 @@ const Elastic = require('../../libs/elastic_search');
 
 exports.getAll = async () => {
     let exhibits = null;
+    let sort = [
+        {"title": "asc"}
+    ];
 
     try {
         exhibits = await Elastic.query({
             match: { type: 'exhibit' }
-        });
+
+        }, null, sort);
     }
     catch(error) {
         console.log(`Error retrieving exhibits. Elastic response: ${error}`);
@@ -36,11 +40,14 @@ exports.get = async (id) => {
 
 exports.getItems = async (id) => {
     let items = null;
+    let sort = [
+        {"order": "asc"}
+    ];
 
     try {
         items = await Elastic.query({
             match: { is_member_of_exhibit: id }
-        });
+        },null, sort);
     }
     catch(error) {
         console.log(`Error retrieving exhibits. Elastic response: ${error}`);
