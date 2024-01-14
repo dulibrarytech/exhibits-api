@@ -27,4 +27,6 @@ app.use('/api/v1', api);
 app.use(notFound);
 app.use(errorHandler);
 
+// TODO add api key verification
+
 module.exports = app;
