@@ -3,6 +3,8 @@
 const { Client } = require('@elastic/elasticsearch');
 const CONFIG = require('../config/configuration.js');
 
+const RESULTS_SIZE = 100;
+
 let {
     elasticDomain, 
     elasticIndex
@@ -28,6 +30,7 @@ exports.query = async (query={}, aggs=null, sort=null) => {
     let response = await elastic_client.search({
         index: elasticIndex,
         body: {
+            size: RESULTS_SIZE,
             query,
             sort: sort || undefined
             //aggs: aggs || undefined
