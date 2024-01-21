@@ -17,7 +17,6 @@ try {
     elastic_client = new Client({
         node: elasticDomain
     });
-
     console.log(`Connected to Elastic cluster: ${elastic_client.name} at ${elasticDomain}`);
 }
 catch (error) {
@@ -25,22 +24,32 @@ catch (error) {
 }
 
 exports.query = async (query={}, aggs=null, sort=null) => {
-    let data = [];
-    
-    let response = await elastic_client.search({
-        index: elasticIndex,
-        body: {
-            size: RESULTS_SIZE,
-            query,
-            sort: sort || undefined
-            //aggs: aggs || undefined
+    let response = { results: [], aggregations: {} };
+
+    try {
+        let elasticResponse = await elastic_client.search({
+            index: elasticIndex,
+            body: {
+                size: RESULTS_SIZE,
+                query,
+                sort: sort || undefined,
+                aggregations: aggs || undefined
+            }
+        });
+
+        let {hits, aggregations} = elasticResponse.body;
+
+        for(let result of hits.hits) {
+            response.results.push(result['_source']);
         }
-    });
 
-    let results = response.body.hits.hits;
-    data = results.map(function(result){
-        return result['_source']; 
-    });
+        for(let field in aggregations) {
+            response.aggregations[field] = aggregations[field].buckets;
+        }
+    }
+    catch(error) {
+        throw error;
+    }
 
-    return data || [];
+    return response;
 }

@@ -4,34 +4,62 @@ const Elastic = require('../../libs/elastic_search');
 
 exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     let results = null;
+    let queryData = null;
+    let aggsData = {};
     let sortData = null;
-    let aggsData = null;
+    let itemTypes = [];
+    let searchFields = [];
 
     // object types to include in search
-    const ITEM_TYPES = [
-        {match: {type: "exhibit"}},
-        {match: {type: "item"}}
-    ]
+    const ITEM_TYPES = ["exhibit", "item"];
 
     // fulltext search fields
-    const SEARCH_FIELDS = [
-        {match: { "title": terms }},
-        {match: { "description": terms }},
-        {match: { "text": terms }}
-    ]
+    const SEARCH_FIELDS = ["name", "description", "text"];
+    
+    // fields to aggregate in search results
+    const AGGREGATION_FIELDS = [
+        {
+            "name": "Exhibit",
+            "field": "is_member_of_exhibit.keyword"
+        },
+        {
+            "name": "Type",
+            "field": "type.keyword"
+        }
+    ];
 
-    let queryData = {
+    for(let type of ITEM_TYPES) {
+        itemTypes.push({
+            match: { type }
+        });
+    }
+
+    for(let field of SEARCH_FIELDS) {
+        searchFields.push({
+            match: {
+                [field]: terms
+            }
+        });
+    }
+
+    for(let {name, field} of AGGREGATION_FIELDS) {
+        aggsData[name] = {
+            terms: { field }
+        }
+    }
+
+    queryData = {
         bool: {
             must: [
-                {bool: {should: ITEM_TYPES}},
-                {bool: {should: SEARCH_FIELDS}}
+                {bool: {should: itemTypes}},
+                {bool: {should: searchFields}}
             ]
         },
     };
 
-    // TODO define aggs obj if facets pres (build from facets) (will be not null in Elastic::srch() call)
     if(facets) {
-        //aggsData = [];
+        // TODO build facet query with facet field:param, *append it to queryData*. facets => [ {facetName:value}, ... ]
+        // -> A. *push directly to 'must' []* {term: {facetField:facetVal}}
     }
 
     if(sort) {

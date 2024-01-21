@@ -2,8 +2,6 @@
 
 const Search = require('./service');
 
-// TODO middleware to sanitize query strings 
-
 exports.searchIndex = async (req, res) => {
     let terms = req.query.q ? req.query.q.replace(/,/g, ' ').toLowerCase() : null;
     let facets = req.query.f || null;
