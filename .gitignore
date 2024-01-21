@@ -1,5 +1,5 @@
 node_modules
 /client
-src/dev-data
+src/dev-data/
 src/.env
 .DS_Store
