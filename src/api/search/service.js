@@ -82,7 +82,7 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     }
     
     try {
-        results = await Elastic.query(queryData, aggsData, sortData);
+        results = await Elastic.query(queryData, sortData, aggsData);
     }
     catch(error) {
         console.log(`Error searching index. Elastic response: ${error}`);

@@ -9,10 +9,12 @@ exports.getAll = async () => {
     ];
 
     try {
-        exhibits = await Elastic.query({
+        let {results} = await Elastic.query({
             match: { type: 'exhibit' }
 
-        }, null, sort);
+        }, sort);
+
+        exhibits = results;
     }
     catch(error) {
         console.log(`Error retrieving exhibits. Elastic response: ${error}`);
@@ -25,11 +27,13 @@ exports.get = async (id) => {
     let exhibit = null;
 
     try {
-        let response = await Elastic.query({
+        let {results} = await Elastic.query({
             match: { uuid: id }
         });
 
-        if(response.length > 0) exhibit = response.at(0);
+        if(results.length > 0) {
+            exhibit = results.at(0);
+        }
     }
     catch(error) {
         console.log(`Error retrieving exhibits. Elastic response: ${error}`);
@@ -45,9 +49,11 @@ exports.getItems = async (id) => {
     ];
 
     try {
-        items = await Elastic.query({
+        let {results} = await Elastic.query({
             match: { is_member_of_exhibit: id }
-        },null, sort);
+        }, sort);
+
+        items = results;
     }
     catch(error) {
         console.log(`Error retrieving exhibits. Elastic response: ${error}`);

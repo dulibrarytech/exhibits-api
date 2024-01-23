@@ -23,8 +23,8 @@ catch (error) {
     console.error(`Could not connect to Elastic cluster at ${elasticDomain}. Error: ${error}`);
 }
 
-exports.query = async (query={}, aggs=null, sort=null) => {
-    let response = { results: [], aggregations: {} };
+exports.query = async (query={}, sort=null, aggs=null) => {
+    let response = { results: [] };
 
     try {
         let elasticResponse = await elastic_client.search({
@@ -37,14 +37,17 @@ exports.query = async (query={}, aggs=null, sort=null) => {
             }
         });
 
-        let {hits, aggregations} = elasticResponse.body;
+        let {hits, aggregations = null} = elasticResponse.body;
 
         for(let result of hits.hits) {
             response.results.push(result['_source']);
         }
 
-        for(let field in aggregations) {
-            response.aggregations[field] = aggregations[field].buckets;
+        if(aggregations) {
+            response.aggregations = {};
+            for(let field in aggregations) {
+                response.aggregations[field] = aggregations[field].buckets;
+            }
         }
     }
     catch(error) {
