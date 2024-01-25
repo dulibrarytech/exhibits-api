@@ -19,11 +19,11 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     // fields to aggregate in search results
     const AGGREGATION_FIELDS = [
         {
-            "name": "Exhibit",
+            "name": "is_member_of_exhibit",
             "field": "is_member_of_exhibit.keyword"
         },
         {
-            "name": "Type",
+            "name": "type",
             "field": "type.keyword"
         }
     ];
