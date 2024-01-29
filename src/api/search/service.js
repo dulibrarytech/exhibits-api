@@ -3,6 +3,7 @@
 const Elastic = require('../../libs/elastic_search');
 
 exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
+
     let results = null;
     let queryData = null;
     let aggsData = {};
@@ -14,7 +15,7 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     const ITEM_TYPES = ["exhibit", "item"];
 
     // fulltext search fields
-    const SEARCH_FIELDS = ["name", "description", "text"];
+    const SEARCH_FIELDS = ["name", "description", "text"]; // TODO if fields passed in, bypass this
     
     // fields to aggregate in search results
     const AGGREGATION_FIELDS = [
@@ -58,8 +59,15 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     };
 
     if(facets) {
-        // TODO build facet query with facet field:param, *append it to queryData*. facets => [ {facetName:value}, ... ]
-        // -> A. *push directly to 'must' []* {term: {facetField:facetVal}}
+        for(let field in facets) {
+            for(let value of facets[field].split(',')) {
+                queryData.bool.must.push({
+                    term: {
+                        [field]: value
+                    }
+                });
+            }
+        }
     }
 
     if(sort) {
