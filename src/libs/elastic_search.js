@@ -25,7 +25,7 @@ catch (error) {
 
 exports.query = async (query={}, sort=null, aggs=null) => {
     let response = { results: [] };
-
+    
     try {
         let elasticResponse = await elastic_client.search({
             index: elasticIndex,

@@ -3,7 +3,6 @@
 const Elastic = require('../../libs/elastic_search');
 
 exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
-
     let results = null;
     let queryData = null;
     let aggsData = {};
@@ -26,6 +25,10 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
         {
             "name": "type",
             "field": "type.keyword"
+        },
+        {
+            "name": "item_type",
+            "field": "item_type.keyword"
         }
     ];
 
