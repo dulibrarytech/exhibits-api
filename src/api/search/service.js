@@ -11,10 +11,10 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     let searchFields = [];
 
     // object types to include in search
-    const ITEM_TYPES = ["exhibit", "item"];
+    const ITEM_TYPES = ["exhibit", "item", "grid"];
 
     // fulltext search fields
-    const SEARCH_FIELDS = ["name", "description", "text"]; // TODO if fields passed in, bypass this
+    const SEARCH_FIELDS = ["title", "description", "text", "items.title", "items.description", "items.text"]; // TODO if fields passed in, bypass this
     
     // fields to aggregate in search results
     const AGGREGATION_FIELDS = [
