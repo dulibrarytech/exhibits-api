@@ -7,11 +7,15 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     let queryData = null;
     let aggsData = {};
     let sortData = null;
+    let objectTypes = [];
     let itemTypes = [];
     let searchFields = [];
 
     // object types to include in search
-    const ITEM_TYPES = ["exhibit", "item", "grid"];
+    const OBJECT_TYPES = ["exhibit", "item", "grid"];
+
+    // object types to include in search
+    const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf", "external"];
 
     // fulltext search fields
     const SEARCH_FIELDS = ["title", "description", "text", "items.title", "items.description", "items.text"]; // TODO if fields passed in, bypass this
@@ -32,9 +36,15 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
         }
     ];
 
-    for(let type of ITEM_TYPES) {
-        itemTypes.push({
+    for(let type of OBJECT_TYPES) {
+        objectTypes.push({
             match: { type }
+        });
+    }
+
+    for(let item_type of ITEM_TYPES) {
+        itemTypes.push({
+            match: { item_type }
         });
     }
 
@@ -55,6 +65,7 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     queryData = {
         bool: {
             must: [
+                {bool: {should: objectTypes}},
                 {bool: {should: itemTypes}},
                 {bool: {should: searchFields}}
             ]
