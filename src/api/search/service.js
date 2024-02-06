@@ -10,6 +10,7 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     let objectTypes = [];
     let itemTypes = [];
     let searchFields = [];
+    let queryType = null;
 
     // object types to include in search
     const OBJECT_TYPES = ["exhibit", "item", "grid"];
@@ -48,9 +49,16 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
         });
     }
 
+    if(terms.indexOf('\\ ') > 0) {
+        queryType = "match_phrase";
+        terms = terms.replace('\\', '')
+    }
+    else {
+        queryType = "match";
+    }
     for(let field of SEARCH_FIELDS) {
         searchFields.push({
-            match: {
+            [queryType]: {
                 [field]: terms
             }
         });
