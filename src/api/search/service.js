@@ -22,7 +22,13 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     const SEARCH_FIELDS = ["title", "description", "text", "items.title", "items.description", "items.text"]; // TODO if fields passed in, bypass this
     
     // fields to aggregate in search results
-    const AGGREGATION_FIELDS = [
+    const AGGREGATION_FIELDS_EXHIBIT = [
+        {
+            "name": "item_type",
+            "field": "item_type.keyword"
+        }
+    ];
+    const AGGREGATION_FIELDS_ITEM = [
         {
             "name": "is_member_of_exhibit",
             "field": "is_member_of_exhibit.keyword"
@@ -64,7 +70,7 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
         });
     }
 
-    for(let {name, field} of AGGREGATION_FIELDS) {
+    for(let {name, field} of exhibitId ? AGGREGATION_FIELDS_EXHIBIT : AGGREGATION_FIELDS_ITEM) {
         aggsData[name] = {
             terms: { field }
         }
@@ -79,6 +85,11 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
             ]
         },
     };
+
+    // TEST dev - output the internal subqueries
+    // queryData.bool.must.forEach((subquery) => {
+    //     console.log("TEST subquery:", subquery.bool.should)
+    // })
 
     if(facets) {
         for(let field in facets) {
