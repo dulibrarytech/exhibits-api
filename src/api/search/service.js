@@ -2,7 +2,7 @@
 
 const Elastic = require('../../libs/elastic_search');
 
-exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
+exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null) => {
     let results = null;
     let queryData = null;
     let aggsData = {};
@@ -15,11 +15,11 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     // object types to include in search
     const OBJECT_TYPES = ["exhibit", "item", "grid"];
 
-    // object types to include in search
+    // item types to include in search
     const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf", "external"];
 
     // fulltext search fields
-    const SEARCH_FIELDS = ["title", "description", "text", "items.title", "items.description", "items.text"]; // TODO if fields passed in, bypass this
+    const SEARCH_FIELDS = ["title", "description", "text", "items.title", "items.description", "items.text"];
     
     // fields to aggregate in search results
     const AGGREGATION_FIELDS_EXHIBIT = [
@@ -33,10 +33,10 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
             "name": "is_member_of_exhibit",
             "field": "is_member_of_exhibit.keyword"
         },
-        {
-            "name": "type",
-            "field": "type.keyword"
-        },
+        // {
+        //     "name": "type",
+        //     "field": "type.keyword"
+        // },
         {
             "name": "item_type",
             "field": "item_type.keyword"
@@ -55,13 +55,27 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
         });
     }
 
+    // allow items that have no 'item_type' field (exhibits, and item grids) to be hit
+    itemTypes.push({
+        bool: {
+            must_not: {
+                exists: {
+                    field: "item_type"
+                }
+            }
+        }
+    });
+
+    // detect multi word terms, and use a phrase match on the terms (will hit on exact match of string) All terms must be present in the index document, in order.
     if(terms.indexOf('\\ ') > 0) {
         queryType = "match_phrase";
         terms = terms.replace('\\', '')
     }
+    // terms will hit if all are present, the order does not matter. AND boolean queries will still hit if not all of the terms are present in the index document.
     else {
         queryType = "match";
     }
+
     for(let field of SEARCH_FIELDS) {
         searchFields.push({
             [queryType]: {
@@ -86,10 +100,15 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
         },
     };
 
-    // TEST dev - output the internal subqueries
+    /////
+    // TEST - output the internal subqueries
+    ///////
     // queryData.bool.must.forEach((subquery) => {
     //     console.log("TEST subquery:", subquery.bool.should)
     // })
+    /////
+    // end TEST
+    ///////
 
     if(facets) {
         for(let field in facets) {
@@ -123,7 +142,7 @@ exports.index = async (terms, facets=null, sort=null, exhibitId=null) => {
     }
     
     try {
-        results = await Elastic.query(queryData, sortData, aggsData);
+        results = await Elastic.query(queryData, sortData, aggsData, page || 1);
     }
     catch(error) {
         console.log(`Error searching index. Elastic response: ${error}`);

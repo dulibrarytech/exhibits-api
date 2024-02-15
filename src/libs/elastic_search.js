@@ -3,7 +3,7 @@
 const { Client } = require('@elastic/elasticsearch');
 const CONFIG = require('../config/configuration.js');
 
-const RESULTS_SIZE = 100;
+const RESULTS_SIZE = 10;
 
 let {
     elasticDomain, 
@@ -23,25 +23,39 @@ catch (error) {
     console.error(`Could not connect to Elastic cluster at ${elasticDomain}. Error: ${error}`);
 }
 
-exports.query = async (query={}, sort=null, aggs=null) => {
+exports.query = async (query={}, sort=null, aggs=null, page=1) => {
+    console.log("TEST ES search page:", page)
     let response = { results: [] };
+    let size = RESULTS_SIZE;
+    let from = size * (page-1);
+
+    // console.log("TEST ES search page:", page)
+    console.log("TEST ES search from:", from)
+    console.log("TEST ES search size:", RESULTS_SIZE)
     
     try {
         let elasticResponse = await elastic_client.search({
             index: elasticIndex,
             body: {
-                size: RESULTS_SIZE,
+                size,
+                from,
                 query,
                 sort: sort || undefined,
-                aggregations: aggs || undefined
+                aggregations: aggs || undefined,
             }
         });
 
+        console.log("TEST ES responde body:", elasticResponse.body)
+
         let {hits, aggregations = null} = elasticResponse.body;
 
+        response.resultCount = hits.total.value;
         for(let result of hits.hits) {
             response.results.push(result['_source']);
         }
+
+        //console.log("TEST ES results:", response.results)
+        console.log("TEST ES results count:", response.results.length)
 
         if(aggregations) {
             response.aggregations = {};
@@ -49,6 +63,17 @@ exports.query = async (query={}, sort=null, aggs=null) => {
                 response.aggregations[field] = aggregations[field].buckets;
             }
         }
+        
+        /////
+        // TEST - output the internal subqueries
+        ///////
+        for(let agg in response.aggregations) {
+            console.log("TEST ES agg:", agg)
+            console.log("TEST ES agg items:", response.aggregations[agg])
+        }
+        /////
+        // end TEST
+        ///////
     }
     catch(error) {
         throw error;
