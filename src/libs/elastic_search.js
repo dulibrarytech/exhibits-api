@@ -24,14 +24,9 @@ catch (error) {
 }
 
 exports.query = async (query={}, sort=null, aggs=null, page=1) => {
-    console.log("TEST ES search page:", page)
     let response = { results: [] };
     let size = RESULTS_SIZE;
     let from = size * (page-1);
-
-    // console.log("TEST ES search page:", page)
-    console.log("TEST ES search from:", from)
-    console.log("TEST ES search size:", RESULTS_SIZE)
     
     try {
         let elasticResponse = await elastic_client.search({
@@ -45,17 +40,12 @@ exports.query = async (query={}, sort=null, aggs=null, page=1) => {
             }
         });
 
-        console.log("TEST ES responde body:", elasticResponse.body)
-
         let {hits, aggregations = null} = elasticResponse.body;
 
         response.resultCount = hits.total.value;
         for(let result of hits.hits) {
             response.results.push(result['_source']);
         }
-
-        //console.log("TEST ES results:", response.results)
-        console.log("TEST ES results count:", response.results.length)
 
         if(aggregations) {
             response.aggregations = {};
@@ -67,10 +57,10 @@ exports.query = async (query={}, sort=null, aggs=null, page=1) => {
         /////
         // TEST - output the internal subqueries
         ///////
-        for(let agg in response.aggregations) {
-            console.log("TEST ES agg:", agg)
-            console.log("TEST ES agg items:", response.aggregations[agg])
-        }
+        // for(let agg in response.aggregations) {
+        //     console.log("TEST ES agg:", agg)
+        //     console.log("TEST ES agg items:", response.aggregations[agg])
+        // }
         /////
         // end TEST
         ///////

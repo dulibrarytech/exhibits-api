@@ -10,10 +10,11 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
     let objectTypes = [];
     let itemTypes = [];
     let searchFields = [];
+    var searchType = null;
     let queryType = null;
 
     // object types to include in search
-    const OBJECT_TYPES = ["exhibit", "item", "grid"];
+    const OBJECT_TYPES = ["exhibit", "item", "grid", "timeline-grid"];
 
     // item types to include in search
     const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf", "external"];
@@ -43,6 +44,8 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         }
     ];
 
+    searchType = exhibitId ? "item" : "exhibit"; // TODO if "all": do not set type here, maintain as "all". This will bypass the addition of the subquery to restrict results to exhibit type or exhibit items
+
     for(let type of OBJECT_TYPES) {
         objectTypes.push({
             match: { type }
@@ -71,7 +74,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         queryType = "match_phrase";
         terms = terms.replace('\\', '')
     }
-    // terms will hit if all are present, the order does not matter. AND boolean queries will still hit if not all of the terms are present in the index document.
+    // will hit if all terms are present, the order does not matter. AND boolean queries will still hit if not all of the terms are present in the index document.
     else {
         queryType = "match";
     }
@@ -134,8 +137,13 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         sortData.push("_score");
     }
 
-    // scope search to an exhibit if exhibitId is present
-    if(exhibitId) {
+    // exhibit search: restrict results to type=exhibit, item search: scope search to an exhibit (exhibitId is present)
+    if(searchType == 'exhibit') {
+        queryData.bool.must.push({
+            match: {"type": "exhibit"}
+        });
+    }
+    else if(searchType == 'item') {
         queryData.bool.must.push({
             bool: {filter: {term: {"is_member_of_exhibit": exhibitId}}}
         });
