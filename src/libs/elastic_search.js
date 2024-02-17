@@ -46,7 +46,7 @@ exports.query = async (query={}, sort=null, aggs=null, page=1) => {
         for(let result of hits.hits) {
             response.results.push(result['_source']);
         }
-
+        
         if(aggregations) {
             response.aggregations = {};
             for(let field in aggregations) {

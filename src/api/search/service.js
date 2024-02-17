@@ -10,11 +10,10 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
     let objectTypes = [];
     let itemTypes = [];
     let searchFields = [];
-    var searchType = null;
     let queryType = null;
 
     // object types to include in search
-    const OBJECT_TYPES = ["exhibit", "item", "grid", "timeline-grid"];
+    const OBJECT_TYPES = ["exhibit", "item"];
 
     // item types to include in search
     const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf", "external"];
@@ -23,28 +22,13 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
     const SEARCH_FIELDS = ["title", "description", "text", "items.title", "items.description", "items.text"];
     
     // fields to aggregate in search results
-    const AGGREGATION_FIELDS_EXHIBIT = [
-        {
-            "name": "item_type",
-            "field": "item_type.keyword"
-        }
-    ];
+    const AGGREGATION_FIELDS_EXHIBIT = [];
     const AGGREGATION_FIELDS_ITEM = [
         {
-            "name": "is_member_of_exhibit",
-            "field": "is_member_of_exhibit.keyword"
-        },
-        // {
-        //     "name": "type",
-        //     "field": "type.keyword"
-        // },
-        {
             "name": "item_type",
             "field": "item_type.keyword"
         }
     ];
-
-    searchType = exhibitId ? "item" : "exhibit"; // TODO if "all": do not set type here, maintain as "all". This will bypass the addition of the subquery to restrict results to exhibit type or exhibit items
 
     for(let type of OBJECT_TYPES) {
         objectTypes.push({
@@ -87,7 +71,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         });
     }
 
-    for(let {name, field} of exhibitId ? AGGREGATION_FIELDS_EXHIBIT : AGGREGATION_FIELDS_ITEM) {
+    for(let {name, field} of exhibitId ? AGGREGATION_FIELDS_ITEM : AGGREGATION_FIELDS_EXHIBIT) {
         aggsData[name] = {
             terms: { field }
         }
@@ -102,6 +86,17 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
             ]
         },
     };
+
+    // add the nested query object for the "items" field to search the items array objects
+    // queryData.nested = {
+    //     path: "items",
+    //     query: {
+    //         match: {"items.title" : terms},
+    //         match: {"items.description" : terms},
+    //         match: {"items.text" : terms}
+    //     },
+    //     inner_hits: {} 
+    // }
 
     /////
     // TEST - output the internal subqueries
@@ -137,13 +132,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         sortData.push("_score");
     }
 
-    // exhibit search: restrict results to type=exhibit, item search: scope search to an exhibit (exhibitId is present)
-    if(searchType == 'exhibit') {
-        queryData.bool.must.push({
-            match: {"type": "exhibit"}
-        });
-    }
-    else if(searchType == 'item') {
+    if(exhibitId) {
         queryData.bool.must.push({
             bool: {filter: {term: {"is_member_of_exhibit": exhibitId}}}
         });
