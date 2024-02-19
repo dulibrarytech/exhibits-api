@@ -51,7 +51,7 @@ exports.getItems = async (id) => {
     try {
         let {results} = await Elastic.query({
             match: { is_member_of_exhibit: id }
-        }, sort);
+        }, sort, null);
 
         items = results;
     }

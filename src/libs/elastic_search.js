@@ -3,7 +3,8 @@
 const { Client } = require('@elastic/elasticsearch');
 const CONFIG = require('../config/configuration.js');
 
-const RESULTS_SIZE = 10;
+const RESULTS_PAGE_LENGTH = 10;
+const DEFAULT_RESULTS_SIZE = 200;
 
 let {
     elasticDomain, 
@@ -23,10 +24,10 @@ catch (error) {
     console.error(`Could not connect to Elastic cluster at ${elasticDomain}. Error: ${error}`);
 }
 
-exports.query = async (query={}, sort=null, aggs=null, page=1) => {
+exports.query = async (query={}, sort=null, page=1, aggs=null) => {
     let response = { results: [] };
-    let size = RESULTS_SIZE;
-    let from = size * (page-1);
+    let size = page ? RESULTS_PAGE_LENGTH : DEFAULT_RESULTS_SIZE;
+    let from = page ? size * (page-1) : 0;
     
     try {
         let elasticResponse = await elastic_client.search({
@@ -46,7 +47,11 @@ exports.query = async (query={}, sort=null, aggs=null, page=1) => {
         for(let result of hits.hits) {
             response.results.push(result['_source']);
         }
-        
+
+        // console.log("TEST results:", response.results)
+        // console.log("TEST response:", elasticResponse.body)
+        // console.log("TEST result count:", response.resultCount)
+
         if(aggregations) {
             response.aggregations = {};
             for(let field in aggregations) {
@@ -57,10 +62,10 @@ exports.query = async (query={}, sort=null, aggs=null, page=1) => {
         /////
         // TEST - output the internal subqueries
         ///////
-        // for(let agg in response.aggregations) {
-        //     console.log("TEST ES agg:", agg)
-        //     console.log("TEST ES agg items:", response.aggregations[agg])
-        // }
+        for(let agg in response.aggregations) {
+            console.log("TEST ES agg:", agg)
+            console.log("TEST ES agg items:", response.aggregations[agg])
+        }
         /////
         // end TEST
         ///////
