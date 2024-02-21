@@ -1,7 +1,7 @@
 'use strict'
 
-const util = require('util');
 const Elastic = require('../../libs/elastic_search');
+const {getSearchResultAggregations, combineAggregations} = require('./helper');
 
 exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null) => {
     let queryData = null;
@@ -22,7 +22,6 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
 
     // fulltext search fields
     const SEARCH_FIELDS = ["title", "description", "text"];
-    const NESTED_SEARCH_FIELDS = ["items"];
     
     // fields to aggregate in search results
     const AGGREGATION_FIELDS_EXHIBIT = [];
@@ -33,13 +32,16 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         }
     ];
 
-    for(let type of OBJECT_TYPES) {
+    /*
+     * main query - searches in top level index documents
+     */
+    for(let type of OBJECT_TYPES) { // helper
         objectTypes.push({
             match: { type }
         });
     }
 
-    for(let item_type of ITEM_TYPES) {
+    for(let item_type of ITEM_TYPES) { // helper
         itemTypes.push({
             match: { item_type }
         });
@@ -127,6 +129,14 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
     catch(error) {
         console.log(`Error searching index. Elastic response: ${error}`);
     }
+    /*
+     * end main query
+     */
+
+    /*
+     * nested query - searches in the "items" array of grid documents
+     */
+    let nestedResultsData = {}, nestedAggregations = {};
 
     objectTypes = [];
     for(let type of NESTED_OBJECT_TYPES) {
@@ -142,27 +152,39 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         });
     }
 
-    searchFields = [];
-    for(let field of NESTED_SEARCH_FIELDS) {
-        searchFields.push({
-            nested: {
-                path: field,
-                query: {
-                    bool: {
-                        must: [
-                            {bool: {should: itemTypes}},
-                            {bool: {should: [
-                                {match: {[`${field}.title`] : terms}}, // TODO use SEARCH_FIELDS
-                                {match: {[`${field}.description`] : terms}},
-                                {match: {[`${field}.text`] : terms}}
-                            ]}}
-                        ]
-                    }
-                },
-                inner_hits: {} 
-            }
-        });
+    let nestedQuery = {
+        bool: {
+            must: [
+                {bool: {should: itemTypes}},
+                {bool: {should: [
+                    {match: {[`items.title`] : terms}}, // TODO use SEARCH_FIELDS
+                    {match: {[`items.description`] : terms}},
+                    {match: {[`items.text`] : terms}}
+                ]}}
+            ]
+        }
     }
+
+    if(facets) {
+        for(let field in facets) {
+            for(let value of facets[field].split(',')) {
+                nestedQuery.bool.must.push({
+                    term: {
+                        [`items.${field}`]: value
+                    }
+                });
+            }
+        }
+    }
+
+    searchFields = [];
+    searchFields.push({
+        nested: {
+            path: "items",
+            query: nestedQuery,
+            inner_hits: {} 
+        }
+    });
 
     queryData = {
         bool: {
@@ -181,13 +203,11 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         }
     }
 
-    for(let field of NESTED_SEARCH_FIELDS) {
-        aggsData.items = {
-            nested: {
-                path: field
-            },
-            aggregations: itemsAggs
-        }
+    aggsData.items = {
+        nested: {
+            path: "items"
+        },
+        aggregations: itemsAggs
     }
 
     if(exhibitId) {
@@ -197,55 +217,20 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
     }
 
     try {
-        let nestedResultData = await Elastic.query(queryData, sortData, page || 1, aggsData);
-
-        let nestedAggregations = {};
-        let aggCounts = {}, aggField, aggValue;
-
-        for(let {name} of AGGREGATION_FIELDS_ITEM) {
-            aggField = name;
-
-            if(aggField in nestedAggregations == false) {
-                nestedAggregations[aggField] = [];
-            }
-
-            for(let result of nestedResultData.results) {
-                aggValue = result[aggField];
-                
-                if(!aggCounts[aggValue]) aggCounts[aggValue] = 0;
-                aggCounts[aggValue]++;
-            }
-
-            for(let key in aggCounts) {
-                nestedAggregations[aggField].push({
-                    key,
-                    doc_count: aggCounts[key]
-                })
-            }
-        }
-
-        let topAggs = resultsData.aggregations, topAgg;
-        for(let key in nestedAggregations) {
-            for(let nestedAgg of nestedAggregations[key]) {
-                topAgg = topAggs[key].filter((topAgg) => {
-                    return topAgg.key == nestedAgg.key;
-                })[0];
-
-                if(topAgg) {
-                    topAgg.doc_count += nestedAgg.doc_count;
-                }
-                else {
-                    topAggs[key].push(nestedAgg);
-                }
-            }
-        }
-
-        resultsData.results = resultsData.results.concat(nestedResultData.results);
-        resultsData.resultCount += nestedResultData.resultCount;
+        nestedResultsData = await Elastic.query(queryData, sortData, page || 1, aggsData);
+        nestedAggregations = getSearchResultAggregations(AGGREGATION_FIELDS_ITEM, nestedResultsData.results);
     }
     catch(error) {
         console.log(`Error searching index. Elastic response: ${error}`);
     }
+
+    /*
+     * end nested query
+     */
+
+    resultsData.aggregations = combineAggregations(resultsData.aggregations, nestedAggregations);
+    resultsData.results = resultsData.results.concat(nestedResultsData.results);
+    resultsData.resultCount += nestedResultsData.resultCount;
 
     return resultsData;
 }

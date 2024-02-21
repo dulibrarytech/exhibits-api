@@ -45,8 +45,9 @@ exports.query = async (query={}, sort=null, page=1, aggs=null) => {
 
         for(let result of hits.hits) {
 
+            // If inner_hits are present, add the inner results to the main results set
             if(result.inner_hits) {
-                for(let field in result.inner_hits) { // if broken revert 'field' to ['items'] key to test
+                for(let field in result.inner_hits) {
                     response.resultCount += result.inner_hits[field].hits.total.value;
                     for(let innerResult of result.inner_hits[field].hits.hits) {
                         response.results.push(innerResult._source);
@@ -54,6 +55,7 @@ exports.query = async (query={}, sort=null, page=1, aggs=null) => {
                 }
             }
 
+            // Push the top level result to the results set
             else {
                 response.resultCount = hits.total.value;
                 response.results.push(result['_source']);
@@ -61,7 +63,7 @@ exports.query = async (query={}, sort=null, page=1, aggs=null) => {
         }
 
         if(aggregations) {
-            response.aggregations = {};
+            if(!response.aggregations) response.aggregations = {};
             for(let field in aggregations) {
                 response.aggregations[field] = aggregations[field].buckets;
             }
