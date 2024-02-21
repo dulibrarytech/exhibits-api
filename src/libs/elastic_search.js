@@ -25,10 +25,10 @@ catch (error) {
 }
 
 exports.query = async (query={}, sort=null, page=1, aggs=null) => {
-    let response = { results: [] };
+    let response = { results: [], resultCount: 0 };
     let size = page ? RESULTS_PAGE_LENGTH : DEFAULT_RESULTS_SIZE;
     let from = page ? size * (page-1) : 0;
-    
+
     try {
         let elasticResponse = await elastic_client.search({
             index: elasticIndex,
@@ -43,14 +43,22 @@ exports.query = async (query={}, sort=null, page=1, aggs=null) => {
 
         let {hits, aggregations = null} = elasticResponse.body;
 
-        response.resultCount = hits.total.value;
         for(let result of hits.hits) {
-            response.results.push(result['_source']);
-        }
 
-        // console.log("TEST results:", response.results)
-        // console.log("TEST response:", elasticResponse.body)
-        // console.log("TEST result count:", response.resultCount)
+            if(result.inner_hits) {
+                for(let field in result.inner_hits) { // if broken revert 'field' to ['items'] key to test
+                    response.resultCount += result.inner_hits[field].hits.total.value;
+                    for(let innerResult of result.inner_hits[field].hits.hits) {
+                        response.results.push(innerResult._source);
+                    }
+                }
+            }
+
+            else {
+                response.resultCount = hits.total.value;
+                response.results.push(result['_source']);
+            }
+        }
 
         if(aggregations) {
             response.aggregations = {};
@@ -58,19 +66,9 @@ exports.query = async (query={}, sort=null, page=1, aggs=null) => {
                 response.aggregations[field] = aggregations[field].buckets;
             }
         }
-        
-        /////
-        // TEST - output the internal subqueries
-        ///////
-        for(let agg in response.aggregations) {
-            console.log("TEST ES agg:", agg)
-            console.log("TEST ES agg items:", response.aggregations[agg])
-        }
-        /////
-        // end TEST
-        ///////
     }
     catch(error) {
+        console.error(error);
         throw error;
     }
 
