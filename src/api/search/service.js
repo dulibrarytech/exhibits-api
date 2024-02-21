@@ -228,7 +228,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
      * end nested query
      */
 
-    resultsData.aggregations = combineAggregations(resultsData.aggregations, nestedAggregations);
+    if(resultsData.aggregations) resultsData.aggregations = combineAggregations(resultsData.aggregations, nestedAggregations);
     resultsData.results = resultsData.results.concat(nestedResultsData.results);
     resultsData.resultCount += nestedResultsData.resultCount;
 
