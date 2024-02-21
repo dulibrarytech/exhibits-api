@@ -46,6 +46,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
             match: { item_type }
         });
     }
+    
     // allow items that have no 'item_type' field (exhibits, and item grids) to be hit
     itemTypes.push({
         bool: {
@@ -93,6 +94,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         }
     }
 
+    // add facet clauses to main search query
     if(facets) {
         for(let field in facets) {
             for(let value of facets[field].split(',')) {
@@ -105,6 +107,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         }
     }
 
+    // Add sort field if sort value is present
     if(sort) {
         let field = sort[0];
         let value = sort[1];
@@ -117,6 +120,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         sortData.push("_score");
     }
 
+    // If exhibitId is present, scope the search to the exhibit
     if(exhibitId) {
         queryData.bool.must.push({
             bool: {filter: {term: {"is_member_of_exhibit": exhibitId}}}
@@ -124,6 +128,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
     }
 
     try {
+        // execute the search for top level documents
         resultsData = await Elastic.query(queryData, sortData, page || 1, aggsData);
     }
     catch(error) {
@@ -152,6 +157,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         });
     }
 
+    // build nested search query object
     let nestedQuery = {
         bool: {
             must: [
@@ -165,6 +171,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         }
     }
 
+    // add facet clauses to nested search query
     if(facets) {
         for(let field in facets) {
             for(let value of facets[field].split(',')) {
@@ -177,6 +184,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         }
     }
 
+    // create the nested query to the main search fields array
     searchFields = [];
     searchFields.push({
         nested: {
@@ -186,6 +194,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         }
     });
 
+    // build the search query object
     queryData = {
         bool: {
             must: [
@@ -194,15 +203,15 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
             ]
         }
     };
-    aggsData = {};
 
+    // add nested aggregations
     let itemsAggs = {};
     for(let {name, field} of AGGREGATION_FIELDS_ITEM) {
         itemsAggs[`items.${name}`] = {
             terms: { field: `items.${field}` }
         }
     }
-
+    aggsData = {};
     aggsData.items = {
         nested: {
             path: "items"
@@ -210,6 +219,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         aggregations: itemsAggs
     }
 
+    // if exhibitId is present, scope the search to the exhibit
     if(exhibitId) {
         queryData.bool.must.push({
             bool: {filter: {term: {"is_member_of_exhibit": exhibitId}}}
@@ -217,6 +227,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
     }
 
     try {
+        // execute the search for nested documents
         nestedResultsData = await Elastic.query(queryData, sortData, page || 1, aggsData);
         nestedAggregations = getSearchResultAggregations(AGGREGATION_FIELDS_ITEM, nestedResultsData.results);
     }
@@ -228,6 +239,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
      * end nested query
      */
 
+    // add the nested search results data to the main search results data
     if(resultsData.aggregations) resultsData.aggregations = combineAggregations(resultsData.aggregations, nestedAggregations);
     resultsData.results = resultsData.results.concat(nestedResultsData.results);
     resultsData.resultCount += nestedResultsData.resultCount;
