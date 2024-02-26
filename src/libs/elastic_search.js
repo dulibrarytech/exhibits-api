@@ -12,16 +12,28 @@ let {
 
 } = CONFIG;
 
-let elastic_client;
+let elastic_client = null;
 
+console.log(`Connecting to Elastic server at domain: ${elasticDomain}...`);
 try {
     elastic_client = new Client({
         node: elasticDomain
     });
-    console.log(`Connected to Elastic cluster: ${elastic_client.name} at ${elasticDomain}`);
 }
 catch (error) {
     console.error(`Could not connect to Elastic cluster at ${elasticDomain}. Error: ${error}`);
+}
+
+if(elastic_client) {
+    elastic_client.info().then(function (response) {
+      console.log(`Connected to Elastic server. Server info:`, response)
+
+    }, function (error) {
+      console.error(`Could not connect to Elastic server. Error: ${error}`);
+    });
+}
+else {
+    console.log(`Cound not connect to Elastic server. No error report available`);
 }
 
 exports.query = async (query={}, sort=null, page=1, aggs=null) => {
