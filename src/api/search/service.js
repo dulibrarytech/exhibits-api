@@ -15,7 +15,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
 
     // object types to include in the search
     const OBJECT_TYPES = ["exhibit", "item"]; // <-- remove grid/vtl
-    const NESTED_OBJECT_TYPES = ["grid", "vertical_timeline"]
+    const NESTED_OBJECT_TYPES = ["grid", "vertical_timeline", "vertical_timeline_2"]
 
     // item types to include in search
     const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf", "external"];
