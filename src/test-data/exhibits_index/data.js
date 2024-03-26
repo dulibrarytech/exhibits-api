@@ -88,7 +88,7 @@ module.exports = [
   +"When recreating, practicing respect for the environment is critical for maintaining the nation’s natural resources for the enjoyment of future generations. Leave No Trace principles are designed to teach low impact ethics to balance recreational land use with preservation. Practicing sustainable recreation is key to the longevity of our natural spaces.</div>",
   "page_layout": "top_nav",
   "template": "vertical_scroll",
-  "styles": '{"exhibit":{"template":{"backgroundColor":"#7CA599","color":"#fff","fontSize":"20px","fontFamily":"arial"},"navigation":{"menu":{"backgroundColor":"#688D71","color":"white"}},"heading":{"fontFamily":"arial"}}}',
+  "styles": '{"exhibit":{"template":{"backgroundColor":"rgb(124, 165, 153)","color":"#fff","fontSize":"20px","fontFamily":"arial"},"navigation":{"menu":{"backgroundColor":"#688D71","color":"white"}},"heading":{"fontFamily":"arial"}}}',
   "is_published": 1,
   "is_featured": 1,
   "created": "2022-10-13T20:24:20.000Z"

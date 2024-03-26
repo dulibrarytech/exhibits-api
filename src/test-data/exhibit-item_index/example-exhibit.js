@@ -30,20 +30,21 @@ module.exports = [
         "media_width": "65", // {int from x to y TBD} width of the media element in the item as percent (default: '50') * use only on side-by-side layouts 'media_right' and 'media_left' 
 
         /* user style settings (default: {}) */
-        // "styles": { 
+        "styles": { 
 
-        //     /* 
-        //      * user styles for exhibit item 
-        //      */
-        //     "item": {
-        //         "backgroundColor": "", // hex or rgb value from color picker
-        //         "color": "", // hex or rgb value from color picker
-        //         "fontFamily": "", // list of font-family options
-        //         "fontSize": ""
-        //     }
-        // },
+            /* 
+             * user styles for exhibit item 
+             */
+            "item": {
+                "backgroundColor": "", // hex or rgb value from color picker
+                "color": "", // hex or rgb value from color picker
+                "fontFamily": "", // list of font-family options
+                "fontSize": ""
+            }
+        },
 
         "is_published": 1, // (default: 0)
+        "is_embedded": 0,  // (default: 0) If 1, media is embedded in the item on the template, and is not opened in the popup viewer when clicked. Media is viewed/played from the template
         "order": 2,
         "created": "2022-10-13T20:24:20.000Z"
     },
@@ -623,6 +624,10 @@ module.exports = [
         "created": "2022-10-13T20:24:20.000Z"
     },
 
+    ////////////////////////////////
+    // items opened in modal viewer
+    ////////////////////////////////
+
     // heading, example item types
     {
         "type": "heading",
@@ -795,6 +800,10 @@ module.exports = [
         "order": 21
     },
 
+    ////////////////////////////////
+    // end items opened in modal viewer
+    ////////////////////////////////
+
     //////////////////////
     // repository items
     //////////////////////
@@ -843,7 +852,7 @@ module.exports = [
         "template": "custom",
         "thumbnail": "test-tn.png",
         "item_type": "repo",
-        "media": "19d6b900-dbf9-475b-a42f-250d58d0b5f1",
+        "media": "38613e09-28ee-4b00-9081-df2a18f7946e",
         "text": "<div style='font-size: 1.3em; font-weight: bold'>Audio</div><hr><div><p>In 2017 UNSW Sydney became the caretaker for the <i><b>Dennis Wolanski Library collection</b></i>. The collection was originally part of the Sydney Opera House performing arts library. The collection is international in scope and focuses on the performing arts in Australia, 1789-1997. It consists of 1,600 archive boxes, containing press clippings, theatre programs, press releases, correspondence, and ephemera, and a card index of 80,000 entries.</p><p>"+
         "Collection access is managed by the Performance Memories Project, a partnership of <a href='#'>UNSW Library</a>, UNSW Theatre and Performance Studies, AusStage and the Wolanski Foundation. As part of project, we have now made available as downloads more than 160,000 records from the project site, including a subject list of research files and two converted card indexes, one covering the performing arts in general, one devoted to Australian drama. </p><div>",
         "type": "item",
@@ -861,8 +870,8 @@ module.exports = [
         "title": "repo video item",
         "template": "custom",
         "item_type": "repo",
-        "media": "b0ddcce8-4eb5-4169-8399-2efe1bf71486",
-        "text": "<div style='font-size: 1.3em; font-weight: bold'>Video</div><hr><div><p>In 2017 UNSW Sydney became the caretaker for the <i><b>Dennis Wolanski Library collection</b></i>. The collection was originally part of the Sydney Opera House performing arts library. The collection is international in scope and focuses on the performing arts in Australia, 1789-1997. It consists of 1,600 archive boxes, containing press clippings, theatre programs, press releases, correspondence, and ephemera, and a card index of 80,000 entries.</p><p>"+
+        "media": "953ea5ce-7a36-4816-8a10-6dc0fc81b10d",
+        "text": "<div style='font-size: 1.3em; font-weight: bold'>Video</div><hr><div><p>In 2017 UNSW Sydney Denver became the caretaker for the <i><b>Dennis Wolanski Library collection</b></i>. The collection was originally part of the Sydney Opera House performing arts library. The collection is international in scope and focuses on the performing arts in Australia, 1789-1997. It consists of 1,600 archive boxes, containing press clippings, theatre programs, press releases, correspondence, and ephemera, and a card index of 80,000 entries.</p><p>"+
         "Collection access is managed by the Performance Memories Project, a partnership of <a href='#'>UNSW Library</a>, UNSW Theatre and Performance Studies, AusStage and the Wolanski Foundation. As part of project, we have now made available as downloads more than 160,000 records from the project site, including a subject list of research files and two converted card indexes, one covering the performing arts in general, one devoted to Australian drama. </p><div>",
         "type": "item",
         "thumbnail": "test-tn.png",
@@ -890,5 +899,132 @@ module.exports = [
         "layout": "media_left",
         "is_published": 1,
         "created": "2022-10-13T20:24:20.000Z"
+    },
+
+    //////////////////////
+    // repository items
+    //////////////////////
+
+    //////////////////////
+    // embedded items
+    //////////////////////
+
+    {
+        "uuid": "44c028631f69c94cf57c5b49754f2d6d",
+        "type": "heading",
+        "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
+        "text": "Example Item Types (Embedded)",
+        "order": 27,
+        "is_visible": 1,
+        "is_anchor": 1
+    },
+    {
+        "uuid": "d30fbab695c973b23631bca98cd6e072",
+        "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
+        "title": "small image",
+        "caption": "Summary/Description. Image courtesy of the University of Denver.",
+        "item_type": "image",
+        "media": "87e2442acfbd95fe5ed8b18e3ca09e11.jpg",
+        "description": "This is the text that goes on the preview item This is the text that goes on the preview item This is the text that goes on the preview item",
+        "text": "&lt;div style=&amp;#39;font-size: 1.3em; font-weight: bold&amp;#39;&gt;Small image&lt;/div&gt;&lt;hr&gt;Lorem ipsum dolor sit amet denver, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+        "type": "item",
+        "layout": "media_right",
+        "styles": "{\"item\":{\"background\":\"#F1A35E\"}}",
+        "is_embedded": 1,
+        "is_published": 1,
+        "order": 28,
+        "created": "2023-06-29T20:24:20.000Z"
+    },
+    {
+        "uuid": "d8ccc1b145d20a3cf39e394c9d7e87b6",
+        "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
+        "title": "large image, media only",
+        "caption": "Summary/Description. Image courtesy of the University of Denver.",
+        "item_type": "large_image",
+        "media": "9c9088bf-3581-4f0b-89fa-ee0fd38a3e4d.tif",
+        "text": "&lt;div style=&amp;#39;font-size: 1.3em; font-weight: bold&amp;#39;&gt;Large image&lt;/div&gt;&lt;hr&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
+        "type": "item",
+        "layout": "media_only",
+        "styles": "{\"item\":{\"background\":\"#B0BF73\"}}",
+        "media_width": "50",
+        "is_embedded": 1,
+        "is_published": 1,
+        "show_title": 1,
+        "order": 29,
+        "created": "2023-06-29T20:24:20.000Z"
+    },
+    {
+        "uuid": "ee29e23a988177d38a34b814be6f5793",
+        "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
+        "title": "audio item",
+        "caption": "Summary/Description. Audio content courtesy of the University of Denver.",
+        "item_type": "audio",
+        "media": "38613e09-28ee-4b00-9081-df2a18f7946e.mp3",
+        "text": "&lt;div style=&amp;#39;font-size: 1.3em; font-weight: bold&amp;#39;&gt;Audio&lt;/div&gt;&lt;hr&gt;It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &amp;#39;Content here, content here&amp;#39;, making it look like readable English.",
+        "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+        "type": "item",
+        "layout": "media_right",
+        "media_width": "25",
+        "styles": "{\"item\":{\"background\":\"#F1A35E\"}}",
+        "is_embedded": 1,
+        "is_published": 1,
+        "kaltura_id": "0_unc0v4as",
+        "order": 30,
+        "created": "2023-06-29T20:24:20.000Z"
+    },
+    {
+        "uuid": "bb74428a8639083a5c351750ff3d6b47",
+        "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
+        "title": "video item",
+        "caption": "Summary/Description. Video content courtesy of the University of Denver.",
+        "item_type": "video",
+        "media": "953ea5ce-7a36-4816-8a10-6dc0fc81b10d.mp4",
+        "text": "&lt;div style=&amp;#39;font-size: 1.3em; font-weight: bold&amp;#39;&gt;Video&lt;/div&gt;&lt;hr&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.",
+        "type": "item",
+        "layout": "media_right",
+        "media_width": "25",
+        "styles": "{\"item\":{\"background\":\"#B0BF73\"}}",
+        "is_embedded": 1,
+        "is_published": 1,
+        "kaltura_id": "0_za4023rj",
+        "order": 31,
+        "created": "2023-06-29T20:24:20.000Z"
+    },
+    {
+        "uuid": "41096e73aa6448d5a81c8e7dd669da48",
+        "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
+        "title": "pdf item",
+        "caption": "Summary/Description. Courtesy of the University of Denver.",
+        "item_type": "pdf",
+        "media": "5916273c-fb54-42f3-8340-f63ad24faafa_1.pdf",
+        "text": "&lt;div style=&amp;#39;font-size: 1.3em; font-weight: bold&amp;#39;&gt;Pdf&lt;/div&gt;&lt;hr&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "type": "item",
+        "layout": "media_right",
+        "media_width": "25",
+        "styles": "{\"item\":{\"background\":\"#F1A35E\"}}",
+        "is_embedded": 1,
+        "is_published": 1,
+        "order": 32,
+        "created": "2023-06-29T20:24:20.000Z"
+    },
+    {
+        "uuid": "def6dcc6d1a69df509f8a41aea8d2337",
+        "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
+        "title": "external source item",
+        "caption": "Summary/Description. Courtesy of the University of Denver.",
+        "item_type": "external",
+        "media": "https://sample-videos.com/img/Sample-jpg-image-1mb.jpg",
+        "text": "&lt;div style=&amp;#39;font-size: 1.3em; font-weight: bold&amp;#39;&gt;External source&lt;/div&gt;&lt;hr&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+        "type": "item",
+        "styles": "{\"item\":{\"background\":\"#B0BF73\"}}",
+        "is_embedded": 1,
+        "is_published": 1,
+        "order": 33,
+        "created": "2023-06-29T20:24:20.000Z"
     }
+
+    //////////////////////
+    // end embedded items
+    //////////////////////
 ]
