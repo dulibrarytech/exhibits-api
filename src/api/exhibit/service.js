@@ -5,7 +5,7 @@ const Elastic = require('../../libs/elastic_search');
 exports.getAll = async () => {
     let exhibits = null;
     let sort = [
-        {"title": "asc"}
+        {"title.keyword": "asc"}
     ];
 
     try {

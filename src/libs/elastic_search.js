@@ -2,6 +2,7 @@
 
 const { Client } = require('@elastic/elasticsearch');
 const CONFIG = require('../config/configuration.js');
+const fs = require('fs');
 
 const RESULTS_PAGE_LENGTH = 10;
 const DEFAULT_RESULTS_SIZE = 200;
@@ -17,7 +18,11 @@ let elastic_client = null;
 console.log(`Connecting to Elastic server at domain: ${elasticDomain}...`);
 try {
     elastic_client = new Client({
-        node: elasticDomain
+        node: elasticDomain,
+        tls: {
+            //ca: fs.readFileSync( "pathtocert" ) // TODO get from env
+            rejectUnauthorized: false
+        }
     });
 }
 catch (error) {
@@ -31,9 +36,6 @@ if(elastic_client) {
     }, function (error) {
       console.error(`Could not connect to Elastic server. Error: ${error}`);
     });
-}
-else {
-    console.log(`Cound not connect to Elastic server. No error report available`);
 }
 
 exports.query = async (query={}, sort=null, page=1, aggs=null) => {
@@ -53,7 +55,7 @@ exports.query = async (query={}, sort=null, page=1, aggs=null) => {
             }
         });
 
-        let {hits, aggregations = null} = elasticResponse.body;
+        let {hits, aggregations = null} = elasticResponse;
 
         for(let result of hits.hits) {
 

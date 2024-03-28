@@ -18,7 +18,7 @@
   "author": "Jeff Rynhart",
   "license": "not public",
   "dependencies": {
-    "@elastic/elasticsearch": "~7.6.0",
+    "@elastic/elasticsearch": "~8.13.0",
     "axios": "^1.6.3",
     "body-parser": "^1.20.0",
     "concurrently": "^7.2.2",
@@ -27,6 +27,7 @@
     "elasticsearch-sanitize": "^2.0.0",
     "express": "^4.18.1",
     "express-validator": "^7.0.1",
+    "fs": "^0.0.1-security",
     "util": "^0.12.5"
   },
   "devDependencies": {
