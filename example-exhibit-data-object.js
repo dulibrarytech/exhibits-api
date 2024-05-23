@@ -5,7 +5,7 @@ example_exhibit_data_object = [
       "title": "Title: Test Exhibit", // {string | html} title for exhibit banner (R) 
       "subtitle": "Subtitle: The Legacy of Settler Colonialism and the University of Denver", // {string | html} (default: null, no subtitle displayed)
       "banner_template": "banner_1", // {'banner_1' | 'banner_2'} (default: banner_1) 
-      "about_the_curators": "About the curators content", // tbd
+      "about_the_curators": "About the curators content", // {text | html} content for the "About the Curators" page 
       "alert_text": "this is an <strong>Alert</strong>", // {string | html} alert banner displayed below hero section (default: null, alert banner not displayed)
       "hero_image": "brent-learned_one-november-morning.jpeg", // {filename.extension} filename or path to file (default: null, hero image not displayed. image section will be displayed with a gray background if the banner template has a hero image section)
       "thumbnail_image": "example-exhibit_tn.jpg", // {filename.extension} filename. exhibit thumbnail image. (default: null, thumbnail image will be derived from the 'hero_image' if present.)
