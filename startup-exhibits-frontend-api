@@ -1,2 +1,0 @@
-#!/bin/sh
-node /Users/jeff.rynhart/Dev/Projects/exhibits-app/src/exhibits-api.js --node-args="--max-old-space-size=6096" > /Users/jeff.rynhart/Dev/Projects/exhibits-app/exhibits-api.log
