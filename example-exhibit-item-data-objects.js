@@ -32,7 +32,7 @@ let example_exhibit_item_objects = [
         "description": "", // {string | html} This is the text displayed on a grid item (preview only, the item text is not displayed on preview items) (default: null, not displayed)
         "type": "item", // {'row' | 'grid' | 'vertical_timeline' | 'heading'} (R)
         "layout": "media_left", // {'media_right' | 'media_left' | 'media_top' | 'media_bottom' | "media_only" | "text_only"} (R)
-        "media_width": "65", // {int from x to y TBD} width of the media element in the item as percent (default: '50') * use only on side-by-side layouts 'media_right' and 'media_left' 
+        "media_width": "50", // {25|33|50|66|75} width of the media element in the item as percent (default: '50') * use only on side-by-side layouts 'media_right' and 'media_left' 
         "media_padding": 1,// bool {0,1} If 1, side padding will be applied to the media item (default: 1)
 
         /* user style settings (default: {}) */
