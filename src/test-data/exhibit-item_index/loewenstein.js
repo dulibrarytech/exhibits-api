@@ -4,6 +4,7 @@ module.exports.exhibit_items = [
         "type": "heading",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f", 
         "text": "Family Heritage", 
+        "styles": {"backgroundColor":"#DCC9AB","color":"rgb(155,136,110)","fontSize":"47px","fontFamily":"Nocturne Serif"},
         "order": 2, 
         "is_visible": 1, 
         "is_anchor": 1 
@@ -217,6 +218,7 @@ module.exports.exhibit_items = [
         "type": "heading",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f", 
         "text": "Kristallnacht and Kindertransport 1938", 
+        "styles": {"backgroundColor":"#DCC9AB","color":"rgb(155,136,110)","fontSize":"47px","fontFamily":"Nocturne Serif"},
         "order": 15, 
         "is_visible": 1, 
         "is_anchor": 1 
