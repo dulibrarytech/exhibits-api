@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "scripts": {
     "client-install": "cd client && npm install",
-    "start": "node src/index.js",
+    "start": "node src/exhibits-api.js",
     "serve:server": "nodemon src/exhibits-api.js",
     "serve:client": "cd client && npm run dev",
     "dev": "concurrently \"npm run serve:server\" \"npm run serve:client\"",
