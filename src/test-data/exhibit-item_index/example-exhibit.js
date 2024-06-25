@@ -1022,9 +1022,105 @@ module.exports = [
         "is_published": 1,
         "order": 33,
         "created": "2023-06-29T20:24:20.000Z"
-    }
+    },
 
     //////////////////////
     // end embedded items
     //////////////////////
+
+    // item grid
+    {
+        "uuid": "",
+        "is_member_of_exhibit": "1",
+        "type": "grid",
+        "columns": "2",
+        "title": "repo item grid",
+        "order": 34,
+        "styles": {
+            "item_grid": { 
+                "color": "#303030",
+                "backgroundColor": "#706560",
+                "fontFamily": "arial"
+            }
+        },
+        "items": [
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "7358d544fab45abb782ab2bf39d3ff50a",
+                "date": "",
+                "title": "",
+                "description": "description",
+                "caption": "University of Denver founded by John Evans, also Colorado's Second Territorial Governor.",
+                "item_type": "image",
+                "media": "",
+                "text": "text",
+                "type": "item",
+                "is_published": 1,
+                "order": 1, 
+                "created": "2022-10-13T20:24:20.000Z"
+            },
+            {
+                "uuid": "6cf1a7cf3bd10f588bd0122d05346877",
+                "is_member_of_exhibit": "1",
+                "date": "November 29, 1864",
+                "title": "One November Morning",
+                "description": "Sand Creek Massacre. More than 160 Cheyenne and Arapaho people - primarily women, children, and elders - are massacred by the Colorado Third Cavalry, led by DU trustee Colonel John Chivington.",
+                "caption": "Sand Creek Massacre",
+                "item_type": "image",
+                "media": "6cf1a7cf3bd10f588bd0122d05346877.jpeg",
+                "text": "test text",
+                "type": "item",
+                "styles": {
+                    "item": {
+                        "backgroundColor": "#F09169",
+                        "fontFamily": "Verdana"
+                    }
+                },
+                "is_published": 1,
+                "order": 2,
+                "created": "2022-10-13T20:24:20.000Z"
+            },
+            {
+                "uuid": "69cc54aa37cc876deb529821667e2f89",
+                "is_member_of_exhibit": "1",
+                "date": "1919",
+                "title": "\"Ministers Snapped in Action\" article in the DU Clarion vol. 27.",
+                "description": "The \"Fighting Parsons\" is first mentioned as a nickname for the football team in the Clarion. No likeness or cartoon associated with the nickname; the team is also called \“Fighting Ministers.\"",
+                "caption": "Clipping of \"Ministers Snapped in Action\" article in the DU Clarion vol. 27.",
+                "item_type": "image",
+                "media": "69cc54aa37cc876deb529821667e2f89.jpeg",
+                "text": "test text",
+                "type": "item",
+                "styles": {
+                    "item": { // styles this item in grid
+                        "backgroundColor": "#849B78",
+                        "fontFamily": "Times New Roman"
+                    }
+                },
+                "is_published": 1,
+                "order": 3,
+                "created": "2022-10-13T20:24:20.000Z"
+            },
+            {
+                "uuid": "e5dda358941b0bd63e474a5a27a723c0",
+                "is_member_of_exhibit": "1",
+                "date": "October 1924",
+                "title": "\"Denver 'Battling Ministers' Seek Fitting Name\" Clarion Article.",
+                "description": "Clarion article “Denver ‘Battling Ministers’ Seek Fitting Name: War Cry to Replace Outworn Slogans is Big Contest Aim” highlights student desire to change nickname to something that better reflects the school mission and spirit.",
+                "caption": "Clarion article “Denver ‘Battling Ministers’",
+                "item_type": "image",
+                "media": "e5dda358941b0bd63e474a5a27a723c0.jpeg",
+                "text": "test text",
+                "type": "item",
+                "styles": {
+                    "item": {
+                        "backgroundColor": "#F09169"
+                    }
+                },
+                "is_published": 1,
+                "order": 4,
+                "created": "2022-10-13T20:24:20.000Z"
+            }
+        ]
+    },
 ]
