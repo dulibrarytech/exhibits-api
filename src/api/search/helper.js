@@ -30,7 +30,6 @@ exports.getSearchResultAggregations = (aggFields, results) => {
 }
 
 exports.combineAggregations = (existingAggs={}, newAggs={}) => {
-    console.log("TEST exist/new", existingAggs, newAggs)
     let agg;
     for(let key in newAggs) {
 
