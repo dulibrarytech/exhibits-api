@@ -467,7 +467,7 @@ module.exports.exhibit_items = [
         "template": "row", 
         "item_type": "image", 
         "media": "6ed58561-f90b-4555-af67-53cc1561e77a", 
-        "text": "Between 1933 and the end of World War II in 1945, the Nazis systematically murdered six million Jews – approximately 2/3 of the 1933 Jewish population of Europe. Nearly all Polish, German, and Austrian Jews who remained in their countries perished. In other occupied countries, about a quarter of the Jewish population survived. Nazis also targeted the mentally and physically disabled, gypsies, Soviet prisoners of war, homosexuals, Polish and Soviet citizens, political opponents, religious dissidents, and those whose behavior did not match prescribed Nazi social norms.  Frequent air raids were systematically destroying Berlin. Surviving among the ruins, the Loewensteins did as much as they could to help their friends. Maria welcomed displaced individuals like Monica, the daughter of a deceased Jewish mother and a fanatic Nazi father, into their home. Maria also sent food and packages of necessities to family and friends who had been sent to ghettoes (Max’s brother Georg and sister-in law Alice) and concentration camps (family friends the Eylenburgs).",
+        "text": "&lt;p&gt;Between 1933 and the end of World War II in 1945, the Nazis systematically murdered six million Jews – approximately 2/3 of the 1933 Jewish population of Europe. Nearly all Polish, German, and Austrian Jews who remained in their countries perished. In other occupied countries, about a quarter of the Jewish population survived. Nazis also targeted the mentally and physically disabled, gypsies, Soviet prisoners of war, homosexuals, Polish and Soviet citizens, political opponents, religious dissidents, and those whose behavior did not match prescribed Nazi social norms.&lt;/p&gt;&lt;p&gt;Frequent air raids were systematically destroying Berlin. Surviving among the ruins, the Loewensteins did as much as they could to help their friends. Maria welcomed displaced individuals like Monica, the daughter of a deceased Jewish mother and a fanatic Nazi father, into their home. Maria also sent food and packages of necessities to family and friends who had been sent to ghettoes (Max’s brother Georg and sister-in law Alice) and concentration camps (family friends the Eylenburgs).&lt;/p&gt;",
         "type": "item", 
         "layout": "media_right", 
         "media_width": "50",  
@@ -493,8 +493,8 @@ module.exports.exhibit_items = [
                 "caption": "Loewenstein family portrait, 1940. Left to right: Max, Alice, Marie (Maria), and Georg Loewenstein. In front, Ernestine Loewenstein (called 'Omchen' by her granchildren). Ernestine died not long after the photograph was taken.", 
                 "template": "row", 
                 "item_type": "image", 
-                "media": "", 
-                "text": "Henry’s beloved Uncle Georg Loewenstein (Max’s brother) and his wife Alice lived near the Loewensteins. During Kristallnacht (November 9-10, 1938), Georg, along with many other Jewish men, was taken to the Oranienburg Concentration Camp. Georg was wearing slippers, night clothes, and a robe when they came for him, yet the Nazis would not permit him to change or take a coat. When Georg was released in February 1939, his fingers and toes were badly frostbitten, and he was a broken man. During the Kristallnacht terror, assuming that the Nazis would not return a second time after taking Georg, the Loewensteins and distant family members hid in Uncle Georg’s apartment for a few weeks.",        
+                "media": "6ed58561-f90b-4555-af67-53cc1561e77a", 
+                "text": "&lt;p&gt;Henry’s beloved Uncle Georg Loewenstein (Max’s brother) and his wife Alice lived near the Loewensteins. During Kristallnacht (November 9-10, 1938), Georg, along with many other Jewish men, was taken to the Oranienburg Concentration Camp. Georg was wearing slippers, night clothes, and a robe when they came for him, yet the Nazis would not permit him to change or take a coat. When Georg was released in February 1939, his fingers and toes were badly frostbitten, and he was a broken man.&lt;/p&gt;&lt;p&gt;During the Kristallnacht terror, assuming that the Nazis would not return a second time after taking Georg, the Loewensteins and distant family members hid in Uncle Georg’s apartment for a few weeks.&lt;/p&gt;",        
                 "type": "item", 
                 "layout": "media_bottom",
                 "is_repo_item": 1,
@@ -511,7 +511,7 @@ module.exports.exhibit_items = [
                 "template": "row", 
                 "item_type": "image", 
                 "media": "6406d02c-0802-485e-b753-8ea0b3dbe0c4",
-                "text": "On October 24, 1941, the Nazis again came for Uncle Georg. This time his wife Alice was taken as well and both were transported to the Łódź Ghetto, the second largest ghetto in German-occupied Poland. Maria was able to mail some food and supplies to them, but communication with those in ghettos and concentration camps was severely limited. Maria received one pre-printed note from Georg and Alice, dated February 16, 1942, thanking her for a package. It would be the last the family heard from them. According to Łódź Ghetto census records compiled by Yad Vashem, Israel's memorial to victims of the Holocaust, Georg Loewenstein perished in the Łódź Ghetto, most likely from starvation. Alice Loewenstein was transported to the Chelmno Death Camp on May 15, 1942 where she was killed.",        
+                "text": "&lt;p&gt;On October 24, 1941, the Nazis again came for Uncle Georg. This time his wife Alice was taken as well and both were transported to the Łódź Ghetto, the second largest ghetto in German-occupied Poland. Maria was able to mail some food and supplies to them, but communication with those in ghettos and concentration camps was severely limited. Maria received one pre-printed note from Georg and Alice, dated February 16, 1942, thanking her for a package. It would be the last the family heard from them. According to Łódź Ghetto census records compiled by Yad Vashem, Israel's memorial to victims of the Holocaust, Georg Loewenstein perished in the Łódź Ghetto, most likely from starvation. Alice Loewenstein was transported to the Chelmno Death Camp on May 15, 1942 where she was killed.&lt;/p&gt;",        
                 "type": "item", 
                 "layout": "media_bottom",
                 "is_repo_item": 1,
@@ -530,7 +530,7 @@ module.exports.exhibit_items = [
         "template": "row", 
         "item_type": "image", 
         "media": "27421952d39071578cf79cd4c578001b.jpg", 
-        "text": "Before the war, Dr. Ernst Eylenburg was head of surgery in a Berlin hospital, and Dr. Elisabeth Eylenburg was a sports injury specialist. They sent their eldest child, Erna to the France on March 30, 1939 when she was just 15 years old. She later moved to the Netherlands. After the Netherlands fell to Germany, Erna was on one of the first transports to the Auschwitz Concentration Camp and was murdered there in 1942. In 1943, Ernst and Elisabeth were transported to the Theresienstadt Concentration Camp. Their young son Walter (age 13) would be sent there too about six months later.\nKarin and Maria attempted to relieve the Eylenburgs’ suffering by sending packages of food and personal care items. Doctors Ernst and Elisabeth replied with three pre-printed cards of thanks, the only form of communication allowed the prisoners of Theresienstadt. Due to examination by prison guards, each card is postmarked several days or weeks after the date of the card.\nIn August 1944, Dr. Elisabeth found a way to smuggle out an actual message to the Loewensteins. In it, she thanks them for their package and manages to sound positive, reporting that her husband is well and her son has grown almost as tall as his father. That message, dated August 5, was written in response to a package received on July 11, and is postmarked August 31. The final card received from the Eylenburgs, is signed in a weak hand by Elisabeth and dated September 22, 1944. This was the last the Loewensteins heard from them.\nDr. Ernst and Walter Eylenburg were taken to the Auschwitz Death Camp and, according to the Central Database of Shoah Victims' names, murdered soon thereafter. Dr. Elizabeth Eylenburg was taken to Auschwitz a short time later and also killed.",
+        "text": "&lt;p&gt;Before the war, Dr. Ernst Eylenburg was head of surgery in a Berlin hospital, and Dr. Elisabeth Eylenburg was a sports injury specialist. They sent their eldest child, Erna to the France on March 30, 1939 when she was just 15 years old. She later moved to the Netherlands. After the Netherlands fell to Germany, Erna was on one of the first transports to the Auschwitz Concentration Camp and was murdered there in 1942. In 1943, Ernst and Elisabeth were transported to the Theresienstadt Concentration Camp. Their young son Walter (age 13) would be sent there too about six months later.&lt;/p&gt;&lt;p&gt;Karin and Maria attempted to relieve the Eylenburgs’ suffering by sending packages of food and personal care items. Doctors Ernst and Elisabeth replied with three pre-printed cards of thanks, the only form of communication allowed the prisoners of Theresienstadt. Due to examination by prison guards, each card is postmarked several days or weeks after the date of the card.&lt;/p&gt;&lt;p&gt;In August 1944, Dr. Elisabeth found a way to smuggle out an actual message to the Loewensteins. In it, she thanks them for their package and manages to sound positive, reporting that her husband is well and her son has grown almost as tall as his father. That message, dated August 5, was written in response to a package received on July 11, and is postmarked August 31. The final card received from the Eylenburgs, is signed in a weak hand by Elisabeth and dated September 22, 1944. This was the last the Loewensteins heard from them.&lt;/p&gt;&lt;p&gt;Dr. Ernst and Walter Eylenburg were taken to the Auschwitz Death Camp and, according to the Central Database of Shoah Victims' names, murdered soon thereafter. Dr. Elizabeth Eylenburg was taken to Auschwitz a short time later and also killed.&lt;/p&gt;",
         "type": "item", 
         "layout": "media_right", 
         "media_width": "50",  
@@ -555,7 +555,7 @@ module.exports.exhibit_items = [
                 "template": "row", 
                 "item_type": "large_image", 
                 "media": "27da17f1-2b52-4be7-aebf-7c76585be7b9", 
-                "text": "Monica was a desperate young woman who had lost all hope of finding safety. Her Jewish mother had died, and her German father was a fanatic Nazi who wanted to see her deported to the death camps. The Loewensteins took her in when she had nowhere else to turn. Karin Steinberg, Maria's daughter from her first marriage, became especially close to Monica. One day Monica did not come home. Hearing talk of a body in a nearby canal, Karin investigated and was saddened to learn that Monica had committed suicide.",        
+                "text": "&lt;p&gt;Monica was a desperate young woman who had lost all hope of finding safety. Her Jewish mother had died, and her German father was a fanatic Nazi who wanted to see her deported to the death camps.&lt;/p&gt;&lt;p&gt;The Loewensteins took her in when she had nowhere else to turn. Karin Steinberg, Maria's daughter from her first marriage, became especially close to Monica. One day Monica did not come home. Hearing talk of a body in a nearby canal, Karin investigated and was saddened to learn that Monica had committed suicide.&lt;/p&gt;",        
                 "type": "item", 
                 "layout": "media_bottom",
                 "styles": "{}",
@@ -670,7 +670,7 @@ module.exports.exhibit_items = [
         "template": "row", 
         "item_type": "pdf", 
         "media": "f8c6459b-235d-4cf3-b538-aec2da037cff", 
-        "text": "World War II began with Germany’s attack on Poland on September 1, 1939, after which point it became almost impossible for German Jews to emigrate. Jewish emigration stopped completely in October 1941. After that date, few Jews in German-occupied areas escaped with their lives. Max, Maria, and Karin remained in Berlin for the rest of the war – Maria’s courage saved the family from deportation and certain death on numerous occasions. Miraculously, they all survived until May 7, 1945, when Germany finally surrendered and the war came to an end. World War II began with Germany’s attack on Poland on September 1, 1939, after which point it became almost impossible for German Jews to emigrate and even that stopped completely in October 1941. After that date, few Jews in German-occupied areas escaped with their lives. Max, Maria, and Karin remained in Berlin for the rest of the war – Maria’s courage saved the family from deportation and certain death on numerous occasions - miraculously, they all survived. Loewensteins’ Jewish family and friends were taken to ghettoes and concentration camps where they were killed. The Loewensteins’ home was classified as a “Jewish household” and as a result, the family suffered the effects of anti-Jewish German measures. Maria’s status as an Aryan, as well as her bravery and wisdom, saved Max many times. Most notably she and Karin joined the only successful demonstration of Germans opposing the Nazi’s attempts to take Jews to their deaths, during what later became known as the \"Rosenstrasse Factory Event\". The deportation threat was always there, but when in March 1943, the British began their night time ”1,000 bomber” raids and the U.S. Eighth Air Force followed with massive daylight raids on Berlin, the Nazis were too busy to thoroughly follow-up with the deportations. The Russians battled their way into the ruins of Berlin in the winter and spring of 1945. Finally, Germany surrendered on May 7, 1945. The Loewensteins’ long nightmare of fear and separation was almost over.",
+        "text": "&lt;p&gt;World War II began with Germany’s attack on Poland on September 1, 1939, after which point it became almost impossible for German Jews to emigrate. Jewish emigration stopped completely in October 1941. After that date, few Jews in German-occupied areas escaped with their lives.&lt;/p&gt;&lt;p&gt;Max, Maria, and Karin remained in Berlin for the rest of the war – Maria’s courage saved the family from deportation and certain death on numerous occasions. Miraculously, they all survived until May 7, 1945, when Germany finally surrendered and the war came to an end.&lt;/p&gt;&lt;p&gt;World War II began with Germany’s attack on Poland on September 1, 1939, after which point it became almost impossible for German Jews to emigrate and even that stopped completely in October 1941. After that date, few Jews in German-occupied areas escaped with their lives. Max, Maria, and Karin remained in Berlin for the rest of the war – Maria’s courage saved the family from deportation and certain death on numerous occasions - miraculously, they all survived.&lt;/p&gt;&lt;p&gt;Loewensteins’ Jewish family and friends were taken to ghettoes and concentration camps where they were killed.&lt;/p&gt;&lt;p&gt;The Loewensteins’ home was classified as a “Jewish household” and as a result, the family suffered the effects of anti-Jewish German measures.&lt;/p&gt;&lt;p&gt;Maria’s status as an Aryan, as well as her bravery and wisdom, saved Max many times. Most notably she and Karin joined the only successful demonstration of Germans opposing the Nazi’s attempts to take Jews to their deaths, during what later became known as the \"Rosenstrasse Factory Event\". The deportation threat was always there, but when in March 1943, the British began their night time ”1,000 bomber” raids and the U.S. Eighth Air Force followed with massive daylight raids on Berlin, the Nazis were too busy to thoroughly follow-up with the deportations.&lt;/p&gt;&lt;p&gt;The Russians battled their way into the ruins of Berlin in the winter and spring of 1945. Finally, Germany surrendered on May 7, 1945. The Loewensteins’ long nightmare of fear and separation was almost over.&lt;/p&gt;",
         "type": "item", 
         "layout": "media_right", 
         "media_width": "50",  
@@ -785,12 +785,26 @@ module.exports.exhibit_items = [
         "order": 34
     },// current ^^^
     {
+        "uuid": "27a7c1ca38643ff6070e0db7c5da03c2",
+        "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
+        "title": "ART FROM THE SUFFERING", 
+        "caption": "",
+        "template": "row", 
+        "item_type": "image", 
+        "text": "Throughout the War, many victims of the Nazi regime found ways to express their suffering through creative outlets. Maria Loewenstein, a professional artist and designer, expressed her feelings through her art. \n\n'JOB,' 1945, depicts the central figure in the Book of Job from the Bible. Job has long been a reference point in Jewish philosophy and religion, symbolizing the suffering of the Jewish people. \n\n'Despair' is far more literal. In it, a woman sits alone in a cold, dark, nearly bare apartment. She is huddled in front of a stove and wrapped heavily in blankets, her cheek resting on her hand. The basket next to her is empty, and the room's one shelf has no food, only a few cups and an unlit candle.",
+        "type": "item", 
+        "layout": "text_only", 
+        "styles": "{}",
+        "is_published": 1, 
+        "order": 35
+    },
+    {
         "uuid": "1a391bb06f0eb7a75732eeee94543d5b",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
         "type": "grid",
         "columns": "2",
         "title": "",
-        "order": 35,
+        "order": 36,
         "styles": {},
         "items": [
             {
@@ -830,7 +844,7 @@ module.exports.exhibit_items = [
         "type": "grid",
         "columns": "2",
         "title": "",
-        "order": 36,
+        "order": 37,
         "styles": {},
         "items": [
             {
@@ -863,23 +877,6 @@ module.exports.exhibit_items = [
                 "order": 2
             }
         ]
-    },
-    {
-        "uuid": "27a7c1ca38643ff6070e0db7c5da03c2",
-        "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
-        "title": "", 
-        "caption": "",
-        "template": "row", 
-        "item_type": "image", 
-        "media": "", 
-        "text": "",
-        "type": "item", 
-        "layout": "media_right", 
-        "media_width": "50",  
-        "wrap_text": 1,
-        "styles": {},
-        "is_published": 1, 
-        "order": 37
     },
     {
         "uuid": "4c7bd3a1d70295292ef8fa71c40b81cf",
