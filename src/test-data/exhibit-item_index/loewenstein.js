@@ -671,7 +671,7 @@ module.exports.exhibit_items = [
         "is_repo_item": 1,
         "is_published": 1, 
         "order": 28
-    }, 
+    }, // end tested
     {
         "uuid": "ae0b763711b6721cf5a2f45c0df155e3",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -702,7 +702,7 @@ module.exports.exhibit_items = [
         "layout": "media_right", 
         "media_width": "50",  
         "wrap_text": 1,
-        "styles": "{}",
+        "styles": "{\"item\":{\"backgroundColor\":\"#fff\"}}",
         "is_repo_item": 1,
         "is_published": 1, 
         "order": 30
@@ -719,7 +719,7 @@ module.exports.exhibit_items = [
         "type": "item", 
         "layout": "media_only", 
         "media_width": "100",  
-        "styles": "{}",
+        "styles": "{\"item\":{\"backgroundColor\":\"#fff\"}}",
         "is_published": 1, 
         "order": 31
     },
@@ -786,7 +786,7 @@ module.exports.exhibit_items = [
         "text": "&lt;p&gt;Throughout the War, many victims of the Nazi regime found ways to express their suffering through creative outlets. Maria Loewenstein, a professional artist and designer, expressed her feelings through her art.&lt;/p&gt;&lt;p&gt;'JOB,' 1945, depicts the central figure in the Book of Job from the Bible. Job has long been a reference point in Jewish philosophy and religion, symbolizing the suffering of the Jewish people.&lt;/p&gt;&lt;p&gt;'Despair' is far more literal. In it, a woman sits alone in a cold, dark, nearly bare apartment. She is huddled in front of a stove and wrapped heavily in blankets, her cheek resting on her hand. The basket next to her is empty, and the room's one shelf has no food, only a few cups and an unlit candle.&lt;/p&gt;",
         "type": "item", 
         "layout": "text_only", 
-        "styles": "{}",
+        "styles": "{\"item\":{\"backgroundColor\":\"#fff\"}}",
         "is_published": 1, 
         "order": 35
     },
@@ -797,19 +797,19 @@ module.exports.exhibit_items = [
         "columns": "2",
         "title": "",
         "order": 36,
-        "styles": "{}",
+        "styles": "{\"item_grid\":{\"backgroundColor\":\"#fff\"}}",
         "items": [
             {
                 "uuid": "0bc01c7a1dc9b6f630d0e52778391fc2",
                 "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
                 "title": "", 
                 "caption": "‘JOB,’ by Marie (Maria) Lowenstein, 1945.", 
-                "item_type": "image", 
-                "media": "114187dc-b8e0-4aaf-b37f-20a9958289e6", 
+                "item_type": "large_image", 
+                "media": "0bc01c7a1dc9b6f630d0e52778391fc2.tiff", 
                 "type": "item",
                 "media_width": "75",
                 "styles": "{}",
-                "is_repo_item": 1,
+                "is_repo_item": 0,
                 "is_published": 1, 
                 "order": 1
             },
@@ -837,7 +837,7 @@ module.exports.exhibit_items = [
         "columns": "2",
         "title": "MARIA’S DRAWINGS OF THE FAMILY",
         "order": 37,
-        "styles": "{\"item\":{\"backgroundColor\":\"rgb(194,206,213)\"}}",
+        "styles": "{\"item_grid\":{\"backgroundColor\":\"rgb(194,206,213)\"}}",
         "items": [
             {
                 "uuid": "13e53fc9eba4405bd2e3709f8dfe8798",
@@ -1053,7 +1053,7 @@ module.exports.exhibit_items = [
                 "uuid": "26ec8696535338e76f91a48ac95f6b16",
                 "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
                 "item_type": "image", 
-                "media": "", 
+                "media": "26ec8696535338e76f91a48ac95f6b16.jpg", 
                 "description": "Household ration identification card.",        
                 "type": "item", 
                 "styles": "{}",
@@ -1065,7 +1065,7 @@ module.exports.exhibit_items = [
                 "uuid": "db3af578a79e1562a5db1866a9a17fdb",
                 "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f", 
                 "item_type": "image", 
-                "media": "", 
+                "media": "db3af578a79e1562a5db1866a9a17fdb.jpg", 
                 "description": "Clothing ration card.",        
                 "type": "item", 
                 "styles": "{}",
@@ -1076,7 +1076,7 @@ module.exports.exhibit_items = [
                 "uuid": "b3f894eb8631913c126b769e67127320",
                 "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
                 "item_type": "image", 
-                "media": "", 
+                "media": "b3f894eb8631913c126b769e67127320.jpg", 
                 "description": "Red Cross letter (March 1944) from the Loewensteins to Henry; wartime communications between Germany and England went through the Red Cross.",        
                 "type": "item", 
                 "styles": "{}",
@@ -1088,7 +1088,7 @@ module.exports.exhibit_items = [
                 "uuid": "97dd0f8e622a8757ecc78543e31f7753",
                 "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f", 
                 "item_type": "image", 
-                "media": "", 
+                "media": "97dd0f8e622a8757ecc78543e31f7753.jpg", 
                 "description": "Red Cross letter (April 1944) from the Loewensteins to Henry; wartime communications between Germany and England went through the Red Cross.",        
                 "type": "item", 
                 "styles": "{}",
@@ -1099,7 +1099,7 @@ module.exports.exhibit_items = [
                 "uuid": "cfb0eca6d22a372f6c3758d6ce38f8a0",
                 "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
                 "item_type": "image", 
-                "media": "", 
+                "media": "cfb0eca6d22a372f6c3758d6ce38f8a0.jpg", 
                 "description": "Clothing ration card.",        
                 "type": "item", 
                 "styles": "{}",
@@ -1111,7 +1111,7 @@ module.exports.exhibit_items = [
                 "uuid": "bd53c78ba68e31a77c3ff40096860bf2",
                 "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
                 "item_type": "image", 
-                "media": "", 
+                "media": "bd53c78ba68e31a77c3ff40096860bf2.jpg", 
                 "description": "Clothing ration card.",        
                 "type": "item", 
                 "styles": "{}",
@@ -1119,7 +1119,7 @@ module.exports.exhibit_items = [
                 "order": 6
             }
         ]
-    },
+    }, // end current
     {
         "uuid": "09b38747eed941cc085d2c4e88f066d7",
         "type": "heading",
