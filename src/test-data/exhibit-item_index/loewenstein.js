@@ -1197,7 +1197,7 @@ module.exports.exhibit_items = [
                 "order": 13
             }
         ]
-    }, // end reingest of non uppercase titles
+    }, 
     {
         "uuid": "b0e3e309fccd3132c2cebc1143aec877",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
