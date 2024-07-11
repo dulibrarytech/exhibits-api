@@ -37,16 +37,10 @@ let example_exhibit_item_objects = [
 
         /* user style settings (default: {}) */
         "styles": { 
-    
-            /* 
-             * user styles for exhibit item 
-             */
-            "item": {
-                "backgroundColor": "", // hex or rgb value from color picker
-                "color": "", // hex or rgb value from color picker
-                "fontFamily": "", // list of font-family options
-                "fontSize": ""
-            }
+            "backgroundColor": "", // hex or rgb value from color picker
+            "color": "", // hex or rgb value from color picker
+            "fontFamily": "", // list of font-family options
+            "fontSize": ""
         },
     
         "is_repo_item": 0, // bool {0,1} If 1, will use the digitaldu object uuid in the "media" field above to stream the item from the repository (default: 0)
@@ -64,11 +58,9 @@ let example_exhibit_item_objects = [
         "title": "Item Grid Title", // *** The title field will appear in the navigation as a sublink under the previous page heading ***
         "order": 3,
         "styles": {
-            "item_grid": { // styles for grid section
-                "color": "#303030",
-                "backgroundColor": "#706560",
-                "fontFamily": "arial"
-            }
+            "color": "#303030",
+            "backgroundColor": "#706560",
+            "fontFamily": "arial"
         },
         "items": [
             // grid item fields:
@@ -88,16 +80,10 @@ let example_exhibit_item_objects = [
 
                 /* user style settings (default: {}) */
                 "styles": { 
-            
-                    /* 
-                    * user styles for exhibit item 
-                    */
-                    "item": {
-                        "backgroundColor": "", // hex or rgb value from color picker
-                        "color": "", // hex or rgb value from color picker
-                        "fontFamily": "", // list of font-family options
-                        "fontSize": ""
-                    }
+                    "backgroundColor": "", // hex or rgb value from color picker
+                    "color": "", // hex or rgb value from color picker
+                    "fontFamily": "", // list of font-family options
+                    "fontSize": ""
                 },
             
                 "is_repo_item": 0, // bool {0,1} If 1, will use the digitaldu object uuid in the "media" field above to stream the item from the repository (default: 0)
@@ -107,7 +93,7 @@ let example_exhibit_item_objects = [
         ]
     },
     
-    // vertical timeline item grid
+    // vertical timeline item grid (same as item grid - with additional "year_label" property in the grid items)
     {
         "uuid": "{grid item uuid}",
         "is_member_of_exhibit": "{parent exhibit uuid}",
@@ -115,11 +101,9 @@ let example_exhibit_item_objects = [
         "title": "Item Grid Title", // *** The title field will appear in the navigation as a sublink under the previous page heading ***
         "order": 1,
         "styles": {
-            "item_grid": { // styles for grid section
-                "color": "#303030",
-                "backgroundColor": "gray",
-                "fontFamily": "Cursive"
-            }
+            "color": "#303030",
+            "backgroundColor": "gray",
+            "fontFamily": "Cursive"
         },
         "items": [
             // vertical timeline grid item fields: same as the standard grid item fields, but includes the "year_label" (separates sections of the vertical timeline grid)
