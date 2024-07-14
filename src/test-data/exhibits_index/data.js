@@ -44,5 +44,22 @@ module.exports = [
     "styles": "{\"exhibit\":{\"navigation\":{\"menu\":{\"backgroundColor\":\"#e5e5e5\",\"color\":\"#505050\",\"fontFamily\":\"Tahoma\",\"fontSize\":\"18px\",\"textAlign\":\"left\"}},\"template\":{\"backgroundColor\":\"white\",\"color\":\"#303030\",\"fontFamily\":\"Verdana\",\"fontSize\":\"18px\",\"textAlign\":\"left\"}}}",
     "is_published": 1,
     "is_featured": 1
+  },
+  {
+    "uuid": "642bbd319b780725f753b15e1df520e6",
+    "type": "exhibit",
+    "title": "Title: Test Exhibit",
+    "subtitle": "Subtitle: The Legacy of Settler Colonialism and the University of Denver",
+    "banner_template": "banner_1",
+    "about_the_curators": "About the curators content",
+    "alert_text": "this is an &lt;strong&gt;Alert&lt;/strong&gt;",
+    "hero_image": "brent-learned_one-november-morning.jpeg",
+    "thumbnail_image": "example-exhibit_tn.jpg",
+    "description": "&lt;strong&gt;Description text:&lt;/strong&gt; At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.",
+    "page_layout": "top_nav",
+    "template": "vertical_scroll",
+    "styles": "{\"exhibit\":{\"navigation\":{\"menu\":{\"backgroundColor\":\"#e5e5e5\",\"color\":\"#505050\",\"fontFamily\":\"Tahoma\",\"fontSize\":\"18px\",\"textAlign\":\"left\"}},\"template\":{\"backgroundColor\":\"white\",\"color\":\"#303030\",\"fontFamily\":\"Verdana\",\"fontSize\":\"18px\",\"textAlign\":\"left\"}}}",
+    "is_published": 1,
+    "is_featured": 1
   }
 ]
