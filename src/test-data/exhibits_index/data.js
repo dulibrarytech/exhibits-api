@@ -48,18 +48,26 @@ module.exports = [
   {
     "uuid": "642bbd319b780725f753b15e1df520e6",
     "type": "exhibit",
-    "title": "Title: Test Exhibit",
-    "subtitle": "Subtitle: The Legacy of Settler Colonialism and the University of Denver",
+    "title": "Hanya Holm: When Modern Dance Came to Colorado",
     "banner_template": "banner_1",
     "about_the_curators": "About the curators content",
-    "alert_text": "this is an &lt;strong&gt;Alert&lt;/strong&gt;",
-    "hero_image": "brent-learned_one-november-morning.jpeg",
-    "thumbnail_image": "example-exhibit_tn.jpg",
-    "description": "&lt;strong&gt;Description text:&lt;/strong&gt; At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.",
+    "hero_image": "hanya_holm_hero.jpg",
+    "thumbnail_image": "hanya_holm_hero_thumbnail.jpg",
+    "description": "<div class=\"description-body\"><p>Hanya Holm is popularly known for her innovative choreography in Broadway musicals like My Fair Lady and Kiss Me, Kate. She is also revered as one of the \"big four\" founders of modern dance, alongside Martha Graham, Doris Humphrey, and Charles Weidman.</p><p>Holm first came to Colorado in 1933 when she taught at the Perry Mansfield Dance Camp in Steamboat Springs. Beginning in 1941, she returned every summer for 43 years, making the state a destination for anyone who wanted to learn about modern dance.</p><p>Holm’s influence on dance in Colorado was extensive; she taught Freidann Parker and Lillian Covillo (co-founders of Colorado Ballet), Alfred Brooks and Maxine Munt (co-founders of the Changing Scene Theatre), Vera Sears (teacher and later director of the Children’s Dance Theatre at the University of Denver).</p><p>The exhibit features images of Holm throughout her career as a dancer, choreographer, and educator, as well as never-before-exhibited images of Holm in personal settings. The images in the exhibit are primarily from the collections of Maxine Munt (a student of Holm) and Marshall Brooks (husband of one of Holm’s company members and close family friend).</p></div>",
     "page_layout": "top_nav",
     "template": "vertical_scroll",
-    "styles": "{\"exhibit\":{\"navigation\":{\"menu\":{\"backgroundColor\":\"#e5e5e5\",\"color\":\"#505050\",\"fontFamily\":\"Tahoma\",\"fontSize\":\"18px\",\"textAlign\":\"left\"}},\"template\":{\"backgroundColor\":\"white\",\"color\":\"#303030\",\"fontFamily\":\"Verdana\",\"fontSize\":\"18px\",\"textAlign\":\"left\"}}}",
+    "styles": {
+      "exhibit": {
+        "color": "black",
+        "backgroundColor": "rgb(230,230,230)"
+      },
+
+      "navigation": {
+        "color": "black",
+        "backgroundColor": "rgb(246,241,142)"
+      }
+    },
     "is_published": 1,
-    "is_featured": 1
+    "is_featured": 0
   }
 ]
