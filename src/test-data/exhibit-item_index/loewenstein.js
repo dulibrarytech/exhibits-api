@@ -564,11 +564,11 @@ module.exports.exhibit_items = [
                 "title": "", 
                 "caption": "Letter from Georg and Alice Loewenstein thanking Marie (Maria) Loewenstein for a package. Sent from the Łodź Ghetto, dated February 16, 1942.", 
                 "item_type": "image", 
-                "media": "6406d02c-0802-485e-b753-8ea0b3dbe0c4",
+                "media": "24dfc21fb83a6dc55929f37ad54de189.jpg",
                 "text": "<p>On October 24, 1941, the Nazis again came for Uncle Georg. This time his wife Alice was taken as well and both were transported to the Łódź Ghetto, the second largest ghetto in German-occupied Poland. Maria was able to mail some food and supplies to them, but communication with those in ghettos and concentration camps was severely limited. Maria received one pre-printed note from Georg and Alice, dated February 16, 1942, thanking her for a package. It would be the last the family heard from them. According to Łódź Ghetto census records compiled by Yad Vashem, Israel's memorial to victims of the Holocaust, Georg Loewenstein perished in the Łódź Ghetto, most likely from starvation. Alice Loewenstein was transported to the Chelmno Death Camp on May 15, 1942 where she was killed.</p>",        
                 "type": "item", 
                 "layout": "media_bottom",
-                "is_repo_item": 1,
+                "is_repo_item": 0,
                 "styles": {},
                 "is_published": 1, 
                 "order": 2
@@ -606,7 +606,7 @@ module.exports.exhibit_items = [
         },
         "items": [
             {
-                "uuid": "abbe0f70059e99253fdae96fff5d64bd",
+                "uuid": "be2701d0b8ce628d0e87e2d9c32de3cb",
                 "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
                 "title": "", 
                 "caption": "Monica poses for a portrait in a park in Berlin, circa 1941.", 
@@ -622,7 +622,7 @@ module.exports.exhibit_items = [
             },
 
             {
-                "uuid": "4f91ba07d0bace47fb152cb8b7ab1156",
+                "uuid": "308252f02ac616542fea16dc29ac95cd",
                 "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
                 "title": "", 
                 "caption": "Karin Steinberg and Monica sit on a park bench with their arms around each other.", 
@@ -823,7 +823,7 @@ module.exports.exhibit_items = [
         "title": "", 
         "caption": "Transcript of Max Loewenstein and Marie Steinberg's Marriage Certificate Record, shown at the Rosentrasse protest to save Max from transportation.",
         "template": "row", 
-        "item_type": "pdf", 
+        "item_type": "image", 
         "media": "5298dc7f86d4dd3dae413d6e4dbe08de.jpg", 
         "text": "<p>Finally, the Nazis set up machine guns and prepared to use force to put an end to this challenge to their authority. Joseph Goebbels, Minister of Propaganda and Gauleiter (Governor) of Berlin, was keenly aware that Germany had suffered enormous military defeats in recent weeks. Estimates vary, but they had lost at least 500,000 men in the battle for Stalingrad. British Field Marshal Montgomery had just driven Rommel’s army across North Africa, inflicting many casualties.</p><p>Goebbels, concerned about German morale, did not want to see a massacre of German women in the center of Berlin, where it could not be covered up. He gave the order to release all Jews who had a non-Jewish spouse waiting for them, noting that deportations could easily resume in a few weeks, when it would be more convenient. Approximately 2,000, including Max, were released. All others were taken to the gas chambers at Auschwitz. Thus Max escaped deportation once again, but knew that they might come for him at any moment.</p><p>On March 2, 1943 the British began their nighttime “1,000 bomber” raids, and the U.S. Eighth Air Force soon followed with its massive daylight raids on Berlin. Max and Maria welcomed these raids despite the dangers from the falling bombs, because that was the only time when they did not have to fear the Nazis.</p>",
         "type": "item", 
@@ -832,7 +832,7 @@ module.exports.exhibit_items = [
         "wrap_text": 1,
         "styles": { 
             backgroundColor: 'rgb(194,206,213)' 
-    },
+        },
         "is_published": 1, 
         "order": 33
     },
