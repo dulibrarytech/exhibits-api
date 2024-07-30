@@ -14,7 +14,7 @@ module.exports = [
       "exhibit":{
           "navigation":{
               "backgroundColor": "#DCC9AB",
-              "color":"#fff",
+              "color":"#ffffff",
           },
           "template":{
               "backgroundColor":"#7D8791",
@@ -41,11 +41,11 @@ module.exports = [
     "styles": {
       "exhibit": {
         "navigation": {
-          "color": "black",
+          "color": "#000000",
           "backgroundColor": "#F6F18E"
         },
         "template": {
-          "color": "black",
+          "color": "#000000",
           "backgroundColor": "#E6E6E6",
           "fontSize":"19px"
         }
@@ -77,7 +77,7 @@ module.exports = [
               "fontSize":"18px",
           },
           "template":{
-              "backgroundColor":"#fff",
+              "backgroundColor":"#ffffff",
               "color":"#303030",
               "fontFamily":"Verdana",
               "fontSize":"18px",
