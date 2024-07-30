@@ -1,36 +1,5 @@
 module.exports = [
   {
-    "uuid": "1b35b664f99ef799cd4a752bd1ccb039",
-    "type": "exhibit",
-    "title": "DU Outdoors",
-    "banner_template": "banner_1",
-    "hero_image": "du-outdoors_hero.jpg",
-    "thumbnail_image": "",
-    "description": "<div style='color: white'>Since the university was founded in 1864, the DU community has sought inspiration and recreation outside of the classroom. Student organizations, department initiatives, and the recently established John C. Kennedy Mountain Campus provide evidence of a continuous drive toward nature throughout the university’s history. The first Kynewisbok student yearbook, published in 1898, included an ode to the University of Denver. The Ode referred to DU as the “queenly mother” “under the slopes of the mountains... where winter kisses the summer on Evans, or Pike’s Peak, or Gray.” Times changed, but DU’s love for the mountains did not. The 1974 yearbook featured the music and lyrics of John Denver’s well-known song, “Rocky Mountain High.” Several decades later, the Kynewisbok highlighted student recreational clubs as “Rocky Mountain High Outlets to Students,” where “the temptation to explore and the reminder to preserve are constant threats to studying.” Today, DU students share their Rocky Mountain adventures via Instagram, Facebook, and other social media platforms. Student organizations and University programs throughout time have created opportunities for DU students to leave some of their stress behind on campus and journey to the mountains.<br><br><br><div style='font-size: 1.5em; text-align: center'>How we recreate is just as important as why we recreate.</div><br><br>Outdoor organizations have published guidelines for how to recreate responsibly in 2023. These include building an inclusive outdoors, respecting others, and following Leave No Trace principles. By recognizing the historic and systemic exclusivity of outdoor recreation, we can work to create a more inclusive environment for all seeking connection in and with nature. Leaders in the field call for the acknowledgment of historic denver and contemporary discrimination to address the history of segregation in public spaces. Institutionally, another area for change is amplifying diverse perspectives in the field by filling leadership positions with people of color. Responsible outdoor recreation also requires respecting the connections that others may hold to a place. In the United States, some recreation areas occupy stolen land that embodies the cultural heritage of contemporary Native American communities. Certain national parks, state parks, and other recreation areas are both natural and cultural landscapes. When visiting an area to recreate, consider whose land you are on, and how you can respect their connections to the place while you form your own. When recreating, practicing respect for the environment is critical for maintaining the nation’s natural resources for the enjoyment of future generations. Leave No Trace principles are designed to teach low impact ethics to balance recreational land use with preservation. Practicing sustainable recreation is key to the longevity of our natural spaces.</div&gt",
-    "page_layout": "top_nav",
-    "template": "vertical_scroll",
-    "styles": {
-      "exhibit":{
-          "navigation":{
-              "menu":{
-                  "backgroundColor":"rgb(104, 141, 113)",
-                  "color":"#fff",
-                  "textAlign":"center"
-              }
-          },
-          "template":{
-              "backgroundColor":"rgb(124, 165, 153)",
-              "color":"#fff",
-              "fontSize":"20px",
-              "line-height":"29px"
-          }
-      }
-    },
-    "is_published": 1,
-    "is_featured": 1
-  },
-
-  {
     "uuid": "7b843505f749e10f8702eab4c1ec135f",
     "type": "exhibit",
     "title": "Loewenstien",
@@ -44,23 +13,46 @@ module.exports = [
     "styles": {
       "exhibit":{
           "navigation":{
-              "menu":{
-                  "backgroundColor":
-                  "#DCC9AB",
-                  "color":"#fff",
-                  "textAlign":"center"
-              }
+              "backgroundColor": "#DCC9AB",
+              "color":"#fff",
           },
           "template":{
-              "backgroundColor":"rgb(125,135,145)",
+              "backgroundColor":"#7D8791",
               "color":"#303030",
               "fontSize":"19px",
-              "line-height":"29px"
           }
       }
     },
     "is_published": 1,
     "is_featured": 1
+  },
+  
+  {
+    "uuid": "642bbd319b780725f753b15e1df520e6",
+    "type": "exhibit",
+    "title": "Hanya Holm: When Modern Dance Came to Colorado",
+    "banner_template": "banner_1",
+    "about_the_curators": "About the curators content",
+    "hero_image": "hanya_holm_hero.jpg",
+    "thumbnail_image": "hanya_holm_hero_thumbnail.jpg",
+    "description": "<div class=\"description-body\"><p>Hanya Holm is popularly known for her innovative choreography in Broadway musicals like My Fair Lady and Kiss Me, Kate. She is also revered as one of the \"big four\" founders of modern dance, alongside Martha Graham, Doris Humphrey, and Charles Weidman.</p><p>Holm first came to Colorado in 1933 when she taught at the Perry Mansfield Dance Camp in Steamboat Springs. Beginning in 1941, she returned every summer for 43 years, making the state a destination for anyone who wanted to learn about modern dance.</p><p>Holm’s influence on dance in Colorado was extensive; she taught Freidann Parker and Lillian Covillo (co-founders of Colorado Ballet), Alfred Brooks and Maxine Munt (co-founders of the Changing Scene Theatre), Vera Sears (teacher and later director of the Children’s Dance Theatre at the University of Denver).</p><p>The exhibit features images of Holm throughout her career as a dancer, choreographer, and educator, as well as never-before-exhibited images of Holm in personal settings. The images in the exhibit are primarily from the collections of <a href=\"https://specialcollections.du.edu/object/2c2c1422-a728-4a2a-9444-ceb0a11edf2d\" style=\"color:rgb(168,47,136)\">Maxine Munt</a> (a student of Holm) and <a href=\"#\" style=\"color:rgb(168,47,136)\">Marshall Brooks</a> (husband of one of Holm’s company members and close family friend).</p></div>",
+    "page_layout": "top_nav",
+    "template": "vertical_scroll",
+    "styles": {
+      "exhibit": {
+        "navigation": {
+          "color": "black",
+          "backgroundColor": "#F6F18E"
+        },
+        "template": {
+          "color": "black",
+          "backgroundColor": "#E6E6E6",
+          "fontSize":"19px"
+        }
+      },
+    },
+    "is_published": 1,
+    "is_featured": 0
   },
 
   {
@@ -79,50 +71,20 @@ module.exports = [
     "styles": {
       "exhibit":{
           "navigation":{
-              "menu":{
-                  "backgroundColor":"#e5e5e5",
-                  "color":"#505050",
-                  "fontFamily":"Tahoma",
-                  "fontSize":"18px",
-                  "textAlign":"left"
-              }
+              "backgroundColor":"#e5e5e5",
+              "color":"#505050",
+              "fontFamily":"Tahoma",
+              "fontSize":"18px",
           },
           "template":{
-              "backgroundColor":"white",
+              "backgroundColor":"#fff",
               "color":"#303030",
               "fontFamily":"Verdana",
               "fontSize":"18px",
-              "textAlign":"left"
           }
       }
     },
     "is_published": 1,
     "is_featured": 1
-  },
-  
-  {
-    "uuid": "642bbd319b780725f753b15e1df520e6",
-    "type": "exhibit",
-    "title": "Hanya Holm: When Modern Dance Came to Colorado",
-    "banner_template": "banner_1",
-    "about_the_curators": "About the curators content",
-    "hero_image": "hanya_holm_hero.jpg",
-    "thumbnail_image": "hanya_holm_hero_thumbnail.jpg",
-    "description": "<div class=\"description-body\"><p>Hanya Holm is popularly known for her innovative choreography in Broadway musicals like My Fair Lady and Kiss Me, Kate. She is also revered as one of the \"big four\" founders of modern dance, alongside Martha Graham, Doris Humphrey, and Charles Weidman.</p><p>Holm first came to Colorado in 1933 when she taught at the Perry Mansfield Dance Camp in Steamboat Springs. Beginning in 1941, she returned every summer for 43 years, making the state a destination for anyone who wanted to learn about modern dance.</p><p>Holm’s influence on dance in Colorado was extensive; she taught Freidann Parker and Lillian Covillo (co-founders of Colorado Ballet), Alfred Brooks and Maxine Munt (co-founders of the Changing Scene Theatre), Vera Sears (teacher and later director of the Children’s Dance Theatre at the University of Denver).</p><p>The exhibit features images of Holm throughout her career as a dancer, choreographer, and educator, as well as never-before-exhibited images of Holm in personal settings. The images in the exhibit are primarily from the collections of Maxine Munt (a student of Holm) and Marshall Brooks (husband of one of Holm’s company members and close family friend).</p></div>",
-    "page_layout": "top_nav",
-    "template": "vertical_scroll",
-    "styles": {
-      "exhibit": {
-        "color": "black",
-        "backgroundColor": "rgb(230,230,230)"
-      },
-
-      "navigation": {
-        "color": "black",
-        "backgroundColor": "rgb(246,241,142)"
-      }
-    },
-    "is_published": 1,
-    "is_featured": 0
   }
 ]
