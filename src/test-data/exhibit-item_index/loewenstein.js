@@ -6,7 +6,7 @@ module.exports.exhibit_items = [
         "text": "Family Heritage", 
         "styles": {
             backgroundColor: '#DCC9AB',
-            color: 'rgb(155,136,110)',
+            color: '#9B886E',
             fontSize: '47px',
             fontFamily: 'Nocturne Serif'
         },
@@ -24,7 +24,7 @@ module.exports.exhibit_items = [
         "type": "item",
         "layout": "text_only",
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
         },
         "is_published": 1,
         "order": 3
@@ -45,7 +45,7 @@ module.exports.exhibit_items = [
         "wrap_text": 1,
         "media_width": "33",  
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_repo_item": 1,
         "is_published": 1, 
@@ -65,7 +65,7 @@ module.exports.exhibit_items = [
         "layout": "media_only", 
         "media_width": "50",  
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_published": 1, 
         "order": 5
@@ -85,7 +85,7 @@ module.exports.exhibit_items = [
         "layout": "media_right", 
         "media_width": "33",  
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
         },
         "is_repo_item": 1,
         "is_published": 1, 
@@ -105,7 +105,7 @@ module.exports.exhibit_items = [
         "layout": "media_only", 
         "media_width": "33",  
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
         },
         "is_repo_item": 1,
         "is_published": 1, 
@@ -125,7 +125,7 @@ module.exports.exhibit_items = [
         "layout": "media_right", 
         "media_width": "33",  
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_published": 1, 
         "order": 8
@@ -144,7 +144,7 @@ module.exports.exhibit_items = [
         "layout": "media_only", 
         "media_width": "33",  
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_published": 1, 
         "order": 9
@@ -163,7 +163,7 @@ module.exports.exhibit_items = [
         "layout": "media_right", 
         "media_width": "50",  
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
         },
         "is_published": 1, 
         "order": 10
@@ -182,7 +182,7 @@ module.exports.exhibit_items = [
         "layout": "media_only", 
         "media_width": "50",  
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
         },
         "is_published": 1, 
         "order": 11
@@ -201,7 +201,7 @@ module.exports.exhibit_items = [
         "layout": "media_right", 
         "media_width": "33",  
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_published": 1, 
         "order": 12
@@ -220,7 +220,7 @@ module.exports.exhibit_items = [
         "layout": "media_right", 
         "media_width": "33",  
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
     },
         "is_published": 1, 
         "order": 13
@@ -239,7 +239,7 @@ module.exports.exhibit_items = [
         "layout": "media_only", 
         "media_width": "50",  
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
         },
         "is_published": 1, 
         "order": 14
@@ -252,7 +252,7 @@ module.exports.exhibit_items = [
         "text": "Kristallnacht and Kindertransport 1938", 
         "styles": {
             backgroundColor: '#DCC9AB',
-            color: 'rgb(155,136,110)',
+            color: '#9B886E',
             fontSize: '47px',
             fontFamily: 'Nocturne Serif'
         },
@@ -274,7 +274,7 @@ module.exports.exhibit_items = [
         "layout": "media_right", 
         "media_width": "50",  
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_published": 1, 
         "order": 16
@@ -293,7 +293,7 @@ module.exports.exhibit_items = [
         "layout": "media_right", 
         "media_width": "33",  
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
         },
         "is_published": 1, 
         "order": 17
@@ -307,7 +307,7 @@ module.exports.exhibit_items = [
         "title": "Escape Attempts",
         "order": 18,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "items": [
             {
@@ -358,7 +358,7 @@ module.exports.exhibit_items = [
         "layout": "media_right", 
         "media_width": "75",  
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
     },
         "is_published": 1, 
         "order": 19
@@ -372,7 +372,7 @@ module.exports.exhibit_items = [
         "title": "Kindertransport Document and Image Gallery",
         "order": 20,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "items": [
             {
@@ -503,7 +503,7 @@ module.exports.exhibit_items = [
         "text": "Victims of the Holocaust", 
         "styles": {
             backgroundColor: '#DCC9AB',
-            color: 'rgb(155,136,110)',
+            color: '#9B886E',
             fontSize: '47px',
             fontFamily: 'Nocturne Serif'
         },
@@ -526,7 +526,7 @@ module.exports.exhibit_items = [
         "wrap_text": 1,
         "is_repo_item": 1,
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
     },
         "is_published": 1, 
         "order": 22
@@ -539,7 +539,7 @@ module.exports.exhibit_items = [
         "title": "Uncle Georg and Aunt Alice",
         "order": 23,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "items": [
             {
@@ -589,7 +589,7 @@ module.exports.exhibit_items = [
         "layout": "media_right", 
         "media_width": "50",  
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
     },
         "is_published": 1, 
         "order": 24
@@ -602,7 +602,7 @@ module.exports.exhibit_items = [
         "title": "Monica",
         "order": 25,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "items": [
             {
@@ -646,7 +646,7 @@ module.exports.exhibit_items = [
         "title": "Victims of the Holocaust Gallery",
         "order": 26,
         "styles": { 
-            backgroundColor: rgb(194,206,213)
+            backgroundColor: "#C2CED5"
         },
         "items": [
             {
@@ -713,7 +713,7 @@ module.exports.exhibit_items = [
         "text": "Survival In Berlin, 1939-1945", 
         "styles": {
             backgroundColor: '#DCC9AB',
-            color: 'rgb(155,136,110)',
+            color: '#9B886E',
             fontSize: '47px',
             fontFamily: 'Nocturne Serif'
         },
@@ -735,7 +735,7 @@ module.exports.exhibit_items = [
         "media_width": "50",  
         "wrap_text": 1,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_repo_item": 1,
         "is_published": 1, 
@@ -755,7 +755,7 @@ module.exports.exhibit_items = [
         "media_width": "50",  
         "wrap_text": 1,
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
     },
         "is_published": 1, 
         "order": 29
@@ -774,7 +774,7 @@ module.exports.exhibit_items = [
         "media_width": "50",  
         "wrap_text": 1,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_repo_item": 1,
         "is_published": 1, 
@@ -793,7 +793,7 @@ module.exports.exhibit_items = [
         "layout": "media_only", 
         "media_width": "100",  
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_published": 1, 
         "order": 31
@@ -812,7 +812,7 @@ module.exports.exhibit_items = [
         "media_width": "50",  
         "wrap_text": 1,
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
     },
         "is_published": 1, 
         "order": 32
@@ -831,7 +831,7 @@ module.exports.exhibit_items = [
         "media_width": "50",  
         "wrap_text": 1,
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
         },
         "is_published": 1, 
         "order": 33
@@ -850,7 +850,7 @@ module.exports.exhibit_items = [
         "media_width": "66",  
         "wrap_text": 1,
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
     },
         "is_repo_item": 1,
         "is_published": 1, 
@@ -867,7 +867,7 @@ module.exports.exhibit_items = [
         "type": "item", 
         "layout": "text_only", 
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_published": 1, 
         "order": 35
@@ -880,7 +880,7 @@ module.exports.exhibit_items = [
         "title": "",
         "order": 36,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "items": [
             {
@@ -922,7 +922,7 @@ module.exports.exhibit_items = [
         "title": "Maria's Drawings of the Family",
         "order": 37,
         "styles": { 
-            backgroundColor: rgb(194,206,213)
+            backgroundColor: '#C2CED5'
         },
         "items": [
             {
@@ -969,7 +969,7 @@ module.exports.exhibit_items = [
         "media_width": "50",  
         "wrap_text": 0,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_published": 1, 
         "order": 38
@@ -982,7 +982,7 @@ module.exports.exhibit_items = [
         "title": "Survival in Berlin Gallery",
         "order": 39,
         "styles": { 
-            backgroundColor: rgb(194,206,213)
+            backgroundColor: '#C2CED5'
         },
         "items": [
             {
@@ -1138,7 +1138,7 @@ module.exports.exhibit_items = [
         "title": "Survival In Berlin Gallery 2",
         "order": 40,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "items": [
             {
@@ -1225,7 +1225,7 @@ module.exports.exhibit_items = [
         "text": "Post War And Emigration, 1945-", 
         "styles": {
             backgroundColor: '#DCC9AB',
-            color: 'rgb(155,136,110)',
+            color: '#9B886E',
             fontSize: '47px',
             fontFamily: 'Nocturne Serif'
         },
@@ -1247,7 +1247,7 @@ module.exports.exhibit_items = [
         "media_width": "66",  
         "wrap_text": 1,
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
     },
         "is_published": 1, 
         "order": 42
@@ -1266,7 +1266,7 @@ module.exports.exhibit_items = [
         "media_width": "66",  
         "wrap_text": 0,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_published": 1, 
         "order": 43
@@ -1285,7 +1285,7 @@ module.exports.exhibit_items = [
         "media_width": "50",  
         "wrap_text": 0,
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
     },
         "is_published": 1, 
         "order": 44
@@ -1304,7 +1304,7 @@ module.exports.exhibit_items = [
         "media_width": "50",  
         "wrap_text": 1,
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
     },
         "is_published": 1, 
         "order": 45
@@ -1323,7 +1323,7 @@ module.exports.exhibit_items = [
         "media_width": "50",  
         "wrap_text": 0,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_published": 1, 
         "order": 46
@@ -1342,7 +1342,7 @@ module.exports.exhibit_items = [
         "media_width": "66",  
         "wrap_text": 1,
         "styles": { 
-            backgroundColor: 'rgb(194,206,213)' 
+            backgroundColor: '#C2CED5' 
     },
         "is_published": 1, 
         "order": 47
@@ -1361,7 +1361,7 @@ module.exports.exhibit_items = [
         "media_width": "66",  
         "wrap_text": 1,
         "styles": { 
-            backgroundColor: '#fff' 
+            backgroundColor: '#ffffff' 
         },
         "is_published": 1, 
         "order": 48
@@ -1374,7 +1374,7 @@ module.exports.exhibit_items = [
         "title": "Post War and Emigration Gallery",
         "order": 49,
         "styles": { 
-            backgroundColor: rgb(194,206,213)
+            backgroundColor: '#C2CED5'
         },
         "items": [
             {
