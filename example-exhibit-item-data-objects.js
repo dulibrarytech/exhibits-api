@@ -18,7 +18,7 @@ let example_exhibit_item_objects = [
         "order": 1
     },
     
-    // full-row item
+    // item
     {
         "uuid": "{item uuid}",
         "is_member_of_exhibit": "{parent exhibit uuid}",
@@ -44,6 +44,7 @@ let example_exhibit_item_objects = [
         },
     
         "is_repo_item": 0, // bool {0,1} If 1, will use the digitaldu object uuid in the "media" field above to stream the item from the repository (default: 0)
+        "pdf_open_to_page": 1, // {integer} For 'item_type': 'pdf', will open the pdf file to this page (default: 1)  
         "is_published": 1, // (default: 0)
         "is_embedded": 0,  // (default: 0) If 1, media is embedded in the item on the template, and is not opened in the popup viewer when clicked. Media is viewed/played from the template
         "order": 1
@@ -63,32 +64,9 @@ let example_exhibit_item_objects = [
             "fontFamily": "arial"
         },
         "items": [
-            // grid item fields:
+            // grid item fields (contains all item fields. grid specific fields are shown below) :
             {
-                "uuid": "{grid item uuid}",
-                "is_member_of_exhibit": "{parent exhibit uuid}",
-                "thumbnail": "{path to user uploaded thumbnail image, or url to external thumbnail image}",
-                "date": "{date to display over or instead of title}",
-                "title": "Grid Item Title", // {string} (default: null, item displays no title) *** The title field will appear in the navigation as a sublink under the previous page heading ***
-                "caption": "Item caption text", // {string} (default: null, item displays no caption under media content)
-                "item_type": "image", // {'image', 'large_image', 'audio', 'video', 'pdf', 'external'} (R)
-                "media": "f14d40a9ba5f040c5868c36b473ad7f5.jpg", // { {filename}.{extension} OR {digitaldu item uuid} (IF 'is_repo_item' == true) } (R if no "text" value)
-                "text": "text to show in the item viewer modal, when a grid item is clicked", // {string | html} If present will be shown INSTEAD of the description 
-                "description": "description text", // {string | html} description text displayed on the grid item. *IF there is no description, but there is text, the text will be displayed on the grid item and ALSO in the modal viewer.
-                "type": "item", // {'row' | 'grid' | 'vertical_timeline' | 'heading'} (R)
-                "layout": "media_top", // {'media_right' | 'media_left' | 'media_top' | 'media_bottom' | "media_only" | "text_only"} (default:media_top) 
-
-                /* user style settings (default: {}) */
-                "styles": { 
-                    "backgroundColor": "", // hex or rgb value from color picker
-                    "color": "", // hex or rgb value from color picker
-                    "fontFamily": "", // list of font-family options
-                    "fontSize": ""
-                },
-            
-                "is_repo_item": 0, // bool {0,1} If 1, will use the digitaldu object uuid in the "media" field above to stream the item from the repository (default: 0)
-                "is_published": 1, // (default: 0)
-                "order": 1 // order in grid
+                "description": "", // {string | html} description text displayed on the grid item. *IF there is no description, but there is text, the text will be displayed on the grid item and ALSO in the modal viewer.
             }
         ]
     },
@@ -106,10 +84,10 @@ let example_exhibit_item_objects = [
             "fontFamily": "Cursive"
         },
         "items": [
-            // vertical timeline grid item fields: same as the standard grid item fields, but includes the "year_label" (separates sections of the vertical timeline grid)
+             // grid item fields (contains all item fields. grid specific fields are shown below) :
             {
-                "year_label": "1850" // insert a year label to the timeline before this item
-
+                "year_label": "1850", // insert a year label to the timeline before this item
+                "description": "", // {string | html} description text displayed on the grid item. *IF there is no description, but there is text, the text will be displayed on the grid item and ALSO in the modal viewer.
             }
         ]
     }]
