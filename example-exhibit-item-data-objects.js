@@ -29,10 +29,10 @@ let example_exhibit_item_objects = [
         "media": "f14d40a9ba5f040c5868c36b473ad7f5.jpg", // { {filename}.{extension} OR {digitaldu item uuid} (IF 'is_repo_item' == true) } (R if no "text" value)
         "text": "", // {string | html} 
         "wrap_text": 1, // bool {0,1} If 1, text will wrap around the media element (default: 1)
-        "description": "", // {string | html} This is the text displayed on a grid item (preview only, the item text is not displayed on preview items) (default: null, not displayed)
         "type": "item", // {'row' | 'grid' | 'vertical_timeline' | 'heading'} (R)
         "layout": "media_left", // {'media_right' | 'media_left' | 'media_top' | 'media_bottom' | "media_only" | "text_only"} (R)
         "media_width": "50", // {25|33|50|66|75} width of the media element in the item as percent (default: '50') * use only on side-by-side layouts 'media_right' and 'media_left' 
+        "media_padding": 1, // bool {0,1} If 1, margins will be added to the item. If 0, there will be no margins (default: 1)
 
         /* user style settings (default: {}) */
         "styles": { 
