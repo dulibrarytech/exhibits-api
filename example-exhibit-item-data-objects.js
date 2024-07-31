@@ -25,14 +25,14 @@ let example_exhibit_item_objects = [
         "thumbnail": "{path to user uploaded thumbnail image, or url to external thumbnail image}",
         "title": "Item Title", // {string} (default: null, item displays no title) *** The title field will appear in the navigation as a sublink under the previous page heading ***
         "caption": "Item caption text", // {string} (default: null, item displays no caption under media content)
-        "item_type": "image", // {'image', 'large_image', 'audio', 'video', 'pdf', 'external'} (R)
+        "item_type": "image", // {'image', 'audio', 'video', 'pdf', 'external'} (R)
         "media": "f14d40a9ba5f040c5868c36b473ad7f5.jpg", // { {filename}.{extension} OR {digitaldu item uuid} (IF 'is_repo_item' == true) } (R if no "text" value)
         "text": "", // {string | html} 
         "wrap_text": 1, // bool {0,1} If 1, text will wrap around the media element (default: 1)
         "type": "item", // {'row' | 'grid' | 'vertical_timeline' | 'heading'} (R)
         "layout": "media_left", // {'media_right' | 'media_left' | 'media_top' | 'media_bottom' | "media_only" | "text_only"} (R)
         "media_width": "50", // {25|33|50|66|75} width of the media element in the item as percent (default: '50') * use only on side-by-side layouts 'media_right' and 'media_left' 
-        "media_padding": 1, // bool {0,1} If 1, margins will be added to the item. If 0, there will be no margins (default: 1)
+        "media_padding": 1, // bool {0,1} If 1, margins will be added to the item display. If 0, there will be no margins (default: 1)
 
         /* user style settings (default: {}) */
         "styles": { 
