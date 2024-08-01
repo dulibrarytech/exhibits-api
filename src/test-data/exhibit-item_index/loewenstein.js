@@ -1305,7 +1305,7 @@ module.exports.exhibit_items = [
         "wrap_text": 1,
         "styles": { 
             backgroundColor: '#C2CED5' 
-    },
+        },
         "is_published": 1, 
         "order": 45
     }, 
