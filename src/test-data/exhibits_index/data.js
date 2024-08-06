@@ -74,13 +74,13 @@ module.exports = [
               "backgroundColor":"#e5e5e5",
               "color":"#505050",
               "fontFamily":"Tahoma",
-              "fontSize":"18px",
+              "fontSize":"19px",
           },
           "template":{
               "backgroundColor":"#ffffff",
               "color":"#303030",
               "fontFamily":"Verdana",
-              "fontSize":"18px",
+              "fontSize":"19px",
           }
       }
     },
