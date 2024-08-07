@@ -344,7 +344,8 @@ module.exports.exhibit_items = [
                 "is_published": 1, 
                 "order": 2
             }
-        ]
+        ],
+        "is_published": 1, 
     },
 
     {
@@ -495,7 +496,8 @@ module.exports.exhibit_items = [
                 "is_published": 1, 
                 "order": 9
             }
-        ]
+        ],
+        "is_published": 1
     },
 
     {
@@ -576,7 +578,8 @@ module.exports.exhibit_items = [
                 "is_published": 1, 
                 "order": 2
             }
-        ]
+        ],
+        "is_published": 1
     },
 
     {
@@ -639,7 +642,8 @@ module.exports.exhibit_items = [
                 "is_published": 1, 
                 "order": 2
             }
-        ]
+        ],
+        "is_published": 1
     },
     {
         "uuid": "cb5338ff229062c1026fd5f64b9119cc",
@@ -707,7 +711,8 @@ module.exports.exhibit_items = [
                 "is_published": 1, 
                 "order": 4
             }
-        ]
+        ],
+        "is_published": 1
     },
     {
         "uuid": "4cc6523b68d8674e886ec53ae25b6239",
@@ -916,7 +921,8 @@ module.exports.exhibit_items = [
                 "is_published": 1, 
                 "order": 2
             }
-        ]
+        ],
+        "is_published": 1
     },
     {
         "uuid": "ddb78a02c0bd518e5dd18e3b7a4bf038",
@@ -957,7 +963,8 @@ module.exports.exhibit_items = [
                 "is_published": 1, 
                 "order": 2
             }
-        ]
+        ],
+        "is_published": 1
     },
     {
         "uuid": "4c7bd3a1d70295292ef8fa71c40b81cf",
@@ -1132,7 +1139,8 @@ module.exports.exhibit_items = [
                 "is_published": 1, 
                 "order": 13
             }
-        ]
+        ],
+        "is_published": 1
     }, 
     {
         "uuid": "b0e3e309fccd3132c2cebc1143aec877",
@@ -1220,7 +1228,8 @@ module.exports.exhibit_items = [
                 "is_published": 1, 
                 "order": 6
             }
-        ]
+        ],
+        "is_published": 1
     },
     {
         "uuid": "09b38747eed941cc085d2c4e88f066d7",
@@ -1574,6 +1583,7 @@ module.exports.exhibit_items = [
                 "is_published": 1, 
                 "order": 16
             }
-        ]
+        ],
+        "is_published": 1
     } // ingested ^^^
 ]
