@@ -354,7 +354,6 @@ module.exports = [
         "layout": "media_left", 
         "media_width": "65", 
 
-        
         "styles": { 
 
             
@@ -448,7 +447,7 @@ module.exports = [
         "description": "", 
         "type": "item", 
         "layout": "media_right", 
-        "media_width": "40", 
+        "media_width": "33", 
 
         
         "styles": { 
