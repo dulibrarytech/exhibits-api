@@ -12,7 +12,8 @@ module.exports.exhibit_items = [
         },
         "order": 2, 
         "is_visible": 1, 
-        "is_anchor": 1 
+        "is_anchor": 1,
+        "is_published": 1
     },
 
     {
@@ -258,7 +259,8 @@ module.exports.exhibit_items = [
         },
         "order": 15, 
         "is_visible": 1, 
-        "is_anchor": 1 
+        "is_anchor": 1,
+        "is_published": 1
     },
 
     {
@@ -509,7 +511,8 @@ module.exports.exhibit_items = [
         },
         "order": 21, 
         "is_visible": 1, 
-        "is_anchor": 1 
+        "is_anchor": 1,
+        "is_published": 1
     },
     {
         "uuid": "3ee135bfe271dabcdef86148e08fe69b",
@@ -719,7 +722,8 @@ module.exports.exhibit_items = [
         },
         "order": 27, 
         "is_visible": 1, 
-        "is_anchor": 1 
+        "is_anchor": 1,
+        "is_published": 1
     },
     {
         "uuid": "75c658752b56fb311d55f794df04246b",
@@ -1231,7 +1235,8 @@ module.exports.exhibit_items = [
         },
         "order": 41, 
         "is_visible": 1, 
-        "is_anchor": 1 
+        "is_anchor": 1,
+        "is_published": 1
     },
     {
         "uuid": "e61ace24ab8d2a038360c72e2a3521d4",
