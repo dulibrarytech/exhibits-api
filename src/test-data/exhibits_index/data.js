@@ -47,11 +47,11 @@ module.exports = [
         "template": {
           "color": "#000000",
           "backgroundColor": "#E6E6E6",
-          "fontSize":"19px"
+          "fontSize":"22px"
         }
       },
     },
-    "is_published": 1,
+    "is_published": 0,
     "is_featured": 0
   },
 
@@ -74,13 +74,13 @@ module.exports = [
               "backgroundColor":"#e5e5e5",
               "color":"#505050",
               "fontFamily":"Tahoma",
-              "fontSize":"19px",
+              "fontSize":"20px",
           },
           "template":{
               "backgroundColor":"#ffffff",
               "color":"#303030",
               "fontFamily":"Verdana",
-              "fontSize":"19px",
+              "fontSize":"20px",
           }
       }
     },
