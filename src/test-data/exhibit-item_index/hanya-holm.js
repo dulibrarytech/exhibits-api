@@ -58,10 +58,6 @@ module.exports.exhibit_items = [
         "order": 3
     },
 
-    //////////////////
-    // end ingested
-    //////////////////
-
     {
         "uuid": "1f35be1b431d986b32822dd9985acde1",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
@@ -171,6 +167,10 @@ module.exports.exhibit_items = [
         "is_published": 0, 
         "order": 9
     },
+
+    //////////////////
+    // end ingested
+    //////////////////
 
     ///////////////////
     // template object
