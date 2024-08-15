@@ -168,6 +168,95 @@ module.exports.exhibit_items = [
         "order": 9
     },
 
+    {
+        "uuid": "a195a7dca8dafdb02b6b15be50876d7b",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "title": "Opera, Film, and Broadway", 
+        "template": "row", 
+        "item_type": "text", 
+        "text": "<p><i>“Though she is a high brow...right out of the modern dance concert field, she does not look down her nose at the Broadway medium.” – dance critic John Martin</i></p>", 
+        "type": "item", 
+        "layout": "text_only", 
+        "styles": { 
+            backgroundColor: '#FFFFFF',
+            fontSize: "1.65em"
+        },
+        "is_published": 0, 
+        "order": 10
+    },
+
+    {
+        "uuid": "d9ba21f5ec84fb2c4649083e382b4486",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "caption": "Hanya Holm poses with Ballad of Baby Doe co-director Edward Levy, Douglas Moore (composer), and John Latouche (librettist), between 1956-1959", 
+        "template": "row", 
+        "item_type": "image", 
+        "media": "265920d8-17f4-4a5f-ab12-d2d9ebf7d45b",
+        "text": "<p>Holm branched out from pure concert dance in 1948 when she choreographed the Broadway production of Cole Porter’s Kiss Me, Kate, and did not, with a few exceptions, revisit it until close to the end of her career. The production marked another important point in Holm's career when, in 1952, she became the first choreographer to copyright her work by submitting her Labanotated score of the musical to the Library of Congress.</p><p>Over the course of her career, she choreographed or did staging for operas (The Ballad of Baby Doe, 1956 and Orpheus and Eurydice, 1959), created choreography for thirteen stage musicals (My Fair Lady, 1956 and Camelot, 1960), and film (The Vagabond King, 1956).</p><p>Holm’s belief that all choregraphy should evolve organically out of an understanding of the work - plot, character, costume, everything - enabled her to branch out from her modern dance roots. She drew from a natural movement base to incorporate classical ballet, jitterbugging, soft-shoe, acrobatics, court dance, and more.</p><p>Holm’s goal was to enable the dance to, as scholar Claudia Gitelman put it, “burst from book and song in seemingly spontaneous fashion.“</p>",        
+        "type": "item", 
+        "layout": "media_right", 
+        "wrap_text": 1,
+        "media_width": "50",  
+        "styles": { 
+            backgroundColor: '#FFFFFF' 
+        },
+        "is_repo_item": 1,
+        "is_published": 0, 
+        "order": 11
+    },
+
+    {
+        "uuid": "223b79dd2b8b47254a7faa900a1466c1",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "caption": "Performance of Orpheus and Eurydice at the Vancouver Festival in Vancouver, British Columbia, Canada in 1959", 
+        "template": "row", 
+        "item_type": "image", 
+        "media": "223b79dd2b8b47254a7faa900a1466c1.jpg",
+        "type": "item", 
+        "layout": "media_only", 
+        "media_width": "100",  
+        "styles": { 
+            backgroundColor: '#FFFFFF' 
+        },
+        "is_published": 0, 
+        "order": 12
+    },
+
+    {
+        "uuid": "6c9ff5ef7cf69126e94bce840a1ea258",
+        "type": "heading",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6", 
+        "text": "Hanya as Educator",
+        "styles": {
+            backgroundColor: '#6C317D',
+            color: '#FFFFFF',
+            fontSize: "47px"
+        },
+        "is_visible": 1, 
+        "is_anchor": 1,
+        "is_published": 0,
+        "order": 13, 
+    },
+
+    {
+        "uuid": "a24f99e877cd460fa6cb4a1ac6b27ab2",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "template": "row", 
+        "item_type": "image", 
+        "media": "a24f99e877cd460fa6cb4a1ac6b27ab2.jpg",
+        "text": "<p>Hanya Holm’s background and training was in modern dance, but her approach to teaching dance mirrored her genre-agnostic approach to choreography – and because of it, her influence extended far beyond the modern dance community.</p><p>Holm began teaching in Germany for expressionist dance pioneer Mary Wigman, and then founded a Wigman School in New York, which was soon renamed the Hanya Holm School of Dance. Starting in 1934, she taught at the now-internationally renowned Bennington School of Dance at Bennington College in Vermont. Bennington was also home to the other “Big Four” modern dance pioneers in America – Charles Weidman, Doris Humphrey, and Martha Graham.</p><p>In 1941, Holm found her “teaching home” at Colorado College, which she would make her summer destination for 43 years. She continued to work internationally on other projects throughout those years, but for those who attended Holm’s eight-week summer dance school in Colorado, her most lasting impact on the dance world was as an educator.</p>",
+        "type": "item", 
+        "layout": "media_left", 
+        "wrap_text": 0,
+        "media_width": "25",  
+        "media_padding": 0,
+        "styles": { 
+            backgroundColor: '#FFFFFF'
+        },
+        "is_published": 0, 
+        "order": 14
+    },
+
     //////////////////
     // end ingested
     //////////////////
