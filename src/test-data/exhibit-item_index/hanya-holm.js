@@ -41,7 +41,7 @@ module.exports.exhibit_items = [
     {
         "uuid": "d0362879647f8fd6957b86dbd63a2e6a",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
-        "title": "Hanya Comes to America", 
+        "title": "<span style='color: #A82F88'>Hanya Comes to America</div>", 
         "caption": "Hanya Holm performs Dance of Work and Play, circa 1937", 
         "template": "row", 
         "item_type": "image", 
@@ -61,7 +61,7 @@ module.exports.exhibit_items = [
     {
         "uuid": "1f35be1b431d986b32822dd9985acde1",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
-        "title": "Into the West", 
+        "title": "<span style='color: #A82F88'>Into the West</div>", 
         "template": "row", 
         "item_type": "text", 
         "text": "<p><i>“I am attracted to the West. I love the clear skies, the light, dry air, the open spaces, and the majestic mountains.” – Hanya Holm</i></p>",    // italic html, for quote    
@@ -134,7 +134,7 @@ module.exports.exhibit_items = [
     {
         "uuid": "4985efa41ead92c40c96667c0b938e2a",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
-        "title": "Modern Dance for the Stage", 
+        "title": "<span style='color: #CFDC5A'>Modern Dance for the Stage</div>", 
         "caption": "Louise Kloepper (an early Holm company member) and Hanya Holm perform Metropolitan Daily, circa 1937", 
         "template": "row", 
         "item_type": "image", 
@@ -171,7 +171,7 @@ module.exports.exhibit_items = [
     {
         "uuid": "a195a7dca8dafdb02b6b15be50876d7b",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
-        "title": "Opera, Film, and Broadway", 
+        "title": "<span style='color: #CFDC5A'>Opera, Film, and Broadway</div>", 
         "template": "row", 
         "item_type": "text", 
         "text": "<p><i>“Though she is a high brow...right out of the modern dance concert field, she does not look down her nose at the Broadway medium.” – dance critic John Martin</i></p>", 
@@ -257,12 +257,239 @@ module.exports.exhibit_items = [
         "order": 14
     },
 
+    {
+        "uuid": "4ed4afb562beaf2a001103425d51b80c",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "title": "<span style='color: #6C317D'>Bennington School of Dance</span>", 
+        "caption": "Hanya Holm teaches a modern dance class on the lawn at Bennington College, circa 1937", 
+        "template": "row", 
+        "item_type": "image", 
+        "media": "4ed4afb562beaf2a001103425d51b80c.jpg",
+        "text": "<p>In 1934, soon after Holm came to the United States to direct the Wigman School, she began teaching summer modern dance classes at the prestigious Bennington School of Dance. Some of the other teachers included Martha Graham, Charles Weidman, and Doris Humphrey, all of whom are now known as the “Big Four” in modern dance.</p><p>During her time at Bennington, Holm was a founding member of the Bennington Festival, which later became the American Dance Festival. The festival provided a venue for these modern dance educators to experiment and train students at the same time, which led to some of Holm's best known modern dance works, such as Trend (1937).</p><p>Maxine Munt, a company member who later founded the Changing Scene Theatre in Denver with husband and fellow company member Al Brooks, documented her time at Bennington in a scrapbookof photographs that she donated to the University of Denver. Munt's photographs provide an intimate and personal depiction of what life was like for students who were fortunate enough to study and perform at Bennington.</p>",        
+        "type": "item", 
+        "layout": "media_bottom", 
+        "wrap_text": 0,
+        "media_width": "100",  
+        "styles": { 
+            backgroundColor: '#E8DFEB' // light violet 
+        },
+        "is_published": 0, 
+        "order": 15
+    },
+
     //////////////////
     // end ingested
     //////////////////
 
+    {
+        "uuid": "58d71555625ef5f92212c17da831926a",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "type": "grid",
+        "columns": "3",
+        "title": "<span style='color: #6C317D'>Bennington School of Dance Image Gallery</span>",
+        "order": 16,
+        "styles": { 
+            backgroundColor: '#FFFFFF'
+        },
+        "items": [
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 1
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 2
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 3
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 4
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 5
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 6
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 7
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 8
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 9
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 10
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 11
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 12
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 13
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 14
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 15
+            },
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 16
+            }
+        ],
+        "is_published": 1
+    }, 
+
     ///////////////////
-    // template object
+    // template objects
     ///////////////////
     {
         "uuid": "",
@@ -282,5 +509,32 @@ module.exports.exhibit_items = [
         },
         "is_published": 0, 
         "order": 0
+    },
+
+    {
+        "uuid": "",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "type": "grid",
+        "columns": "3",
+        "title": "",
+        "order": 0,
+        "styles": { 
+            backgroundColor: ''
+        },
+        "items": [
+            {
+                "uuid": "",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "",
+                "media": "", 
+                "description": "",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 0
+            },
+        ],
+        "is_published": 1
     }
 ]
