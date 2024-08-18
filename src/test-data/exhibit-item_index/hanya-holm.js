@@ -277,10 +277,6 @@ module.exports.exhibit_items = [
         "order": 15
     },
 
-    //////////////////
-    // end ingested
-    //////////////////
-
     {
         "uuid": "58d71555625ef5f92212c17da831926a",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
@@ -293,200 +289,204 @@ module.exports.exhibit_items = [
         },
         "items": [
             {
-                "uuid": "",
+                "uuid": "8924cc9ca4832409cff69133a9633324",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "8924cc9ca4832409cff69133a9633324_thumbnail.jpg",
+                "media": "8924cc9ca4832409cff69133a9633324.jpg", 
+                "description": "Charles Weidman",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 1
             },
             {
-                "uuid": "",
+                "uuid": "14805c26cb22be95408def7b0c4e3302",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "14805c26cb22be95408def7b0c4e3302_thumbnail.jpg",
+                "media": "14805c26cb22be95408def7b0c4e3302.jpg", 
+                "description": "Martha Graham",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 2
             },
             {
-                "uuid": "",
+                "uuid": "ab09e73e2f7d7183b8103f6314547b23",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "ab09e73e2f7d7183b8103f6314547b23_thumbnail.jpg",
+                "media": "ab09e73e2f7d7183b8103f6314547b23.jpg", 
+                "description": "Doris Humphrey",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 3
             },
             {
-                "uuid": "",
+                "uuid": "752ad7e7a8bf26193d1c73ff2daa9078",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "752ad7e7a8bf26193d1c73ff2daa9078_thumbnail.jpg",
+                "media": "752ad7e7a8bf26193d1c73ff2daa9078.jpg", 
+                "description": "Hanya Holm",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 4
             },
             {
-                "uuid": "",
+                "uuid": "57490714858f4d5fa5ecf905486ea809",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "57490714858f4d5fa5ecf905486ea809_thumbnail.jpg",
+                "media": "57490714858f4d5fa5ecf905486ea809_thumbnail.jpg", 
+                "description": "Charles Weidman",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 5
             },
             {
-                "uuid": "",
+                "uuid": "970090255a7ff0d477cef3055d023e29",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "970090255a7ff0d477cef3055d023e29_thumbnail.jpg",
+                "media": "970090255a7ff0d477cef3055d023e29.jpg", 
+                "description": "Charles Weidman's modern dance class",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 6
             },
             {
-                "uuid": "",
+                "uuid": "38b759d7b0d212669d495466b79200ba",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "38b759d7b0d212669d495466b79200ba_thumbnail.jpg",
+                "media": "38b759d7b0d212669d495466b79200ba.jpg", 
+                "description": "Charles Weidman's modern dance class",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 7
             },
             {
-                "uuid": "",
+                "uuid": "87abcb010c903891d8c752e0a21d5bad",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "87abcb010c903891d8c752e0a21d5bad_thumbnail.jpg",
+                "media": "87abcb010c903891d8c752e0a21d5bad.jpg", 
+                "description": "Charles Weidman's modern dance class",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 8
             },
             {
-                "uuid": "",
+                "uuid": "7f96a75a86a80b1620e266bcdc2e694c",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "7f96a75a86a80b1620e266bcdc2e694c_thumbnail.jpg",
+                "media": "7f96a75a86a80b1620e266bcdc2e694c.jpg", 
+                "description": "A modern dance class rehearses",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 9
-            },
+            }, 
             {
-                "uuid": "",
+                "uuid": "178740016e6fe0be339731bcf35775e4",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "178740016e6fe0be339731bcf35775e4_thumbnail.jpg",
+                "media": "178740016e6fe0be339731bcf35775e4.jpg", 
+                "description": "Charles Weidman's modern dance class",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 10
             },
             {
-                "uuid": "",
+                "uuid": "c7c46bec90e13bbaf8becc24d41e4c0b",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "c7c46bec90e13bbaf8becc24d41e4c0b_thumbnail.jpg",
+                "media": "c7c46bec90e13bbaf8becc24d41e4c0b.jpg", 
+                "description": "Dancers practice in front of the Commons Building",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 11
             },
             {
-                "uuid": "",
+                "uuid": "29393129b02278f9067d90b351d2ddbb",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "29393129b02278f9067d90b351d2ddbb_thumbnail.jpg",
+                "media": "29393129b02278f9067d90b351d2ddbb.jpg", 
+                "description": "Dancers practice in front of the Commons Building",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 12
             },
             {
-                "uuid": "",
+                "uuid": "58ae3b5c7c112963e18efa6200ba0f52",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "58ae3b5c7c112963e18efa6200ba0f52_thumbnail.jpg",
+                "media": "58ae3b5c7c112963e18efa6200ba0f52.jpg", 
+                "description": "Female students play gongs on the lawn",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 13
             },
             {
-                "uuid": "",
+                "uuid": "8c08d80b649e63b42ed247693dfaee85",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "8c08d80b649e63b42ed247693dfaee85_thumbnail.jpg",
+                "media": "8c08d80b649e63b42ed247693dfaee85.jpg", 
+                "description": "Charles Weidman jokes with his students",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 14
             },
             {
-                "uuid": "",
+                "uuid": "70cab42868fef125b821195d70c69973",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "70cab42868fef125b821195d70c69973_thumbnail.jpg",
+                "media": "70cab42868fef125b821195d70c69973.jpg", 
+                "description": "Modern dancers at Bennington College",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 15
             },
             {
-                "uuid": "",
+                "uuid": "f74f588886a267de3850bd30277111ff",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "thumbnail": "f74f588886a267de3850bd30277111ff_thumbnail.jpg",
+                "media": "f74f588886a267de3850bd30277111ff.jpg", 
+                "description": "Commons Building at Bennington College",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
                 "order": 16
             }
         ],
-        "is_published": 1
+        "is_published": 0
     }, 
+
+    //////////////////
+    // end ingested
+    //////////////////
 
     ///////////////////
     // template objects
@@ -535,6 +535,6 @@ module.exports.exhibit_items = [
                 "order": 0
             },
         ],
-        "is_published": 1
+        "is_published": 0
     }
 ]
