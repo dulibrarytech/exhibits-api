@@ -489,6 +489,7 @@
       "order": 17,
       "created": "2023-06-29T20:24:20.000Z"
     },
+
     {
       "uuid": "178575b6affa27334ada62d3d7214831",
       "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
@@ -707,5 +708,24 @@
       "is_published": 1,
       "order": 32,
       "created": "2023-06-29T20:24:20.000Z"
+    },
+
+    {
+        "uuid": "e2fd3cbd88633800f93cbd7543d35575",
+        "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
+        "title": "audio item kaltura",
+        "caption": "Summary/Description. Audio content courtesy of the University of Denver.",
+        "item_type": "audio",
+        "kaltura_id": "0_6mf7d2pb",
+        "media": "",
+        "text": "&lt;div style=&amp;#39;font-size: 1.3em; font-weight: bold&amp;#39;&gt;Audio&lt;/div&gt;&lt;hr&gt;It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &amp;#39;Content here, content here&amp;#39;, making it look like readable English.",
+        "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+        "type": "item",
+        "layout": "media_right",
+        "media_width": "25",
+        "styles": "{\"item\":{\"background\":\"#F1A35E\"}}",
+        "is_published": 1,
+        "order": 33,
+        "created": "2023-06-29T20:24:20.000Z"
     }
   ]
