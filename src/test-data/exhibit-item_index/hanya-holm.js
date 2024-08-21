@@ -523,10 +523,6 @@ module.exports.exhibit_items = [
         "order": 18
     },
 
-    //////////////////
-    // end ingested
-    //////////////////
-
     {
         "uuid": "ea3b6ba68114b3514b71a48757093e51",
         "type": "heading",
@@ -565,7 +561,7 @@ module.exports.exhibit_items = [
     {
         "uuid": "28314325314843dcbf419a82d7b18c72",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
-        "title": "Colorado Ballet", 
+        "title": "<span style='color: #D68037'>Colorado Ballet</span>", 
         "caption": "Freidann Parker poses at Red Rocks Amphitheater, circa 1950", 
         "template": "row", 
         "item_type": "image", 
@@ -603,7 +599,7 @@ module.exports.exhibit_items = [
     {
         "uuid": "a0494efce4628c9f09cb150359f03183",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
-        "title": "Children's Dance Theatre", 
+        "title": "<span style='color: #D68037'>Children's Dance Theatre</span>", 
         "caption": "Vera Sears teaches a children's dance class at the Lamont School of Music mansion, 909 Grant Street", 
         "template": "row", 
         "item_type": "image", 
@@ -619,6 +615,10 @@ module.exports.exhibit_items = [
         "is_published": 0, 
         "order": 23
     },
+
+    //////////////////
+    // end ingested
+    //////////////////
 
     ///////////////////
     // template objects
