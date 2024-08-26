@@ -82,7 +82,7 @@ module.exports.exhibit_items = [
         "media": "71352c4c-9ee1-46f6-9d71-6ba1494ecab8",
         "text": "<p>In 1933, the year of Hitler's rise to power, approximately 160,000 Jews lived in Berlin, Germany, which was less than 4% of its population. By 1939, an estimated 80,000 Berlin Jews had managed to emigrate. Between 1941 and 1944 more than 60,000 were deported to Eastern European ghettoes and death camps. Only about 7,000 were known to have survived by 1945.</p><p>The historic documents in the Lowenstein Family Papers and Art collection tell the story of one Jewish family's miraculous survival amidst the horrors of the Holocaust. Two exceedingly rare documents from 1942 served as eviction notices. They order the recipients to report at a certain date and time to a government building in Berlin. In reality the notice was a summons of deportation to death camps. If obeyed, the recipient was killed. If not obeyed, the recipient most certainly did not retain the letter. That notice led to the deaths of an estimated 60,000 Jews.</p><p>The Loewensteins (Lowenstein after immigration) - Max, Maria, Karin, and Henry - lived in Berlin and, beginning in 1933, experienced the ever tightening Nazi noose. Like many other Jewish families they tried desperately to find ways to leave Germany. The beginnings of the Holocaust burst forth on Kristallnacht in 1938. Synagogues were burned and thousands of Jews were taken to concentration camps. Many were never seen again.</p><p>Thirteen-year-old Henry was lucky to be one of 10,000 children to be saved by the Kindertransport in 1939. Kindertransports were organized by British aid organizations to bring predominantly German, Austrian, and Czechoslovakian Jewish children to the United Kingdom. Henry was able to reunite with his family in 1947.</p><p>Henry's mother Maria, born into a Lutheran family, used her Aryan status to protect her loved ones. Her courage saved the family from deportation and certain death on numerous occasions. She brought the documents in this collection to America in 1946.</p><p>Henry Lowenstein donated them to the Ira M. and Peryle Hayutin Beck Memorial Archives. The collection is located in the Anderson Academic Commons, Special Collections and Archives.</p>",        
         "type": "item", 
-        "wrap_text": 0,
+        "wrap_text": 1,
         "layout": "media_right", 
         "media_width": "33",  
         "styles": { 
@@ -818,11 +818,11 @@ module.exports.exhibit_items = [
         "text": "<p>In the fall of 1942 the Nazis began planning to catch and transport the remaining Berlin Jews in February, 1943, with the goal of making Germany’s capital Judenfrei - a term meaning \"free of Jews.\" They had lists of the remaining Jews in Berlin and their places of employment. On the morning of February 27, 1943, the Nazis proceeded to arrest them. Those Jews who had German relations were crammed into Rosenstrasse (Rose Street) 2-4, an empty factory building that had previously housed Jewish community offices and was a place where the Nazis gathered Jews about to be transported.</p><p>Maria returned home from her night shift that Saturday morning to learn that Max had been taken. She found out that he was being held at the Rosenstrasse address and hurried there to discover about a hundred non-Jewish women demanding to see their husbands, or at least to find out what their fate was to be.</p><p>The Nazi guards, used to dealing with helpless Jewish families, did not know how to respond to these insistent German women, whom they could not so easily bully into submission. The wives stood their ground, crying out: “If you take them, you must take us!” and refused to disperse. Most, including Maria and Karin, stayed on for the next five days, their numbers swelling into the thousands.</p>",
         "type": "item", 
         "layout": "media_right", 
-        "media_width": "50",  
+        "media_width": "66",  
         "wrap_text": 1,
         "styles": { 
             backgroundColor: '#C2CED5' 
-    },
+        },
         "is_published": 1, 
         "order": 32
     },
@@ -837,7 +837,7 @@ module.exports.exhibit_items = [
         "text": "<p>Finally, the Nazis set up machine guns and prepared to use force to put an end to this challenge to their authority. Joseph Goebbels, Minister of Propaganda and Gauleiter (Governor) of Berlin, was keenly aware that Germany had suffered enormous military defeats in recent weeks. Estimates vary, but they had lost at least 500,000 men in the battle for Stalingrad. British Field Marshal Montgomery had just driven Rommel’s army across North Africa, inflicting many casualties.</p><p>Goebbels, concerned about German morale, did not want to see a massacre of German women in the center of Berlin, where it could not be covered up. He gave the order to release all Jews who had a non-Jewish spouse waiting for them, noting that deportations could easily resume in a few weeks, when it would be more convenient. Approximately 2,000, including Max, were released. All others were taken to the gas chambers at Auschwitz. Thus Max escaped deportation once again, but knew that they might come for him at any moment.</p><p>On March 2, 1943 the British began their nighttime “1,000 bomber” raids, and the U.S. Eighth Air Force soon followed with its massive daylight raids on Berlin. Max and Maria welcomed these raids despite the dangers from the falling bombs, because that was the only time when they did not have to fear the Nazis.</p>",
         "type": "item", 
         "layout": "media_right", 
-        "media_width": "50",  
+        "media_width": "66",  
         "wrap_text": 1,
         "styles": { 
             backgroundColor: '#C2CED5' 
@@ -946,7 +946,7 @@ module.exports.exhibit_items = [
                 "type": "item", 
                 "layout": "media_bottom",
                 "styles": {},
-                "is_published": 1, 
+                "is_published": 1,
                 "order": 1
             },
 
@@ -956,7 +956,7 @@ module.exports.exhibit_items = [
                 "title": "", 
                 "caption": "'HUNGER,' by Marie (Maria) Loewenstein, 1944. This drawing depicts Maria's daughter, Karin Steinberg.", 
                 "item_type": "image", 
-                "media": "6a9c450a1fd8d73454fb63e01c15dd56.jpd", 
+                "media": "6a9c450a1fd8d73454fb63e01c15dd56.jpg", 
                 "text": "",        
                 "type": "item", 
                 "styles": {},
@@ -1258,11 +1258,11 @@ module.exports.exhibit_items = [
         "text": "<p>World War II ended on May 7, 1945.</p><p>The Loewensteins had endured incredible hardships, but they had survived. Of the more than 160,000 Jews in Berlin before Hitler came to power, few were still alive. The city lay in ruins and feeding the population was a huge challenge. The victorious Russians wanted Germany to care for the needs of Berlin’s civilian population, but wanted to be sure that no Nazis would be involved.</p><p>Otto Grotewohl had lived in the rear of the Loewensteins’ apartment building when Henry was a child and had served in the Reichstag before Hitler came to power. He was one of the few anti-Nazis with administrative experience who had survived the Hitler era. He began by first organizing food distribution in the immediate neighborhood and soon handled all of Berlin and much of what was to become the East Zone.</p><p>With her clear anti-Nazi past, Karin became hisassistant and soon dealt on his behalf withrepresentatives of the Western Powers. Her maincontact with OMGUS, the Office of the MilitaryGovernment of the United States in Berlin, wasDenver native Dick Sears, who played an importantrole in the family’s later lives. Grotewohl soonbecame the leader of the Social Democratic Party inGermany and eventually the Prime Minister of EastGermany. Under Soviet pressure he met secretly inFebruary/March 1946 with the leader of the GermanCommunists, Wilhelm Pieck. Only Karin was present to take notes as the two leaders planned to betray the Western Powers. She passed the information to her American contacts, was taken prisoner by the Russians, escaped, and her American friends arranged for her, Max and Maria to leave as quickly as possible for safety in the United States.</p>",
         "type": "item", 
         "layout": "media_right", 
-        "media_width": "66",  
+        "media_width": "50",  
         "wrap_text": 1,
         "styles": { 
             backgroundColor: '#C2CED5' 
-    },
+    }   ,
         "is_published": 1, 
         "order": 42
     }, 
