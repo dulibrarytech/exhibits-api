@@ -5,6 +5,10 @@
       "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
       "text": "Example Items",
       "order": 1,
+      "styles": {
+        "color": "white",
+        "backgroundColor": "#8b2332"
+      },
       "is_visible": 1,
       "is_anchor": 1,
       "is_published": 1
@@ -272,6 +276,11 @@
       "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
       "text": "Example Layout Options",
       "order": 5,
+      "styles": {
+        "color": "white",
+        "backgroundColor": "#8b2332",
+        "fontFamily": "Times New Roman"
+      },
       "is_visible": 1,
       "is_anchor": 1,
       "is_published": 1
@@ -557,6 +566,10 @@
       "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
       "text": "Example Item Types",
       "order": 21,
+      "styles": {
+        "color": "white",
+        "backgroundColor": "#8b2332"
+      },
       "is_visible": 1,
       "is_anchor": 1,
       "is_published": 1
@@ -649,7 +662,12 @@
       "text": "Example Item Types - Repository Items",
       "subtext": "subtitle text",
       "order": 27,
+      "styles": {
+        "color": "white",
+        "backgroundColor": "#8b2332"
+      },
       "is_visible": 1,
+      "is_anchor": 1,
       "is_published": 1
     },
     {
@@ -735,6 +753,10 @@
       "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
       "text": "Example Item Types (Embedded)",
       "order": 33,
+      "styles": {
+        "color": "white",
+        "backgroundColor": "#8b2332"
+      },
       "is_visible": 1,
       "is_anchor": 1,
       "is_published": 1
@@ -835,6 +857,10 @@
       "is_member_of_exhibit": "dd748b2c862c71bf50c1238c62ca26f0",
       "text": "Example Kaltura Media Items",
       "order": 39,
+      "styles": {
+        "color": "white",
+        "backgroundColor": "#8b2332"
+      },
       "is_visible": 1,
       "is_anchor": 1,
       "is_published": 1

@@ -2,7 +2,7 @@ module.exports = [
   {
     "uuid": "7b843505f749e10f8702eab4c1ec135f",
     "type": "exhibit",
-    "title": "Loewenstien",
+    "title": "The Loewenstien Family: A Story of Survival",
     "banner_template": "banner_1",
     "hero_image": "loewenstein_hero.jpg",
     "thumbnail_image": "loewenstein_hero_thumbnail.jpeg",
