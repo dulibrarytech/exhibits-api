@@ -15,7 +15,7 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 1, 
     },
 
@@ -34,7 +34,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF' 
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 2
     },
 
@@ -54,7 +54,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#F0DDED' // light pink
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 3
     },
 
@@ -71,7 +71,7 @@ module.exports.exhibit_items = [
             backgroundColor: '#FFFFFF', // ok
             fontSize: "1.65em"
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 4
     },
 
@@ -92,7 +92,7 @@ module.exports.exhibit_items = [
             backgroundColor: '#FFFFFF' 
         },
         "is_repo_item": 1,
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 5
     },
 
@@ -108,7 +108,7 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 6, 
     },
 
@@ -127,7 +127,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF' // ok
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 7
     },
 
@@ -147,7 +147,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#F8FAE4' // light yellow
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 8
     },
 
@@ -164,7 +164,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#F8FAE4'
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 9
     },
 
@@ -181,7 +181,7 @@ module.exports.exhibit_items = [
             backgroundColor: '#FFFFFF',
             fontSize: "1.65em"
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 10
     },
 
@@ -201,7 +201,7 @@ module.exports.exhibit_items = [
             backgroundColor: '#FFFFFF' 
         },
         "is_repo_item": 1,
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 11
     },
 
@@ -218,7 +218,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF' 
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 12
     },
 
@@ -234,7 +234,7 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 13, 
     },
 
@@ -253,7 +253,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF'
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 14
     },
 
@@ -273,7 +273,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#E8DFEB' // light violet 
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 15
     },
 
@@ -481,7 +481,7 @@ module.exports.exhibit_items = [
                 "order": 16
             }
         ],
-        "is_published": 0
+        "is_published": 1
     }, 
 
     {
@@ -500,7 +500,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#E8DFEB' 
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 17
     },
 
@@ -519,7 +519,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#E8DFEB' 
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 18
     },
 
@@ -535,7 +535,7 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 19, 
     },
 
@@ -554,7 +554,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF'
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 20
     },
 
@@ -573,7 +573,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#F8EDDF' // light orange
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 21
     },
 
@@ -592,7 +592,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#F8EDDF' // light orange
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 22
     },
 
@@ -612,8 +612,203 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF' 
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 23
+    },
+
+    {
+        "uuid": "e32409d1bbf27291b94781bd24670cd3",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "type": "grid",
+        "columns": "3",
+        "title": "<span style='color: #D68037'>Children's Dance Theatre Image Gallery</span>",
+        "order": 24,
+        "styles": { 
+            backgroundColor: '#F8EDDF'
+        },
+        "items": [
+            {
+                "uuid": "712145dc6230b4dec142cf338f77bc16",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "712145dc6230b4dec142cf338f77bc16_thumbnail.jpg",
+                "media": "712145dc6230b4dec142cf338f77bc16.jpg", 
+                "description": "Lamont School of Music, 909 Grant Street",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 1
+            },
+            {
+                "uuid": "9d8dca4be5c1ec722cb999aee7c41c30",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "9d8dca4be5c1ec722cb999aee7c41c30_thumbnail.jpg",
+                "media": "9d8dca4be5c1ec722cb999aee7c41c30.jpg", 
+                "description": "Children's dance class at the Lamont School of Music",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 2
+            },
+            {
+                "uuid": "53db5147ecb655a245af43a31c53680a",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "53db5147ecb655a245af43a31c53680a_thumbnail.jpg",
+                "media": "53db5147ecb655a245af43a31c53680a.jpg", 
+                "description": "Promotional photograph for the Children's Dance Theatre",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 3
+            },
+            {
+                "uuid": "f071bf073de862e6143bb5ff1922ca73",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "f071bf073de862e6143bb5ff1922ca73_thumbnail.jpg",
+                "media": "f071bf073de862e6143bb5ff1922ca73.jpg", 
+                "description": "Children's dance class at the Lamont School of Music",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 4
+            },
+            {
+                "uuid": "a4242f67b5251b76880be436d232b3a7",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "a4242f67b5251b76880be436d232b3a7_thumbnail.jpg",
+                "media": "a4242f67b5251b76880be436d232b3a7.jpg", 
+                "description": "Vera Sears, instructor and director of Lamont's dance department",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 5
+            },
+            {
+                "uuid": "186430fa98d662a16244017aa4370a55",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "186430fa98d662a16244017aa4370a55_thumbnail.jpg",
+                "media": "186430fa98d662a16244017aa4370a55.jpg", 
+                "description": "Millie Arndt, a student at the Lamont School of Music",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 6
+            },
+            {
+                "uuid": "f443a8662d25aa592870b4427d29fd06",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "f443a8662d25aa592870b4427d29fd06_thumbnail.jpg",
+                "media": "f443a8662d25aa592870b4427d29fd06.jpg", 
+                "description": "Promotional photograph for the Children's Dance Theatre",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 7
+            },
+            {
+                "uuid": "25c31c12e6ffe865f8a169ec67d023e5",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "25c31c12e6ffe865f8a169ec67d023e5_thumbnail.jpg",
+                "media": "25c31c12e6ffe865f8a169ec67d023e5.jpg", 
+                "description": "Vera Sears, instructor and later director of Lamont's dance department",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 8
+            },
+            {
+                "uuid": "066cd940666788e636ce2861be6c280b",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "066cd940666788e636ce2861be6c280b_thumbnail.jpg",
+                "media": "066cd940666788e636ce2861be6c280b.jpg", 
+                "description": "Children's dance class at the Lamont School of Music",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 9
+            },
+            {
+                "uuid": "f7df8944da8863fe45085177ec165ad4",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "f7df8944da8863fe45085177ec165ad4_thumbnail.jpg",
+                "media": "f7df8944da8863fe45085177ec165ad4.jpg", 
+                "description": "Young girls dance at Lamont School of Music",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 10
+            },
+            {
+                "uuid": "193d21bba6e1b87859cba161529f5989",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "193d21bba6e1b87859cba161529f5989_thumbnail.jpg",
+                "media": "193d21bba6e1b87859cba161529f5989.jpg", 
+                "description": "Sonja Savig, instructor at the Lamont School of Music",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 11
+            },
+            {
+                "uuid": "cf8ad1c875cdc0e031d751a6237aee26",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "cf8ad1c875cdc0e031d751a6237aee26_thumbnail.jpg",
+                "media": "cf8ad1c875cdc0e031d751a6237aee26.jpg", 
+                "description": "Carolyn Durand Brooks, Holm company member and instructor at Lamont",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 12
+            },
+            {
+                "uuid": "dbd3754709ccc69dfe4d448e1060db5f",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "dbd3754709ccc69dfe4d448e1060db5f_thumbnail.jpg",
+                "media": "dbd3754709ccc69dfe4d448e1060db5f.jpg", 
+                "description": "Freidann Parker, co-founder of Colorado Ballet and instructor at Lamont",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 13
+            },
+            {
+                "uuid": "acef71bac830941fede13896fa1ae5f0",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "acef71bac830941fede13896fa1ae5f0_thumbnail.jpg",
+                "media": "acef71bac830941fede13896fa1ae5f0.jpg", 
+                "description": "Freidann Parker, co-founder of Colorado Ballet and instructor at Lamont",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 14
+            },
+            {
+                "uuid": "c51a4a07ae5ccc5111165828c2627e17",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "thumbnail": "c51a4a07ae5ccc5111165828c2627e17_thumbnail.jpg",
+                "media": "c51a4a07ae5ccc5111165828c2627e17.jpg", 
+                "description": "Vera Sears and Hanya Holm, 1978",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 15
+            }
+        ],
+        "is_published": 1
     },
 
     //////////////////
@@ -639,7 +834,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF' 
         },
-        "is_published": 0, 
+        "is_published": 1, 
         "order": 0
     },
 
@@ -667,6 +862,7 @@ module.exports.exhibit_items = [
                 "order": 0
             },
         ],
-        "is_published": 0
+        "is_published": 1
     }
+
 ]
