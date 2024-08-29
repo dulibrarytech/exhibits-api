@@ -24,7 +24,7 @@ module.exports = [
       }
     },
     "is_published": 1,
-    "is_featured": 1
+    "is_featured": 0
   },
   
   {
@@ -51,8 +51,8 @@ module.exports = [
         }
       },
     },
-    "is_published": 0,
-    "is_featured": 0
+    "is_published": 1,
+    "is_featured": 1
   },
 
   {

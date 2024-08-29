@@ -811,58 +811,149 @@ module.exports.exhibit_items = [
         "is_published": 1
     },
 
-    //////////////////
-    // end ingested
-    //////////////////
-
-    ///////////////////
-    // template objects
-    ///////////////////
     {
-        "uuid": "",
+        "uuid": "d6d39d502572717381b72ce47d6356ec",
+        "type": "heading",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6", 
+        "text": "Hanya at Home",
+        "styles": {
+            backgroundColor: '#39A8C3',
+            color: '#FFFFFF',
+            fontSize: "47px"
+        },
+        "is_visible": 1, 
+        "is_anchor": 1,
+        "is_published": 1,
+        "order": 25, 
+    },
+
+    {
+        "uuid": "246710f929e62033e185cb6fb706a0c8",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
-        "title": "", 
-        "caption": "", 
         "template": "row", 
         "item_type": "image", 
-        "media": "",
-        "text": "",        
+        "media": "246710f929e62033e185cb6fb706a0c8.jpg",
+        "text": "<p>Holm’s biographer Walter Sorrell noted that, though she lived in New York City from 1931 until her death in 1992, Holm seemed to prefer her “splendid isolation” in Colorado.</p><p>Marshall Brooks, a set designer and photographer who married Carolyn Durand Brooks (one of Holm's early company members) photographed Hanya in some of these more relaxed, personal moments. Brooks' photographs provide a rare glimpse of Holm not just as “the world-renowned modern dance choreographer and educator,” but also as a hiker of mountains, a jokester, and a friend.</p>",
+        "type": "item", 
+        "layout": "media_left", 
+        "wrap_text": 1,
+        "media_width": "25",  
+        "media_padding": 0,
+        "styles": { 
+            backgroundColor: '#FFFFFF'
+        },
+        "is_published": 1, 
+        "order": 26
+    },
+
+    {
+        "uuid": "84873e408c1d472ebba615e9e43e3288",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "title": "<span style='color: #39A8C3'>A Second Family</span>", 
+        "caption": "Carolyn Durand Brooks, an early Holm company member and close family friend, circa 1939", 
+        "template": "row", 
+        "item_type": "image", 
+        "media": "ef72c60f-02ad-41ac-ab30-7bfbf69f523d",
+        "text": "<p>Carolyn Durand Brooks, a former Hanya Holm Dance Company member, met her husband, Marshall Brooks, when he was working as a set designer for Holm’s company in New York City in the late 1930s. Durand Brooks left the company soon after marrying, but she and Holm kept in close contact.</p><p>Holm visited the Brooks often during the summers that Holm directed the summer dance program at Colorado College, as the Brooks moved to Colorado after World War II. Durand Brooks noted that \"Marshall and I kept in close touch with Hanya and the three of us became great friends, actually more like family.\"</p>",        
         "type": "item", 
         "layout": "media_right", 
         "wrap_text": 1,
         "media_width": "50",  
+        "is_repo_item": 1,
         "styles": { 
-            backgroundColor: '#FFFFFF' 
+            backgroundColor: '#E1F2F6' // light blue 
         },
         "is_published": 1, 
-        "order": 0
+        "order": 27
     },
 
     {
-        "uuid": "",
+        "uuid": "55766599a0d9b2f169278d8cdcdf36a2",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
-        "type": "grid",
-        "columns": "3",
-        "title": "",
-        "order": 0,
+        "title": "", 
+        "caption": "Hanya Holm and Marshall Brooks in the Brooks' backyard, between 1960-1965", 
+        "template": "row", 
+        "item_type": "image", 
+        "media": "247c9260-2549-4610-85b1-eefeb2208931",
+        "type": "item", 
+        "layout": "media_only", 
+        "wrap_text": 1,
+        "media_width": "100",
+        "is_repo_item": 1, 
         "styles": { 
-            backgroundColor: ''
+            backgroundColor: '#E1F2F6' // light blue 
+        },
+        "is_published": 1, 
+        "order": 28
+    },
+
+    {
+        "uuid": "c0dd1c46e334a2971b9e1f9d51d6619d",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "title": "<span style='color: #39A8C3'>Hanya Lets Her Hair Down</div>", 
+        "template": "row", 
+        "item_type": "text", 
+        "text": "<p><i>\"[Hanya Holm] thought deeply and could articulate original, profound ideas, yet she loved nonsense and hilarity.\" - dance scholar Claudia Gitelman</i></p>", 
+        "type": "item", 
+        "layout": "text_only", 
+        "styles": { 
+            backgroundColor: '#FFFFFF',
+            fontSize: "1.65em"
+        },
+        "is_published": 1, 
+        "order": 29
+    },
+
+    { 
+        "uuid": "29bb520b659c916c389d7d17cb38ef70",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "title": "",
+        "type": "grid",
+        "columns": "2",
+        "order": 30,
+        "styles": {
+            backgroundColor: '#FFFFFF'
         },
         "items": [
             {
-                "uuid": "",
+                "uuid": "8e358a3f6374e0eeddb1c68384fe7b63",
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
-                "thumbnail": "",
-                "media": "", 
-                "description": "",        
+                "media": "8e358a3f6374e0eeddb1c68384fe7b63.jpg", 
+                "description": "Hanya Holm hula hoops in the Brooks' backyard, circa 1959",        
                 "type": "item", 
                 "styles": {},
                 "is_published": 1, 
-                "order": 0
+                "order": 1
             },
+            {
+                "uuid": "30d1f17750276a4c596e8e498e0097ed",
+                "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+                "item_type": "image", 
+                "media": "30d1f17750276a4c596e8e498e0097ed.jpg", 
+                "description": "Hanya Holm, known for her tight, ever-present bun, in a rare personal moment - with her hair down",        
+                "type": "item", 
+                "styles": {},
+                "is_published": 1, 
+                "order": 2
+            }
         ],
         "is_published": 1
+    },
+
+    {
+        "uuid": "962278295f01825444724a8c02ad5441",
+        "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
+        "template": "row", 
+        "item_type": "text", 
+        "text": "<p>Marshall Brooks' close relationship with Holm (not to mention his ever-present camera) resulted in a number of photographs of Holm in personal settings with friends and colleagues. The Marshall and Carolyn Durand Brooks Photography and Dance Collection contains many of these photographs, which provide a rare glimpse into Holm's personal life.</p><p>A tour through the collection shows Holm as an avid hiker, a cut-up (there are several photographs of Holm hula hooping with the Brooks in their backyard), and a friend to her former students (fellow German Vera Sears and Colorado Ballet's Freidann Parker and Lillian Covillo).</p><p>These photographs allow us a glimpse at this lighter side of Holm - with her hair down.</p>", 
+        "type": "item", 
+        "layout": "text_only", 
+        "styles": { 
+            backgroundColor: '#FFFFFF'
+        },
+        "is_published": 1, 
+        "order": 31
     }
 
 ]
