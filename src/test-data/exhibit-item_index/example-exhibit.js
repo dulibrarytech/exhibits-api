@@ -802,7 +802,7 @@
       "title": "audio item embedded",
       "caption": "Summary/Description. Audio content courtesy of the University of Denver.",
       "item_type": "audio",
-      "media": "38613e09-28ee-4b00-9081-df2a18f7946e.mp3",
+      "media": "38613e09-28ee-4b00-9081-df2a18f7946e.wav",
       "text": "&lt;div style=&amp;#39;font-size: 1.3em; font-weight: bold&amp;#39;&gt;Audio&lt;/div&gt;&lt;hr&gt;It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using &amp;#39;Content here, content here&amp;#39;, making it look like readable English.",
       "type": "item",
       "layout": "media_right",
@@ -810,7 +810,7 @@
       "styles": "{\"item\":{\"background\":\"#F1A35E\"}}",
       "is_embedded": 1,
       "is_published": 1,
-      "kaltura_id": "0_unc0v4as",
+      //"kaltura_id": "0_unc0v4as",
       "order": 36,
       "created": "2023-06-29T20:24:20.000Z"
     },
@@ -828,7 +828,7 @@
       "styles": "{\"item\":{\"background\":\"#B0BF73\"}}",
       "is_embedded": 1,
       "is_published": 1,
-      "kaltura_id": "0_za4023rj",
+      //"kaltura_id": "0_za4023rj",
       "order": 37,
       "created": "2023-06-29T20:24:20.000Z"
     },
