@@ -34,6 +34,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF' 
         },
+        "is_embedded": 1,
         "is_published": 1, 
         "order": 2
     },
@@ -127,6 +128,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF' // ok
         },
+        "is_embedded": 1,
         "is_published": 1, 
         "order": 7
     },
@@ -253,6 +255,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF'
         },
+        "is_embedded": 1,
         "is_published": 1, 
         "order": 14
     },
@@ -554,6 +557,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF'
         },
+        "is_embedded": 1,
         "is_published": 1, 
         "order": 20
     },
@@ -842,6 +846,7 @@ module.exports.exhibit_items = [
         "styles": { 
             backgroundColor: '#FFFFFF'
         },
+        "is_embedded": 1,
         "is_published": 1, 
         "order": 26
     },
