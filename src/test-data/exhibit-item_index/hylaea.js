@@ -11,7 +11,7 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 1, 
     },
 
@@ -25,7 +25,7 @@ module.exports.exhibit_items = [
         "styles": {
             backgroundColor: '#CCCBCD',
         },
-        "is_published": 0,
+        "is_published": 1,
         "order": 2
     },
 
@@ -41,28 +41,9 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 3, 
     },
-
-    // {
-    //     "uuid": "0c83c8a80e5054d101a3f4594ad88006",
-    //     "is_member_of_exhibit": "811c7fc9ed4f91b837b4f49ae8901c93",
-    //     "item_type": "external",
-    //     "media": "https://www.youtube.com/embed/_fzIE1kZ_c0",
-    //     "text": "<i>“[HYLAEA is] an interactive video and print installation that seeks to bring to life the residues, records, and archives of lost ecological memory. Part ecological ghost story/part zoological bibliography, this project stems from a desire to partially awaken the resting memories of lost life forms from the extinct species cabinets of the museum and the rare book shelves of the library. My intention in seeding motion, sound, interaction and macroscopic detail across the library is for viewers to recall that within less than a century of the publication of the first written and painted records of the astounding bird life of North America, both common and mythological species became the icons of human-induced extinctions.” (Tim Weaver, 2010)</i>",
-    //     "wrap_text": 1,
-    //     "type": "item",
-    //     "layout": "media_top",
-    //     "media_width": "100",
-    //     "media_padding": 1,
-    //     "styles": {
-    //         backgroundColor: '#FFFFFF',
-    //     },
-    //     "is_published": 0,
-    //     "is_embedded": 1,
-    //     "order": 4
-    // },
 
     {
         "uuid": "0c83c8a80e5054d101a3f4594ad88006",
@@ -79,7 +60,7 @@ module.exports.exhibit_items = [
         "styles": {
             backgroundColor: '#FFFFFF',
         },
-        "is_published": 0,
+        "is_published": 1,
         "is_embedded": 1,
         "order": 4
     },
@@ -96,7 +77,7 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 5, 
     },
 
@@ -115,7 +96,7 @@ module.exports.exhibit_items = [
         "styles": {
             backgroundColor: '#CCCBCD',
         },
-        "is_published": 0,
+        "is_published": 1,
         "is_embedded": 1,
         "order": 6
     },
@@ -132,7 +113,7 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 7, 
     },
 
@@ -152,7 +133,7 @@ module.exports.exhibit_items = [
         "styles": {
             backgroundColor: '#FFFFFF',
         },
-        "is_published": 0,
+        "is_published": 1,
         "order": 8
     },
     
@@ -172,7 +153,7 @@ module.exports.exhibit_items = [
         "styles": {
             backgroundColor: '#FFFFFF',
         },
-        "is_published": 0,
+        "is_published": 1,
         "order": 9
     },
 
@@ -188,7 +169,7 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 10, 
     },
 
@@ -208,7 +189,7 @@ module.exports.exhibit_items = [
         "styles": {
             backgroundColor: '#CCCBCD',
         },
-        "is_published": 0,
+        "is_published": 1,
         "order": 11
     },
 
@@ -224,7 +205,7 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 12, 
     },
 
@@ -244,7 +225,7 @@ module.exports.exhibit_items = [
         "styles": {
             backgroundColor: '#FFFFFF',
         },
-        "is_published": 0,
+        "is_published": 1,
         "order": 13
     },
 
@@ -264,7 +245,7 @@ module.exports.exhibit_items = [
         "styles": {
             backgroundColor: '#FFFFFF',
         },
-        "is_published": 0,
+        "is_published": 1,
         "order": 14
     },
 
@@ -280,7 +261,7 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 15, 
     },
 
@@ -300,7 +281,7 @@ module.exports.exhibit_items = [
         "styles": {
             backgroundColor: '#CCCBCD',
         },
-        "is_published": 0,
+        "is_published": 1,
         "order": 16
     },
 
@@ -318,7 +299,7 @@ module.exports.exhibit_items = [
         "styles": {
             backgroundColor: '#CCCBCD',
         },
-        "is_published": 0,
+        "is_published": 1,
         "order": 17
     },
 
@@ -334,7 +315,7 @@ module.exports.exhibit_items = [
         },
         "is_visible": 1, 
         "is_anchor": 1,
-        "is_published": 0,
+        "is_published": 1,
         "order": 18, 
     },
 
@@ -348,84 +329,7 @@ module.exports.exhibit_items = [
         "styles": {
             backgroundColor: '#FFFFFF',
         },
-        "is_published": 0,
+        "is_published": 1,
         "order": 19
-    },
-
-    //////////////////////
-    // end ingested items
-    //////////////////////
-
-    ///////////////////
-    // template objects
-    ///////////////////
-
-    {
-        "uuid": "",
-        "type": "heading",
-        "is_member_of_exhibit": "811c7fc9ed4f91b837b4f49ae8901c93", 
-        "text": "",
-        "styles": {
-            backgroundColor: '#333333',
-            color: '#FFFFFF',
-            fontSize: "47px"
-        },
-        "is_visible": 1, 
-        "is_anchor": 1,
-        "is_published": 0,
-        "order": 0, 
-    },
-
-    {
-        "uuid": "",
-        "is_member_of_exhibit": "811c7fc9ed4f91b837b4f49ae8901c93",
-        "title": "",
-        "caption": "",
-        "item_type": "image",
-        "media": "",
-        "text": "",
-        "wrap_text": 1,
-        "type": "item",
-        "layout": "media_right",
-        "media_width": "50",
-        "media_padding": 1,
-        "styles": {},
-        "is_published": 0,
-        "order": 0
-    },
-
-    { 
-        "uuid": "",
-        "is_member_of_exhibit": "811c7fc9ed4f91b837b4f49ae8901c93",
-        "title": "",
-        "type": "grid",
-        "columns": "2",
-        "order": 0,
-        "styles": {},
-        "items": [
-            {
-                "uuid": "",
-                "is_member_of_exhibit": "811c7fc9ed4f91b837b4f49ae8901c93",
-                "item_type": "image", 
-                "media": "", 
-                "description": "",        
-                "type": "item", 
-                "styles": {},
-                "is_published": 1, 
-                "order": 1
-            },
-            {
-                "uuid": "",
-                "is_member_of_exhibit": "811c7fc9ed4f91b837b4f49ae8901c93",
-                "item_type": "image", 
-                "media": "", 
-                "description": "",        
-                "type": "item", 
-                "styles": {},
-                "is_published": 1, 
-                "order": 2
-            }
-        ],
-        "is_published": 0
-    },
+    }
 ]
