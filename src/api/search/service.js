@@ -21,7 +21,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
     const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf", "external"];
 
     // fulltext search fields
-    const SEARCH_FIELDS = ["title", "description", "text"];
+    const SEARCH_FIELDS = ["title", "description", "text", "caption"];
     
     // fields to aggregate in search results
     const AGGREGATION_FIELDS_EXHIBIT = [];
