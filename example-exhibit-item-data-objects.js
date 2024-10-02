@@ -111,7 +111,7 @@ let example_exhibit_item_objects = [
         "items": [
              // grid item fields (contains all item fields. grid specific fields are shown below) :
             {
-                "year_label": "1850", // insert a year label to the timeline before this item
+                "date": "", // {string} date string e.g. '2022-10-13T20:24:20.000Z'
                 "description": "", // {string | html} description text displayed on the grid item. *IF there is no description, but there is text, the text will be displayed on the grid item and ALSO in the modal viewer.
                 "uuid": "{item uuid}",
                 "is_member_of_exhibit": "{parent exhibit uuid}",

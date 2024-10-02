@@ -89,6 +89,39 @@ module.exports = [
   },
 
   {
+    "uuid": "f007700fa76e738cb77e21453cd634a0",
+    "type": "exhibit",
+    "title": "Title: Test Exhibit - Sidebar Navigation",
+    "subtitle": "Subtitle Text - Hero Banner 1",
+    "banner_template": "banner_1",
+    "about_the_curators": "About the curators content",
+    "alert_text": "This is an <strong>Alert</strong>",
+    "hero_image": "example-exhibit_hero.jpg",
+    "thumbnail_image": "example-exhibit_sidebar_tn.jpg",
+    "description": "<strong>Description text:</strong> At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.",
+    "page_layout": "top_nav",
+    "exhibit_template": "vertical_scroll",
+    "styles": {
+      "exhibit":{
+          "navigation":{
+              "backgroundColor":"#e5e5e5",
+              "color":"#505050",
+              "fontFamily":"Tahoma",
+              "fontSize":"20px",
+          },
+          "template":{
+              "backgroundColor":"#ffffff",
+              "color":"#303030",
+              "fontFamily":"Verdana",
+              "fontSize":"20px",
+          }
+      }
+    },
+    "is_published": 1,
+    "is_featured": 0
+  },
+
+  {
     "uuid": "3f23ddc0d2d77a9de6eb37d6896c1fd3",
     "type": "exhibit",
     "title": "Title: Hero Banner 2",
@@ -163,7 +196,7 @@ module.exports = [
     "title": "<div style=\"color: #FFFFFF; text-transform: uppercase; text-align: center; margin-top: 90px\"><span style=\"font-size: 132px; font-weight: bold\">Hylaea</span><br><span style=\"color: #B5CC5A; font-size: 58px\">A Video, Print, & Rare Book Installation</span></div>",    "banner_template": "banner_4",
     "banner_template": "banner_4",
     "about_the_curators": "About the curators content (html)",
-    "hero_image": "hylaea-title_hero.jpg",
+    "hero_image": "hylaea_hero.jpg",
     "thumbnail_image": "hylaea_hero_thumbnail.jpg",
     "description": "<div style=\"color: #D5E9C9\"><p>HYLAEA was an interactive site-specific installation created by artist Tim Weaver for the library at the University of Denver. Weaver, an associate professor and director of the Emergent Digital Practices program in the School of Art and Art History, combined images, objects, sounds, and videos to reanimate extinct species to awaken memories of lost life forms. This exhibition was on display at University Libraries (formerly Penrose Library) from October 14, 2010 through February 14, 2011.</p><p>The exhibit’s intent is to bring together separate artifacts of lost ecological memory. These artifacts are the deep colors and textures of extinct birds, sonic translations of the DNA and proteins of missing species, and books containing the published records of North America’s breathtaking wildlife. These sounds and images of lost habitats create an immersive sensory experience for the audience. Mining the University Libraries' Special Collections and Archives and the extinct species cabinets at the Denver Museum of Nature and Science, Weaver's exploration of artifacts and lost ecological memory brings records of human-induced extinctions to life.</p></div>",
     "page_layout": "top_nav",
@@ -182,6 +215,10 @@ module.exports = [
       },
     },
     "is_published": 1,
-    "is_featured": 0
-  }
+    "is_featured": 1
+  },
+
+  // no more pios - cd1c36f45f1fa9e80b060ea9e893bab6
+
+  
 ]
