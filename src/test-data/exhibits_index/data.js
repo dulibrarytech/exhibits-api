@@ -193,7 +193,7 @@ module.exports = [
   {
     "uuid": "811c7fc9ed4f91b837b4f49ae8901c93",
     "type": "exhibit",
-    "title": "<div style=\"color: #FFFFFF; text-transform: uppercase; text-align: center; margin-top: 90px\"><span style=\"font-size: 132px; font-weight: bold\">Hylaea</span><br><span style=\"color: #B5CC5A; font-size: 58px\">A Video, Print, & Rare Book Installation</span></div>",    "banner_template": "banner_4",
+    "title": "<div style=\"color: #FFFFFF; text-transform: uppercase; text-align: center; margin-top: 90px\"><span style=\"font-size: 132px; font-weight: bold\">Hylaea</span><br><span style=\"color: #B5CC5A; font-size: 58px\">A Video, Print, & Rare Book Installation</span></div>",
     "banner_template": "banner_4",
     "about_the_curators": "About the curators content (html)",
     "hero_image": "hylaea_hero.jpg",
@@ -218,7 +218,35 @@ module.exports = [
     "is_featured": 1
   },
 
-  // no more pios - cd1c36f45f1fa9e80b060ea9e893bab6
-
+  {
+    "uuid": "cd1c36f45f1fa9e80b060ea9e893bab6",
+    "type": "exhibit",
+    "title": "<div>#No More Pios</div><div style=\"font-size: 0.5em; width: 50%; margin: 0 auto;\">The Legacy of Settler Colonialism and the University of Denver</div>",
+    "banner_template": "banner_3",
+    "about_the_curators": "About the curators content (html)",
+    "hero_image": "no-more-pios_overlay_hero_2.jpg",
+    "thumbnail_image": "no-more-pios_hero_2_thumbnail.jpg",
+    "description": "<div><div><p>Founded in 1864, the University of Denver (DU) has a history of athletic team nicknames, mascots, and university branding that draw heavily on the identity as the oldest private university in Colorado. The history of DU is also forever connected to the Sand Creek Massacre, where more than 160 Cheyenne and Arapaho people - mostly elders, women, and children - were murdered by Colorado's Third Cavalry in November 1864, just six months after the University's founding. </p><p>Like many colleges and universities in the American West, DU has appropriated and romanticized Native American peoples and the U.S. settler colonial project. While many of our alumni associate the term \"pioneer\" with positive memories of the university, for many others, this term represents the forced expropriation of Native lands. Universities use mascots and nicknames to create a sense of community, but for Native students, alumni, faculty, staff, this term is a reminder of stolen land and genocide.</p><p>This exhibit explores DU's history of mascots, nicknames, and branding and the changes over its 150 year history, which often took place alongside related social and cultural changes. “Pioneer” has not always been the nickname and Denver Boone was not the first mascot. DU’s traditions have changed considerably over time, and these changes – like the demands to remove \"Pioneer\" as the nickname – have largely been student-driven.</p></div><div class=\"label-wrapper\"><div class=\"label\"><hr><hr></div></div></div>",
+    "page_layout": "top_nav",
+    "exhibit_template": "vertical_scroll",
+    "styles": {
+      "exhibit": {
+        "navigation": {
+          "color": "#1D1B1C",
+          "backgroundColor": "#A89D78",
+          "fontSize": "22px",
+          "fontFamily": "Neue Haas Unica W1G"
+        },
+        "template": {
+          "color": "#1D1B1C",
+          "background": "#C8C1A4",
+          "fontSize": "20px",
+          "fontFamily": "Neue Haas Unica W1G"
+        }
+      },
+    },
+    "is_published": 0,
+    "is_featured": 0
+  }
   
 ]
