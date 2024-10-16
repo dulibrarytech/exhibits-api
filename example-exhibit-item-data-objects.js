@@ -1,3 +1,4 @@
+// "R": required field
 let example_exhibit_item_objects = [
     // heading
     {
@@ -26,7 +27,7 @@ let example_exhibit_item_objects = [
         "title": "Item Title", // {string} (default: null, item displays no title) *** The title field will appear in the navigation as a sublink under the previous page heading ***
         "caption": "Item caption text", // {string} (default: null, item displays no caption under media content)
         "item_type": "image", // {'image', 'audio', 'video', 'pdf', 'external'} (R)
-        "media": "{filename or ddu pid}", // { {filename}.{extension} OR {digitaldu item uuid} (IF 'is_repo_item' == true) } (R if no "text" value)
+        "media": "{filename or ddu pid}", // { {filename}.{extension} OR {digitaldu item uuid} (IF 'is_repo_item' == 1) OR {kaltura entry_id} (IF 'is_kaltura_item' == 1)} (R if no "text" value)
         "text": "", // {string | html} 
         "wrap_text": 1, // bool {0,1} If 1, text will wrap around the media element (default: 1)
         "type": "item", // {'row' | 'grid' | 'vertical_timeline' | 'heading'} (R)
@@ -41,7 +42,8 @@ let example_exhibit_item_objects = [
             "fontFamily": "", // list of font-family options
             "fontSize": ""
         },
-    
+        
+        "is_kaltura_item": 0, // bool {0,1} If 1, will render in Kaltura embedded viewer (requires a valid kaltura entry_id in the 'media' field) (default: 0) 
         "is_repo_item": 0, // bool {0,1} If 1, will use the digitaldu object uuid in the "media" field above to stream the item from the repository (default: 0)
         "pdf_open_to_page": 1, // {integer} For 'item_type': 'pdf', will open the pdf file to this page (default: 1)  
         "is_published": 1, // (default: 0)
@@ -73,11 +75,11 @@ let example_exhibit_item_objects = [
                 "title": "Item Title", // {string} (default: null, item displays no title) *** The title field will appear in the navigation as a sublink under the previous page heading ***
                 "caption": "Item caption text", // {string} (default: null, item displays no caption under media content)
                 "item_type": "image", // {'image', 'audio', 'video', 'pdf', 'external'} (R)
-                "media": "{filename or ddu pid}", // { {filename}.{extension} OR {digitaldu item uuid} (IF 'is_repo_item' == true) } (R if no "text" value)
+                "media": "{filename or ddu pid}", // { {filename}.{extension} OR {digitaldu item uuid} (IF 'is_repo_item' == 1) OR {kaltura entry_id} (IF 'is_kaltura_item' == 1)} (R if no "text" value)
                 "text": "", // {string | html} 
                 "type": "item", // {'row' | 'grid' | 'vertical_timeline' | 'heading'} (R)
                 "layout": "media_left", // {'media_right' | 'media_left' | 'media_top' | 'media_bottom' | "media_only" | "text_only"} (R)
-                "media_width": "50", // {25|33|50|66|75} width of the media element in the item as percent (default: '50') * use only on side-by-side layouts 'media_right' and 'media_left' 
+                "media_width": "50", // {25|33|50|66|75|100} width of the media element in the item as percent (default: '50') * use only on side-by-side layouts 'media_right' and 'media_left' 
                 "media_padding": 1, // bool {0,1} If 1, margins will be added to the item display. If 0, there will be no margins (default: 1)
 
                 /* user style settings (default: {}) */
@@ -88,6 +90,7 @@ let example_exhibit_item_objects = [
                     "fontSize": ""
                 },
             
+                "is_kaltura_item": 0, // bool {0,1} If 1, will render in Kaltura embedded viewer (requires a valid kaltura entry_id in the 'media' field) (default: 0)  
                 "is_repo_item": 0, // bool {0,1} If 1, will use the digitaldu object uuid in the "media" field above to stream the item from the repository (default: 0)
                 "pdf_open_to_page": 1, // {integer} For 'item_type': 'pdf', will open the pdf file to this page (default: 1)  
                 "is_published": 1, // (default: 0)
