@@ -7,7 +7,7 @@ module.exports.exhibit_items = [
         "uuid": "29cc143eb4356f41b359a85ef130b109",
         "type": "heading",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6", 
-        "text": "From Germany to America",
+        "text": "<div style=\"letter-spacing: 4px; font-weight: bold\">From Germany to America</div>",
         "styles": {
             backgroundColor: '#A82F88', // dark magenta
             color: '#FFFFFF',
@@ -101,7 +101,7 @@ module.exports.exhibit_items = [
         "uuid": "0bea08279194478b5a9f15174d5c4881",
         "type": "heading",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6", 
-        "text": "Hanya as Choreographer",
+        "text": "<div style=\"letter-spacing: 4px; font-weight: bold\">Hanya as Choreographer</div>",
         "styles": {
             backgroundColor: '#CFDC5A', // light green yellow
             color: '#FFFFFF',
@@ -228,7 +228,7 @@ module.exports.exhibit_items = [
         "uuid": "6c9ff5ef7cf69126e94bce840a1ea258",
         "type": "heading",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6", 
-        "text": "Hanya as Educator",
+        "text": "<div style=\"letter-spacing: 4px; font-weight: bold\">Hanya as Educator</div>",
         "styles": {
             backgroundColor: '#6C317D',
             color: '#FFFFFF',
@@ -530,7 +530,7 @@ module.exports.exhibit_items = [
         "uuid": "ea3b6ba68114b3514b71a48757093e51",
         "type": "heading",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6", 
-        "text": "Hanya as Mentor",
+        "text": "<div style=\"letter-spacing: 4px; font-weight: bold\">Hanya as Mentor</div>",
         "styles": {
             backgroundColor: '#D68037', // orange
             color: '#FFFFFF',
@@ -819,7 +819,7 @@ module.exports.exhibit_items = [
         "uuid": "d6d39d502572717381b72ce47d6356ec",
         "type": "heading",
         "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6", 
-        "text": "Hanya at Home",
+        "text": "<div style=\"letter-spacing: 4px; font-weight: bold\">Hanya at Home</div>",
         "styles": {
             backgroundColor: '#39A8C3',
             color: '#FFFFFF',
