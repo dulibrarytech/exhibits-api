@@ -240,7 +240,7 @@ module.exports = [
         },
         "template": {
           "color": "#1D1B1C",
-          "background": "#C8C1A4",
+          "background": "#CAC0A1",
           "fontSize": "20px",
           "fontFamily": "Neue Haas Grotesk Text Pro"
         }
