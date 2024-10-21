@@ -147,7 +147,7 @@ module.exports = [
   {
     "uuid": "6e2c870481f9cb1a275025b04ed2b005",
     "type": "exhibit",
-    "title": "Title: Hero Banner 3",
+    "title": "Title: Hero Banner <i>3</i>",
     "banner_template": "banner_3",
     "hero_image": "example-exhibit-short_hero.jpg",
     "thumbnail_image": "example-exhibit_3_tn.jpg",
