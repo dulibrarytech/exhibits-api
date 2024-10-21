@@ -3,7 +3,7 @@
 const Elastic = require('../../libs/elastic_search');
 const {getSearchResultAggregations, combineAggregations} = require('./helper');
 
-exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null) => {
+exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhibitId=null) => {
     let queryData = null;
     let aggsData = {};
     let sortData = null;
@@ -35,7 +35,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
     /*
      * main query - searches in top level index documents
      */
-    for(let type of OBJECT_TYPES) { // helper
+    if(type) {
         objectTypes.push({
             match: { type }
         });
@@ -80,7 +80,7 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
     queryData = {
         bool: {
             must: [
-                {bool: {should: objectTypes}},
+                {bool: {must: objectTypes}},
                 {bool: {should: itemTypes}},
                 {bool: {should: searchFields}}
             ]
@@ -199,6 +199,16 @@ exports.index = async (terms, facets=null, sort=null, page=null, exhibitId=null)
         bool: {
             must: [
                 {bool: {should: objectTypes}},
+                {bool: {should: searchFields}}
+            ]
+        }
+    };
+
+    queryData = {
+        bool: {
+            must: [
+                {bool: {must: objectTypes}},
+                {bool: {should: itemTypes}},
                 {bool: {should: searchFields}}
             ]
         }

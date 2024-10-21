@@ -7,11 +7,12 @@ exports.searchIndex = async (req, res) => {
     let facets = req.query.f || null;
     let sort = req.query.sort ? req.query.sort.split(',') : null;
     let page = req.query.page ?? null;
+    let type = req.query.type ?? null;
     let exhibitId = req.query.exhibitId || null;
     let results = [];
 
     if(terms) {
-        results = await Search.index(terms, facets, sort, page, exhibitId);
+        results = await Search.index(terms, type, facets, sort, page, exhibitId);
         if(!results) res.status(500);
     }
     else res.status(400);
