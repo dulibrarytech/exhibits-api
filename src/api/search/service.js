@@ -1,6 +1,7 @@
 'use strict'
 
 const Elastic = require('../../libs/elastic_search');
+const Logger = require('../../libs/log4js');
 const {getSearchResultAggregations, combineAggregations} = require('./helper');
 
 exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhibitId=null) => {
@@ -132,7 +133,7 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
         resultsData = await Elastic.query(queryData, sortData, page || 1, aggsData);
     }
     catch(error) {
-        console.log(`Error searching index. Elastic response: ${error}`);
+        Logger.module().error(`Error searching index. Elastic response: ${error}`);
     }
     /*
      * end main query
@@ -242,7 +243,7 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
         nestedAggregations = getSearchResultAggregations(AGGREGATION_FIELDS_ITEM, nestedResultsData.results);
     }
     catch(error) {
-        console.log(`Error searching index. Elastic response: ${error}`);
+        Logger.module().error(`Error searching index. Elastic response: ${error}`);
     }
 
     /*

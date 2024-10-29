@@ -3,6 +3,7 @@
 const { Client } = require('@elastic/elasticsearch');
 const CONFIG = require('../config/configuration.js');
 const fs = require('fs');
+const Logger = require('../libs/log4js');
 
 const RESULTS_PAGE_LENGTH = 10;
 const DEFAULT_RESULTS_SIZE = 200;
@@ -15,7 +16,8 @@ let {
 
 let elastic_client = null;
 
-console.log(`Connecting to Elastic server at domain: ${elasticDomain}...`);
+Logger.module().info(`Connecting to Elastic server at domain: ${elasticDomain}...`);
+
 try {
     elastic_client = new Client({
         node: elasticDomain,
@@ -26,15 +28,15 @@ try {
     });
 }
 catch (error) {
-    console.error(`Could not connect to Elastic cluster at ${elasticDomain}. Error: ${error}`);
+    Logger.module().error(`Could not connect to Elastic cluster at ${elasticDomain}. Error: ${error}`);
 }
 
 if(elastic_client) {
     elastic_client.info().then(function (response) {
-      console.log(`Connected to Elastic server. Server info:`, response)
+        Logger.module().info(`Connected to Elastic server. Server info:`, response)
 
     }, function (error) {
-      console.error(`Could not connect to Elastic server. Error: ${error}`);
+        Logger.module().error(`Could not connect to Elastic server. Error: ${error}`);
     });
 }
 
@@ -84,7 +86,7 @@ exports.query = async (query={}, sort=null, page=1, aggs=null) => {
         }
     }
     catch(error) {
-        console.error(error);
+        Logger.module().error(`Elastic error: ${error}`);
         throw error;
     }
 

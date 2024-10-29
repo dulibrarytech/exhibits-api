@@ -1,6 +1,7 @@
 'use strict'
 
 const Elastic = require('../../libs/elastic_search');
+const Logger = require('../../libs/log4js');
 
 exports.getAll = async () => {
     let exhibits = null;
@@ -17,7 +18,7 @@ exports.getAll = async () => {
         exhibits = results;
     }
     catch(error) {
-        console.log(`Error retrieving exhibits. Elastic response: ${error}`);
+        Logger.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
     }
 
     return exhibits;
@@ -36,7 +37,7 @@ exports.get = async (id) => {
         }
     }
     catch(error) {
-        console.log(`Error retrieving exhibits. Elastic response: ${error}`);
+        Logger.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
     }
 
     return exhibit || {};
@@ -56,7 +57,7 @@ exports.getItems = async (id) => {
         items = results;
     }
     catch(error) {
-        console.log(`Error retrieving exhibits. Elastic response: ${error}`);
+        Logger.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
     }
 
     return items;
