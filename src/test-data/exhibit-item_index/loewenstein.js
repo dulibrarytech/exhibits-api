@@ -315,7 +315,7 @@ module.exports.exhibit_items = [
             {
                 "uuid": "94e2ad77ed753865eb95422330d467d4",
                 "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
-                "title": "Escape Attempts", 
+                "title": "", 
                 "caption": "Erna Eylenburg, 15-year-old daughter of Loewenstein family friends. Erna was deported to Auschwitz and murdered in 1942.", 
                 "template": "row", 
                 "item_type": "image", 
@@ -323,7 +323,7 @@ module.exports.exhibit_items = [
                 "text": "<p>In 1938, Dr. Max Loewenstein applied to the United States Consulate General in Berlin for immigration papers for the family. The Consulate assigned numbers that reserved a place on the waiting list for permission to apply for visas in 1943 or 1944. It was becoming increasingly obvious to the Loewensteins that time was of the essence.</p>",        
                 "type": "item", 
                 "layout": "media_bottom", 
-                "media_width": "75",  
+                "media_width": "100",  
                 "styles": {},
                 "is_published": 1, 
                 "order": 1
