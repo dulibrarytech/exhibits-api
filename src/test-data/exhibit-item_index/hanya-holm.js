@@ -28,7 +28,7 @@ module.exports.exhibit_items = [
         "text": "<p>Hanya Holm was born in 1893 as Joanna Eckert in Worms, Germany. In the 1920s, Holm moved to Dresden to study with the German modern dance pioneer Mary Wigman, quickly becoming one of Wigman's most promising protégées. In the early 1930s, wary of Adolf Hitler's growing influence, Holm accepted dance impresario Sol Hurok's offer to run a Wigman school in the United States.</p><p>Though her school was based in New York, Holm traveled extensively to perform and teach. She first visited Colorado in 1933 when she taught at the Perry Mansfield Dance Camp in Steamboat Springs.</p><p>Holm's connection to the region became an enduring one. She began teaching an eight-week summer course at Colorado College in 1941, returning to the state every summer to teach for 43 years. Holm's yearly summer classes made Colorado a destination for modern dancers, and had an impact on dance and dancers in the state and region for decades.</p>",        
         "type": "item", 
         "layout": "media_left", 
-        "wrap_text": 1,
+        "wrap_text": 0,
         "media_width": "25",  
         "media_padding": 0,
         "styles": { 
@@ -70,7 +70,7 @@ module.exports.exhibit_items = [
         "layout": "text_only", 
         "styles": { 
             backgroundColor: '#FFFFFF', // ok
-            fontSize: "1.65em"
+            fontSize: "1.45em"
         },
         "is_published": 1, 
         "order": 4
@@ -122,7 +122,7 @@ module.exports.exhibit_items = [
         "text": "<p>Hanya Holm’s career was notable for its constant evolution and her experimentation – the only constant was change. She believed that all choreography should evolve organically out of an understanding of the work itself and from a natural movement base. This point of view enabled her to transition seamlessly between different styles, genres, and mediums.</p><p>Over the course of her career, Holm choreographed for the concert stage, television, Broadway musicals, movies, and opera. She was also notable for being the first to copyright a choreographic work when she submitted the Labanotation score for Kiss Me Kate to the Library of Congress.</p><p>Holm's chameleon-like quality as a choreographer ultimately benefitted the work - however, dance scholar Claudia Gitelman has asserted that Holm's focus on serving the project rather than her \"brand\" has led to a lack of recognition relative to the other \"big four\" modern dance pioneers.</p>",        
         "type": "item", 
         "layout": "media_left", 
-        "wrap_text": 1,
+        "wrap_text": 0,
         "media_width": "25",  
         "media_padding": 0,
         "styles": { 
@@ -181,7 +181,7 @@ module.exports.exhibit_items = [
         "layout": "text_only", 
         "styles": { 
             backgroundColor: '#FFFFFF',
-            fontSize: "1.65em"
+            fontSize: "1.45em"
         },
         "is_published": 1, 
         "order": 10
@@ -249,7 +249,7 @@ module.exports.exhibit_items = [
         "text": "<p>Hanya Holm’s background and training was in modern dance, but her approach to teaching dance mirrored her genre-agnostic approach to choreography – and because of it, her influence extended far beyond the modern dance community.</p><p>Holm began teaching in Germany for expressionist dance pioneer Mary Wigman, and then founded a Wigman School in New York, which was soon renamed the Hanya Holm School of Dance. Starting in 1934, she taught at the now-internationally renowned Bennington School of Dance at Bennington College in Vermont. Bennington was also home to the other “Big Four” modern dance pioneers in America – Charles Weidman, Doris Humphrey, and Martha Graham.</p><p>In 1941, Holm found her “teaching home” at Colorado College, which she would make her summer destination for 43 years. She continued to work internationally on other projects throughout those years, but for those who attended Holm’s eight-week summer dance school in Colorado, her most lasting impact on the dance world was as an educator.</p>",
         "type": "item", 
         "layout": "media_left", 
-        "wrap_text": 1,
+        "wrap_text": 0,
         "media_width": "25",  
         "media_padding": 0,
         "styles": { 
@@ -344,7 +344,7 @@ module.exports.exhibit_items = [
                 "is_member_of_exhibit": "642bbd319b780725f753b15e1df520e6",
                 "item_type": "image", 
                 "thumbnail": "57490714858f4d5fa5ecf905486ea809_thumbnail.jpg",
-                "media": "57490714858f4d5fa5ecf905486ea809_thumbnail.jpg", 
+                "media": "57490714858f4d5fa5ecf905486ea809.jpg", 
                 "description": "Charles Weidman",        
                 "type": "item", 
                 "styles": {},
@@ -551,7 +551,7 @@ module.exports.exhibit_items = [
         "text": "<p>Hanya Holm’s gift as a mentor was, as dance critic Walter Terry noted, not just to teach movement but to teach \"the essence and the spirit of dancing.\"</p><p>Some of Holm’s best-known students (Alwin Nikolais, Valerie Bettis, Louise Kloepper, and Don Redlich) worked primarily in modern dance, but Holm’s influence extended into both ballet and theater. The Colorado Ballet was founded by Lillian Covillo and Freidann Parker, both former students of Holm’s. Martha Wilcox, Vera Sears, and Carolyn Durand Brooks, all former students or Holm company members, worked in or with the Children’s Dance Theatre at the University of Denver’s Lamont School of Music. Al Brooks, former student and company member, and Maxine Munt, a former student, met, married, and started the Changing Scene Theatre in Denver in 1968.</p><p>Walter Terry noted that Holm’s commitment to not just one style of dance, but to the art of dance itself, uniquely placed her to teach individuals \"not to become modern dancers...but how to be dancers.\”</p>",        
         "type": "item", 
         "layout": "media_left", 
-        "wrap_text": 1,
+        "wrap_text": 0,
         "media_width": "25",  
         "media_padding": 0,
         "styles": { 
@@ -840,7 +840,7 @@ module.exports.exhibit_items = [
         "text": "<p>Holm’s biographer Walter Sorrell noted that, though she lived in New York City from 1931 until her death in 1992, Holm seemed to prefer her “splendid isolation” in Colorado.</p><p>Marshall Brooks, a set designer and photographer who married Carolyn Durand Brooks (one of Holm's early company members) photographed Hanya in some of these more relaxed, personal moments. Brooks' photographs provide a rare glimpse of Holm not just as “the world-renowned modern dance choreographer and educator,” but also as a hiker of mountains, a jokester, and a friend.</p>",
         "type": "item", 
         "layout": "media_left", 
-        "wrap_text": 1,
+        "wrap_text": 0,
         "media_width": "25",  
         "media_padding": 0,
         "styles": { 
@@ -903,7 +903,7 @@ module.exports.exhibit_items = [
         "layout": "text_only", 
         "styles": { 
             backgroundColor: '#FFFFFF',
-            fontSize: "1.65em"
+            fontSize: "1.45em"
         },
         "is_published": 1, 
         "order": 29

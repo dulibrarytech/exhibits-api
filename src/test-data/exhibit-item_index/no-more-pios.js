@@ -189,10 +189,6 @@ module.exports.exhibit_items = [
         "order": 10, 
     },
 
-    //////////////////////
-    // end ingested items
-    //////////////////////
-
     { 
         "uuid": "c4e9caaf0c47b4ca60d47b82bee72e42",
         "is_member_of_exhibit": "cd1c36f45f1fa9e80b060ea9e893bab6",
@@ -653,4 +649,8 @@ module.exports.exhibit_items = [
         ],
         "is_published": 1
     }
+
+    //////////////////////
+    // end ingested items
+    //////////////////////
 ]
