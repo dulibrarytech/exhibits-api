@@ -2,7 +2,7 @@ const router = require('express').Router();
 const exhibit = require('./exhibit/routes');
 const search = require('./search/routes');
 
-const { sanitizeElasticQuery } = require('../middlewares/elastic.middleware');
+const { sanitizeElasticQuery } = require('../middlewares/exhibits-api.elastic.middleware');
 
 router.get('/', (req, res) => {
   res.sendStatus(200);
