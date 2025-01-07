@@ -29,7 +29,12 @@ exports.get = async (id) => {
 
     try {
         let {results} = await Elastic.query({
-            match: { uuid: id }
+            match: { 
+                uuid: {
+                    query: id,
+                    operator: "AND"
+                } 
+            }
         });
 
         if(results.length > 0) {
@@ -51,7 +56,13 @@ exports.getItems = async (id) => {
 
     try {
         let {results} = await Elastic.query({
-            match: { is_member_of_exhibit: id }
+            match: { 
+                is_member_of_exhibit: {
+                    query: id,
+                    operator: "AND"
+                } 
+            }
+
         }, sort, null);
 
         items = results;
