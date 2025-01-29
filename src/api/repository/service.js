@@ -1,0 +1,69 @@
+'use strict'
+
+const LOGGER = require('../../libs/log4js');
+const CONFIG = require('../../config/configuration.js');
+
+const AXIOS = require('axios');
+const HTTPS = require('https')
+const AGENT = new HTTPS.Agent({
+  rejectUnauthorized: false,
+});
+
+let {
+    repositoryDomain,
+    repositoryApiKey,
+    repositoryItemSourceEndpoint,
+    repositoryItemThumbnailEndpoint,
+    repositoryItemDataEndpoint,
+    repositorySearchEndpoint,
+    repositoryObjectEndpoint,
+    repositoryCollectionEndpoint
+
+} = CONFIG;
+
+const COLLECTION_ID_FIELD = "is_member_of_collection";
+const COLLECTION_TITLE_FIELD = "title";
+
+exports.getItemData = async (id) => {
+    let data = null, collectionData = {}, url, response;
+
+    // fetch repo item data
+    url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", id);
+    try {
+        LOGGER.module().info(`Fetching data for repository item: ${id}`);
+        response = await AXIOS.get(url, {
+            httpsAgent: AGENT,
+        });
+        data = response.data;
+    } catch (error) {
+        LOGGER.module().error(`Error retrieving repository item data. Axios response: ${error}`);
+    }
+
+    data.link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", id);
+    data.collection_id = data[COLLECTION_ID_FIELD];
+
+    // fetch collection data
+    url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", data.collection_id);
+    try {
+        LOGGER.module().info(`Fetching data for repository collection: ${data.collection_id}`);
+        response = await AXIOS.get(url, {
+            httpsAgent: AGENT,
+        });
+        collectionData = response.data;
+    } catch (error) {
+        LOGGER.module().error(`Error retrieving repository collection data. Axios response: ${error}`);
+    }
+
+    data.collection_name = collectionData[COLLECTION_TITLE_FIELD];
+    data.link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", data.collection_id);
+
+    return data;
+}
+
+exports.search = async () => {
+
+}
+
+exports.storeSourceFile = async () => {
+
+}
