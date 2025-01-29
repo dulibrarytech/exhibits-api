@@ -34,13 +34,14 @@ exports.getItemData = async (id) => {
         response = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
+
         data = response.data;
+        data.link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", id);
+        data.collection_id = response.data[COLLECTION_ID_FIELD] || null;
+
     } catch (error) {
         LOGGER.module().error(`Error retrieving repository item data. Axios response: ${error}`);
     }
-
-    data.link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", id);
-    data.collection_id = data[COLLECTION_ID_FIELD];
 
     // fetch collection data
     url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", data.collection_id);
@@ -49,13 +50,13 @@ exports.getItemData = async (id) => {
         response = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
+
         collectionData = response.data;
+        data.collection_name = collectionData[COLLECTION_TITLE_FIELD] || "";
+        data.link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", data.collection_id || "null");
     } catch (error) {
         LOGGER.module().error(`Error retrieving repository collection data. Axios response: ${error}`);
     }
-
-    data.collection_name = collectionData[COLLECTION_TITLE_FIELD];
-    data.link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", data.collection_id);
 
     return data;
 }
