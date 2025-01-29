@@ -10,13 +10,12 @@ exports.getData = async (req, res) => {
     Logger.module().info(`GET /repository/data/${id}`);
     data = await Repository.getItemData(id);
     if(!data) res.status(500);
-    console.log("TEST controller rx data:", data)
     res.send(data);
 }
 
 exports.search = async (req, res) => {
     let results = [];
-    let queryString = req.query || null;
+    let queryString = req.body.queryString || null;
 
     Logger.module().info(`GET /repository/search`);
     results = await Repository.search(queryString);

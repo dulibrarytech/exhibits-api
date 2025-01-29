@@ -4,7 +4,8 @@ const LOGGER = require('../../libs/log4js');
 const CONFIG = require('../../config/configuration.js');
 
 const AXIOS = require('axios');
-const HTTPS = require('https')
+const HTTPS = require('https');
+const QUERYSTRING = require('querystring');
 const AGENT = new HTTPS.Agent({
   rejectUnauthorized: false,
 });
@@ -61,8 +62,23 @@ exports.getItemData = async (id) => {
     return data;
 }
 
-exports.search = async () => {
+exports.search = async (queryString) => {
+    let results = null, url, response;
+    
+    url = `${repositoryDomain}/${repositorySearchEndpoint}?${queryString}`;
+    try {
+        LOGGER.module().info("Searching repository");
+        response = await AXIOS.get(url, {
+            httpsAgent: AGENT,
+        });
 
+        results = response.data;
+    }
+    catch(error) {
+        LOGGER.module().error(`Error searching repository: ${error}`);
+    }
+    
+    return results;
 }
 
 exports.storeSourceFile = async () => {

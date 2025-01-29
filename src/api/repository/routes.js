@@ -11,7 +11,7 @@ router.get('/data/:id', (req, res) => {
   controller.getData(req, res);
 });
 
-router.get('/search', (req, res) => {
+router.post('/search', (req, res) => {
   controller.search(req, res);
 });
 
