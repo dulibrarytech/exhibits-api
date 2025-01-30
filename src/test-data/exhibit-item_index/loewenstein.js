@@ -1,4 +1,7 @@
 module.exports.exhibit_items = [
+    ////////////////////////////
+    // added to dev via backend
+    ////////////////////////////
     {
         "uuid": "68dc2dc27ea7675f7e95dbde60c3b043",
         "type": "heading",
@@ -362,7 +365,7 @@ module.exports.exhibit_items = [
         "media_width": "75",  
         "styles": { 
             backgroundColor: '#C2CED5' 
-    },
+        },
         "is_published": 1, 
         "order": 19
     },
@@ -516,6 +519,7 @@ module.exports.exhibit_items = [
         "is_anchor": 1,
         "is_published": 1
     },
+
     {
         "uuid": "3ee135bfe271dabcdef86148e08fe69b",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -535,7 +539,8 @@ module.exports.exhibit_items = [
     },
         "is_published": 1, 
         "order": 22
-    }, // begin reindex of non-uppercase titles
+    },
+
     {
         "uuid": "882fae804aaf765c09b957a72d19e4ac",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -600,6 +605,7 @@ module.exports.exhibit_items = [
         "is_published": 1, 
         "order": 24
     },
+
     {
         "uuid": "4c03e43a02389ec09864b4864c0db856",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -645,6 +651,7 @@ module.exports.exhibit_items = [
         ],
         "is_published": 1
     },
+
     {
         "uuid": "cb5338ff229062c1026fd5f64b9119cc",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -714,6 +721,7 @@ module.exports.exhibit_items = [
         ],
         "is_published": 1
     },
+
     {
         "uuid": "4cc6523b68d8674e886ec53ae25b6239",
         "type": "heading",
@@ -807,6 +815,7 @@ module.exports.exhibit_items = [
         "is_published": 1, 
         "order": 31
     },
+
     {
         "uuid": "563e842b1cbeca3cb0e9b3e329dc6025",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -845,6 +854,7 @@ module.exports.exhibit_items = [
         "is_published": 1, 
         "order": 33
     },
+
     {
         "uuid": "412c49092b5b12e4f6de5951996fb4f4",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -865,6 +875,7 @@ module.exports.exhibit_items = [
         "is_published": 1, 
         "order": 34
     },
+
     {
         "uuid": "27a7c1ca38643ff6070e0db7c5da03c2",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -985,6 +996,7 @@ module.exports.exhibit_items = [
         "is_published": 1, 
         "order": 38
     },
+
     {
         "uuid": "1ba966d14bcedd48ff31f0f0cdfa439b",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -1142,6 +1154,7 @@ module.exports.exhibit_items = [
         ],
         "is_published": 1
     }, 
+
     {
         "uuid": "b0e3e309fccd3132c2cebc1143aec877",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -1230,7 +1243,8 @@ module.exports.exhibit_items = [
             }
         ],
         "is_published": 1
-    },
+    }, 
+
     {
         "uuid": "09b38747eed941cc085d2c4e88f066d7",
         "type": "heading",
@@ -1284,7 +1298,7 @@ module.exports.exhibit_items = [
         },
         "is_published": 1, 
         "order": 43
-    }, // begin verified object media is correct
+    },
     {
         "uuid": "1f1c1e0e0898c2075a630a2f31cea1dd",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -1345,7 +1359,7 @@ module.exports.exhibit_items = [
     {
         "uuid": "2e54ea0f2272eebba9f0f63dbd74d36b",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
-        "title": "The Loewensteins'Emigration", 
+        "title": "The Loewensteins' Emigration", 
         "caption": "A.J.D.C. National Refugee Service Card",
         "template": "row", 
         "item_type": "pdf", 
@@ -1380,6 +1394,7 @@ module.exports.exhibit_items = [
         "is_published": 1, 
         "order": 48
     }, 
+
     {
         "uuid": "c2d3194070ccd6fcc509990692dd1d90",
         "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",
@@ -1439,6 +1454,11 @@ module.exports.exhibit_items = [
                 "is_published": 1, 
                 "order": 4
             },
+
+            ////////////////////////////
+            // END added to dev via backend
+            ////////////////////////////
+
             {
                 "uuid": "a017a17b7b284eaceac2b7707dcfcaa6",
                 "is_member_of_exhibit": "7b843505f749e10f8702eab4c1ec135f",

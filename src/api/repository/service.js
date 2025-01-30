@@ -3,9 +3,9 @@
 const LOGGER = require('../../libs/log4js');
 const CONFIG = require('../../config/configuration.js');
 
-const AXIOS = require('axios');
+const FS = require('fs');
 const HTTPS = require('https');
-const QUERYSTRING = require('querystring');
+const AXIOS = require('axios');
 const AGENT = new HTTPS.Agent({
   rejectUnauthorized: false,
 });
@@ -14,30 +14,30 @@ let {
     repositoryDomain,
     repositoryApiKey,
     repositoryItemSourceEndpoint,
-    repositoryItemThumbnailEndpoint,
     repositoryItemDataEndpoint,
     repositorySearchEndpoint,
     repositoryObjectEndpoint,
-    repositoryCollectionEndpoint
+    repositoryCollectionEndpoint,
+    resourceLocation
 
 } = CONFIG;
 
 const COLLECTION_ID_FIELD = "is_member_of_collection";
 const COLLECTION_TITLE_FIELD = "title";
 
-exports.getItemData = async (id) => {
+exports.getItemData = async (itemId) => {
     let data = null, collectionData = {}, url, response;
 
     // fetch repo item data
-    url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", id);
+    url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", itemId);
     try {
-        LOGGER.module().info(`Fetching data for repository item: ${id}`);
+        LOGGER.module().info(`Fetching data for repository item: ${itemId}`);
         response = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
 
         data = response.data;
-        data.link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", id);
+        data.link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", itemId);
         data.collection_id = response.data[COLLECTION_ID_FIELD] || null;
 
     } catch (error) {
@@ -81,6 +81,48 @@ exports.search = async (queryString) => {
     return results;
 }
 
-exports.storeSourceFile = async () => {
+exports.storeSourceFile = async (itemId, fileName, filePath) => {
+    let status = true;
+    let fileExists = false;
+    let file = `./${resourceLocation}/${filePath}/${fileName}`;
 
+    LOGGER.module().info(`Verifying repository source file ${fileName}...`);
+
+    try {
+        fileExists = FS.existsSync(file);
+    }
+    catch(error) {
+        LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${file}`);
+        status = false;
+    }
+
+    if(fileExists == false) {
+        try {
+            let url = `${repositoryDomain}/${repositoryItemSourceEndpoint}`.replace("{item_id}", itemId);
+            LOGGER.module().info(`File is not present in local storage. Fetching file from repository: datastream url: ${url}...`);
+
+            let writeStream = FS.createWriteStream(file);
+            writeStream.on('error', (error) => {
+                LOGGER.module().error(`Error storing source file: ${error}`);
+            });
+
+            let response = await AXIOS.get(url, {
+                httpsAgent: AGENT,
+                responseType: 'stream'
+            });
+
+            LOGGER.module().info("Fetch successful. Writing file...");
+            response.data.pipe(writeStream);
+            LOGGER.module().info("File written.");
+        }
+        catch(error) {
+            LOGGER.module().error(`Error storing source file: ${error}`);
+            status = false;
+        }
+    }
+    else {
+        LOGGER.module().info("Repository source file found.");
+    }
+
+    return status;
 }

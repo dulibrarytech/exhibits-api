@@ -5,10 +5,10 @@ const Logger = require('../../libs/log4js');
 
 exports.getData = async (req, res) => {
     let data = {};
-    let id = req.params.id || null;
+    let itemId = req.params.id || null;
     
-    Logger.module().info(`GET /repository/data/${id}`);
-    data = await Repository.getItemData(id);
+    Logger.module().info(`GET /repository/data/${itemId}`);
+    data = await Repository.getItemData(itemId);
     if(!data) res.status(500);
     res.send(data);
 }
@@ -24,12 +24,16 @@ exports.search = async (req, res) => {
 }
 
 exports.fetchSource = async (req, res) => {
-    let response = {}; // fields: status, message, filename
-    let id = req.params.id;
-    let data = req.body;
+    let response = {};
+    let itemId = req.params.id || "";
 
-    Logger.module().info(`GET /repository/source/fetch/${id}`);
-    response = await Repository.storeSourceFile(id, data);
+    let {
+        fileName,
+        filePath
+    } = req.body;
+
+    Logger.module().info(`GET /repository/source/fetch/${itemId}`);
+    response = await Repository.storeSourceFile(itemId, fileName, filePath);
     if(!response) res.status(500);
     res.send(response);
 }
