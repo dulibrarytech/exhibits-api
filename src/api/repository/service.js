@@ -14,6 +14,7 @@ let {
     repositoryDomain,
     repositoryApiKey,
     repositoryItemSourceEndpoint,
+    repositoryItemThumbnailEndpoint,
     repositoryItemDataEndpoint,
     repositorySearchEndpoint,
     repositoryObjectEndpoint,
@@ -22,6 +23,7 @@ let {
 
 } = CONFIG;
 
+const ITEM_ID_FIELD = "pid";
 const COLLECTION_ID_FIELD = "is_member_of_collection";
 const COLLECTION_TITLE_FIELD = "title";
 
@@ -38,13 +40,13 @@ exports.getItemData = async (itemId) => {
 
         data = response.data;
         data.link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", itemId);
+        data.thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", itemId);
         data.collection_id = response.data[COLLECTION_ID_FIELD] || null;
-
     } catch (error) {
         LOGGER.module().error(`Error retrieving repository item data. Axios response: ${error}`);
     }
 
-    // fetch collection data
+    // fetch parent collection data
     url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", data.collection_id);
     try {
         LOGGER.module().info(`Fetching data for repository collection: ${data.collection_id}`);
@@ -73,6 +75,9 @@ exports.search = async (queryString) => {
         });
 
         results = response.data;
+        results.forEach((result) => {
+            result.thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", result[ITEM_ID_FIELD]);
+        });
     }
     catch(error) {
         LOGGER.module().error(`Error searching repository: ${error}`);
@@ -121,7 +126,7 @@ exports.storeSourceFile = async (itemId, fileName, filePath) => {
         }
     }
     else {
-        LOGGER.module().info("Repository source file found.");
+        LOGGER.module().info("Repository source file found. File:", file);
     }
 
     return status;
