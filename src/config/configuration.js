@@ -1,6 +1,7 @@
 module.exports = {
     nodeEnv: process.env.NODE_ENV,
     appPort: process.env.PORT,
+    apiKey: process.env.EXHIBITS_API_KEY,
     elasticDomain: process.env.ELASTIC_DOMAIN,
     elasticIndex: process.env.ELASTIC_INDEX,
     repositoryDomain: process.env.REPOSITORY_DOMAIN,
