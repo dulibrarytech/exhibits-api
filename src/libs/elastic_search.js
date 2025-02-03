@@ -40,6 +40,76 @@ if(elastic_client) {
     });
 }
 
+exports.get = async (documentId) => {
+    let document = {};
+    try {
+        document = await elastic_client.get({
+            index: elasticIndex,
+            id: documentId
+        });
+    }
+    catch(error) {
+        Logger.module().error(`Elastic error: ${error}`);
+        throw error;
+    }
+    return document._source;
+}
+
+exports.fieldSearch = async (field, terms, nested = null) => {
+    let response = {};
+
+    try {
+        let queryData = {
+            "bool": {
+                "should": [
+                    {
+                        "match": {
+                            [field]: terms
+                        }
+                    }
+                ]
+            }
+        }
+
+        if(nested) {
+            let nestedField = `${nested}.${field}`;
+            queryData.bool.should.push({
+                
+                "nested": {
+                    "path": nested,
+                    "query": {
+                        "match": {
+                            [nestedField]: terms
+                        }
+                    }
+                }
+            });
+        }
+
+        let data = {
+            index: elasticIndex,
+            body: {
+                query: queryData
+            }
+        }
+
+        let elasticResponse = await elastic_client.search(data);
+
+        if(elasticResponse.hits.total.value > 0) {
+            response = elasticResponse.hits.hits[0]._source;
+        }
+        else {
+            Logger.module().info(`Elastic field search returned no results. Terms: ${terms}`);
+        }
+
+        return response;
+    }
+    catch(error) {
+        Logger.module().error(`Elastic error: ${error}`);
+        throw error;
+    }
+}
+
 exports.query = async (query={}, sort=null, page=1, aggs=null) => {
     let response = { results: [], resultCount: 0 };
     let size = page ? RESULTS_PAGE_LENGTH : DEFAULT_RESULTS_SIZE;
@@ -86,7 +156,7 @@ exports.query = async (query={}, sort=null, page=1, aggs=null) => {
         }
     }
     catch(error) {
-        Logger.module().error(`Elastic error: ${error}`);
+        Logger.module().error(`Elastic search query error: ${error}`);
         throw error;
     }
 

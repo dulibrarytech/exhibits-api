@@ -2,6 +2,7 @@
 
 const LOGGER = require('../../libs/log4js');
 const CONFIG = require('../../config/configuration.js');
+const ELASTIC = require('../../libs/elastic_search');
 
 const FS = require('fs');
 const HTTPS = require('https');
@@ -69,7 +70,7 @@ exports.search = async (queryString) => {
     
     url = `${repositoryDomain}/${repositorySearchEndpoint}?${queryString}`;
     try {
-        LOGGER.module().info("Searching repository");
+        LOGGER.module().info(`Searching repository: query: ${queryString}`);
         response = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
@@ -86,25 +87,36 @@ exports.search = async (queryString) => {
     return results;
 }
 
-exports.storeSourceFile = async (itemId, fileName, filePath) => {
-    let status = true;
+exports.fetchSourceFile = async (repositoryItemId, exhibitItemId, fileExtension) => {
+    let fileName = "";
+    let status = false;
     let fileExists = false;
-    let file = `./${resourceLocation}/${filePath}/${fileName}`;
-
-    LOGGER.module().info(`Verifying repository source file ${fileName}...`);
+    let file = "";
+    let filePath = "";
 
     try {
+        LOGGER.module().info(`Verifying repository source file ${fileName}...`);
+        
+        let exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
+
+        let exhibitId = exhibitItem.is_member_of_exhibit || null;
+        if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
+
+        fileName = `${exhibitItemId}_repository_item_media.${fileExtension}`;
+        filePath = exhibitId;
+        file = `./${resourceLocation}/${filePath}/${fileName}`;
+
         fileExists = FS.existsSync(file);
     }
     catch(error) {
         LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${file}`);
-        status = false;
+        // return {fileName, status} // each error returns
     }
 
     if(fileExists == false) {
         try {
-            let url = `${repositoryDomain}/${repositoryItemSourceEndpoint}`.replace("{item_id}", itemId);
-            LOGGER.module().info(`File is not present in local storage. Fetching file from repository: datastream url: ${url}...`);
+            let url = `${repositoryDomain}/${repositoryItemSourceEndpoint}`.replace("{item_id}", repositoryItemId);
+            LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. datastream url: ${url}...`);
 
             let writeStream = FS.createWriteStream(file);
             writeStream.on('error', (error) => {
@@ -116,18 +128,19 @@ exports.storeSourceFile = async (itemId, fileName, filePath) => {
                 responseType: 'stream'
             });
 
-            LOGGER.module().info("Fetch successful. Writing file...");
+            LOGGER.module().info("Fetch successful. Writing file...", fileName);
             response.data.pipe(writeStream);
             LOGGER.module().info("File written.");
+            status = true;
         }
         catch(error) {
             LOGGER.module().error(`Error storing source file: ${error}`);
-            status = false;
         }
     }
     else {
-        LOGGER.module().info("Repository source file found. File:", file);
+        LOGGER.module().info("Repository source file found. File:", fileName);
+        status = true;
     }
 
-    return status;
+    return {fileName, status}
 }

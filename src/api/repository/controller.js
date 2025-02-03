@@ -6,8 +6,9 @@ const Logger = require('../../libs/log4js');
 exports.getData = async (req, res) => {
     let data = {};
     let itemId = req.params.id || null;
-    
+
     Logger.module().info(`GET /repository/data/${itemId}`);
+    
     data = await Repository.getItemData(itemId);
     if(!data) res.status(500);
     res.send(data);
@@ -18,22 +19,34 @@ exports.search = async (req, res) => {
     let queryString = req.body.queryString || null;
 
     Logger.module().info(`GET /repository/search`);
+
     results = await Repository.search(queryString);
     if(!results) res.status(500);
     res.send(results);
 }
 
-exports.fetchSource = async (req, res) => {
-    let response = {};
-    let itemId = req.params.id || "";
+exports.fetchSourceFile = async (req, res) => {
+    let response = {
+        filename: "null"
+    };
+
+    let repositoryItemId = req.params.id;
 
     let {
-        fileName,
-        filePath
+        exhibitItemId = null,
+        fileExtension = null
+
     } = req.body;
 
-    Logger.module().info(`GET /repository/source/fetch/${itemId}`);
-    response = await Repository.storeSourceFile(itemId, fileName, filePath);
-    if(!response) res.status(500);
+    Logger.module().info(`GET /repository/source/fetch/${repositoryItemId}`);
+
+    if(!exhibitItemId || !fileExtension) {
+        res.status(400);
+    }
+    else {
+        response = await Repository.fetchSourceFile(repositoryItemId, exhibitItemId, fileExtension);
+        if(!response.status) res.status(500);
+    }
+
     res.send(response);
 }

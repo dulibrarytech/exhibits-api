@@ -6,10 +6,13 @@
 
 const router = require('express').Router();
 const controller = require('./controller');
+const { sanitizeElasticQuery } = require('../../middlewares/exhibits-api.elastic.middleware');
 
 router.get('/', (req, res) => {
   controller.getExhibits(req, res);
 });
+
+router.use('/', sanitizeElasticQuery);
 
 router.get('/:id', (req, res) => {
   controller.getExhibit(req, res);
