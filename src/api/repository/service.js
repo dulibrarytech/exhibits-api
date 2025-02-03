@@ -94,40 +94,44 @@ exports.fetchSourceFile = async (repositoryItemId, exhibitItemId, fileExtension)
     let file = "";
     let filePath = "";
 
-    try {
-        LOGGER.module().info(`Verifying repository source file ${fileName}...`);
-        
-        let exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
+    LOGGER.module().info(`Verifying repository source file ${fileName}...`);
 
+    try {
+        // validate the exhibit item id, and extract the exhibit id for the file path
+        let exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
         let exhibitId = exhibitItem.is_member_of_exhibit || null;
         if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
 
+        // build the source file url for the repository item in local storage
         fileName = `${exhibitItemId}_repository_item_media.${fileExtension}`;
         filePath = exhibitId;
         file = `./${resourceLocation}/${filePath}/${fileName}`;
 
+        // verify the local resource file
         fileExists = FS.existsSync(file);
     }
     catch(error) {
         LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${file}`);
-        // return {fileName, status} // each error returns
     }
 
+    // if the file does not exist, fetch it from the repository
     if(fileExists == false) {
         try {
+            // get the url for the repository source datastream
             let url = `${repositoryDomain}/${repositoryItemSourceEndpoint}`.replace("{item_id}", repositoryItemId);
             LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. datastream url: ${url}...`);
 
+            // create the local resource file
             let writeStream = FS.createWriteStream(file);
             writeStream.on('error', (error) => {
                 LOGGER.module().error(`Error storing source file: ${error}`);
             });
 
+            // fetch and stream the file to local storage
             let response = await AXIOS.get(url, {
                 httpsAgent: AGENT,
                 responseType: 'stream'
             });
-
             LOGGER.module().info("Fetch successful. Writing file...", fileName);
             response.data.pipe(writeStream);
             LOGGER.module().info("File written.");
