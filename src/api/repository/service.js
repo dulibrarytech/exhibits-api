@@ -3,7 +3,6 @@
 const LOGGER = require('../../libs/log4js');
 const CONFIG = require('../../config/configuration.js');
 const ELASTIC = require('../../libs/elastic_search');
-
 const FS = require('fs');
 const HTTPS = require('https');
 const AXIOS = require('axios');
@@ -28,13 +27,21 @@ const ITEM_ID_FIELD = "pid";
 const COLLECTION_ID_FIELD = "is_member_of_collection";
 const COLLECTION_TITLE_FIELD = "title";
 
+/**
+ * 
+ * @param {*} itemId 
+ * @returns 
+ */
 exports.getItemData = async (itemId) => {
-    let data = null, collectionData = {}, url, response;
+    let data = null, 
+        collectionData = {}, 
+        url, 
+        response;
 
-    // fetch repo item data
-    url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", itemId);
+    // fetch repository item data
     try {
         LOGGER.module().info(`Fetching data for repository item: ${itemId}`);
+        url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", itemId);
         response = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
@@ -48,9 +55,9 @@ exports.getItemData = async (itemId) => {
     }
 
     // fetch parent collection data
-    url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", data.collection_id);
     try {
         LOGGER.module().info(`Fetching data for repository collection: ${data.collection_id}`);
+        url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", data.collection_id);
         response = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
@@ -65,12 +72,17 @@ exports.getItemData = async (itemId) => {
     return data;
 }
 
+/**
+ * 
+ * @param {*} queryString 
+ * @returns 
+ */
 exports.search = async (queryString) => {
     let results = null, url, response;
     
-    url = `${repositoryDomain}/${repositorySearchEndpoint}?${queryString}`;
     try {
         LOGGER.module().info(`Searching repository: query: ${queryString}`);
+        url = `${repositoryDomain}/${repositorySearchEndpoint}?${queryString}`;
         response = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
@@ -87,6 +99,13 @@ exports.search = async (queryString) => {
     return results;
 }
 
+/**
+ * 
+ * @param {*} repositoryItemId 
+ * @param {*} exhibitItemId 
+ * @param {*} fileExtension 
+ * @returns 
+ */
 exports.fetchSourceFile = async (repositoryItemId, exhibitItemId, fileExtension) => {
     let fileName = "";
     let status = false;
@@ -94,7 +113,7 @@ exports.fetchSourceFile = async (repositoryItemId, exhibitItemId, fileExtension)
     let file = "";
     let filePath = "";
 
-    LOGGER.module().info(`Verifying repository source file ${fileName}...`);
+    LOGGER.module().info(`Fetching source file for repository item: ${repositoryItemId}...`);
 
     try {
         // validate the exhibit item id, and extract the exhibit id for the file path
@@ -108,6 +127,7 @@ exports.fetchSourceFile = async (repositoryItemId, exhibitItemId, fileExtension)
         file = `./${resourceLocation}/${filePath}/${fileName}`;
 
         // verify the local resource file
+        LOGGER.module().info(`Verifying source file in local storage: ${fileName}...`);
         fileExists = FS.existsSync(file);
     }
     catch(error) {
@@ -127,6 +147,10 @@ exports.fetchSourceFile = async (repositoryItemId, exhibitItemId, fileExtension)
                 LOGGER.module().error(`Error storing source file: ${error}`);
             });
 
+            writeStream.on('finish', () => {
+                console.log(`File written: ${fileName}`);
+            });
+
             // fetch and stream the file to local storage
             let response = await AXIOS.get(url, {
                 httpsAgent: AGENT,
@@ -134,7 +158,7 @@ exports.fetchSourceFile = async (repositoryItemId, exhibitItemId, fileExtension)
             });
             LOGGER.module().info("Fetch successful. Writing file...", fileName);
             response.data.pipe(writeStream);
-            LOGGER.module().info("File written.");
+            
             status = true;
         }
         catch(error) {
