@@ -22,7 +22,6 @@ try {
     elastic_client = new Client({
         node: elasticDomain,
         tls: {
-            //ca: fs.readFileSync( "pathtocert" ) // TODO get from env
             rejectUnauthorized: false
         }
     });
@@ -40,6 +39,11 @@ if(elastic_client) {
     });
 }
 
+/**
+ * 
+ * @param {*} documentId 
+ * @returns 
+ */
 exports.get = async (documentId) => {
     let document = {};
     try {
@@ -55,6 +59,13 @@ exports.get = async (documentId) => {
     return document._source;
 }
 
+/**
+ * 
+ * @param {*} field 
+ * @param {*} terms 
+ * @param {*} nested 
+ * @returns 
+ */
 exports.fieldSearch = async (field, terms, nested = null) => {
     let response = {};
 
@@ -74,7 +85,6 @@ exports.fieldSearch = async (field, terms, nested = null) => {
         if(nested) {
             let nestedField = `${nested}.${field}`;
             queryData.bool.should.push({
-                
                 "nested": {
                     "path": nested,
                     "query": {
@@ -110,6 +120,14 @@ exports.fieldSearch = async (field, terms, nested = null) => {
     }
 }
 
+/**
+ * 
+ * @param {*} query 
+ * @param {*} sort 
+ * @param {*} page 
+ * @param {*} aggs 
+ * @returns 
+ */
 exports.query = async (query={}, sort=null, page=1, aggs=null) => {
     let response = { results: [], resultCount: 0 };
     let size = page ? RESULTS_PAGE_LENGTH : DEFAULT_RESULTS_SIZE;
