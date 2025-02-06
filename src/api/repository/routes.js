@@ -4,22 +4,31 @@
  * Interface for digital repository api
  */
 
-const router = require('express').Router();
-const controller = require('./controller');
+const ROUTER = require('express').Router();
+const CONTROLLER = require('./controller');
+
 const { validateApiKey } = require('../../middlewares/exhibits-api.authentication.middleware');
+const { fetchSourceFileValidator, getDataValidator } = require('../../middlewares/exhibits-api.repository.middleware');
 
-router.get('/data/:id', (req, res) => {
-  controller.getData(req, res);
+/////////////////
+// public routes
+/////////////////
+
+ROUTER.get('/data/:id', getDataValidator, (req, res) => {
+  CONTROLLER.getData(req, res);
 });
 
-router.post('/search', (req, res) => {
-  controller.search(req, res);
+ROUTER.post('/search', (req, res) => {
+  CONTROLLER.search(req, res);
 });
 
-router.use('/source/fetch', validateApiKey);
+////////////////////
+// protected routes
+////////////////////
+ROUTER.use('/source/fetch', validateApiKey);
 
-router.post('/source/fetch/:id', (req, res) => {
-  controller.fetchSourceFile(req, res);
+ROUTER.post('/source/fetch/:id', fetchSourceFileValidator, async (req, res) => {  
+  CONTROLLER.fetchSourceFile(req, res);
 });
 
-module.exports = router;
+module.exports = ROUTER;

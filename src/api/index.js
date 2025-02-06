@@ -1,14 +1,20 @@
-const router = require('express').Router();
-const exhibit = require('./exhibit/routes');
-const search = require('./search/routes');
-const repository = require('./repository/routes');
+const ROUTER = require('express').Router();
+const EXHIBIT = require('./exhibit/routes');
+const SEARCH = require('./search/routes');
+const REPOSITORY = require('./repository/routes');
+const LOGGER = require('../libs/log4js');
 
-router.get('/', (req, res) => {
+ROUTER.get('/', (req, res) => {
   res.sendStatus(200);
 });
 
-router.use('/repository', repository);
-router.use('/exhibit', exhibit);
-router.use('/search', search);
+ROUTER.use('/', (req, res, next) => {
+  LOGGER.module().info(`${req.method} ${req.path}`);
+  next();
+});
 
-module.exports = router;
+ROUTER.use('/exhibit', EXHIBIT);
+ROUTER.use('/search', SEARCH);
+ROUTER.use('/repository', REPOSITORY);
+
+module.exports = ROUTER;
