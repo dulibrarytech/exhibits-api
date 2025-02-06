@@ -4,14 +4,15 @@
  * Interface for elastic search api
  */
 
-const router = require('express').Router();
-const controller = require('./controller');
+const ROUTER = require('express').Router();
+const CONTROLLER = require('./controller');
 const { sanitizeElasticQuery } = require('../../middlewares/exhibits-api.elastic.middleware');
+const { searchIndexValidator } = require('../../middlewares/exhibits-api.search.middleware');
 
-router.use('/', sanitizeElasticQuery);
+ROUTER.use('/', sanitizeElasticQuery);
 
-router.get('/', (req, res) => {
-    controller.searchIndex(req, res);
+ROUTER.get('/', searchIndexValidator, (req, res) => {
+    CONTROLLER.searchIndex(req, res);
 });
 
-module.exports = router;
+module.exports = ROUTER;

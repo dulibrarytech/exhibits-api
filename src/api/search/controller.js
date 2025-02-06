@@ -1,7 +1,6 @@
 'use strict'
 
 const Search = require('./service');
-const Logger = require('../../libs/log4js');
 
 exports.searchIndex = async (req, res) => {
     let terms = req.query.q ? req.query.q.replace(/,/g, ' ').toLowerCase() : null;
@@ -11,8 +10,6 @@ exports.searchIndex = async (req, res) => {
     let type = req.query.type ?? null;
     let exhibitId = req.query.exhibitId || null;
     let results = [];
-
-    Logger.module().info(`GET /search`);
 
     if(terms) {
         results = await Search.index(terms, type, facets, sort, page, exhibitId);

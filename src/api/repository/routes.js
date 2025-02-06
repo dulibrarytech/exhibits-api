@@ -13,7 +13,6 @@ const { fetchSourceFileValidator, getDataValidator } = require('../../middleware
 /////////////////
 // public routes
 /////////////////
-
 ROUTER.get('/data/:id', getDataValidator, (req, res) => {
   CONTROLLER.getData(req, res);
 });
