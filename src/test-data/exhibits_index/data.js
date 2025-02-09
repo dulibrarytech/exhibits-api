@@ -35,7 +35,7 @@ module.exports = [
     "about_the_curators": "",
     "hero_image": "hanya_holm_hero.jpg",
     "thumbnail_image": "hanya_holm_hero_thumbnail.jpg",
-    "description": "<div class=\"description-body\"><p>Hanya Holm is popularly known for her innovative choreography in Broadway musicals like My Fair Lady and Kiss Me, Kate. She is also revered as one of the \"big four\" founders of modern dance, alongside Martha Graham, Doris Humphrey, and Charles Weidman.</p><p>Holm first came to Colorado in 1933 when she taught at the Perry Mansfield Dance Camp in Steamboat Springs. Beginning in 1941, she returned every summer for 43 years, making the state a destination for anyone who wanted to learn about modern dance.</p><p>Holm’s influence on dance in Colorado was extensive; she taught Freidann Parker and Lillian Covillo (co-founders of Colorado Ballet), Alfred Brooks and Maxine Munt (co-founders of the Changing Scene Theatre), Vera Sears (teacher and later director of the Children’s Dance Theatre at the University of Denver).</p><p>The exhibit features images of Holm throughout her career as a dancer, choreographer, and educator, as well as never-before-exhibited images of Holm in personal settings. The images in the exhibit are primarily from the collections of <a href=\"https://specialcollections.du.edu/object/2c2c1422-a728-4a2a-9444-ceb0a11edf2d\" style=\"color:rgb(168,47,136)\">Maxine Munt</a> (a student of Holm) and <a href=\"#\" style=\"color:rgb(168,47,136)\">Marshall Brooks</a> (husband of one of Holm’s company members and close family friend).</p></div>",
+    "description": "<p>Hanya Holm is popularly known for her innovative choreography in Broadway musicals like My Fair Lady and Kiss Me, Kate. She is also revered as one of the \"big four\" founders of modern dance, alongside Martha Graham, Doris Humphrey, and Charles Weidman.</p><p>Holm first came to Colorado in 1933 when she taught at the Perry Mansfield Dance Camp in Steamboat Springs. Beginning in 1941, she returned every summer for 43 years, making the state a destination for anyone who wanted to learn about modern dance.</p><p>Holm’s influence on dance in Colorado was extensive; she taught Freidann Parker and Lillian Covillo (co-founders of Colorado Ballet), Alfred Brooks and Maxine Munt (co-founders of the Changing Scene Theatre), Vera Sears (teacher and later director of the Children’s Dance Theatre at the University of Denver).</p><p>The exhibit features images of Holm throughout her career as a dancer, choreographer, and educator, as well as never-before-exhibited images of Holm in personal settings. The images in the exhibit are primarily from the collections of <a href=\"https://specialcollections.du.edu/object/2c2c1422-a728-4a2a-9444-ceb0a11edf2d\" style=\"color:rgb(168,47,136)\">Maxine Munt</a> (a student of Holm) and <a href=\"#\" style=\"color:rgb(168,47,136)\">Marshall Brooks</a> (husband of one of Holm’s company members and close family friend).</p>",
     "page_layout": "top_nav",
     "exhibit_template": "vertical_scroll",
     "styles": {
@@ -201,8 +201,10 @@ module.exports = [
     "description": "<div style=\"color: #D5E9C9\"><p>HYLAEA was an interactive site-specific installation created by artist Tim Weaver for the library at the University of Denver. Weaver, an associate professor and director of the Emergent Digital Practices program in the School of Art and Art History, combined images, objects, sounds, and videos to reanimate extinct species to awaken memories of lost life forms. This exhibition was on display at University Libraries (formerly Penrose Library) from October 14, 2010 through February 14, 2011.</p><p>The exhibit’s intent is to bring together separate artifacts of lost ecological memory. These artifacts are the deep colors and textures of extinct birds, sonic translations of the DNA and proteins of missing species, and books containing the published records of North America’s breathtaking wildlife. These sounds and images of lost habitats create an immersive sensory experience for the audience. Mining the University Libraries' Special Collections and Archives and the extinct species cabinets at the Denver Museum of Nature and Science, Weaver's exploration of artifacts and lost ecological memory brings records of human-induced extinctions to life.</p></div>",
     "page_layout": "top_nav",
     "exhibit_template": "vertical_scroll",
+
     "styles": {
       "exhibit": {
+
         "navigation": {
           "color": "#FFFFFF",
           "backgroundColor": "#333333"
@@ -211,9 +213,13 @@ module.exports = [
           "color": "#000000",
           "backgroundColor": "#000000",
           "fontSize":"22px"
+        },
+        "introduction": {
+
         }
       },
     },
+
     "is_published": 1,
     "is_featured": 1
   },
