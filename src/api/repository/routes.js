@@ -1,5 +1,5 @@
 /**
- * Exhibits client api
+ * Exhibits api
  * /repository 
  * Interface for digital repository api
  */

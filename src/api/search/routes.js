@@ -1,5 +1,5 @@
 /**
- * Exhibits client api
+ * Exhibits api
  * /search 
  * Interface for elastic search api
  */

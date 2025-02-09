@@ -1,25 +1,26 @@
 /**
- * Exhibits client api
+ * Exhibits api
  * /exhibit 
- * Interface for elastic search api
+ * Interface for exhibit api
  */
 
-const router = require('express').Router();
-const controller = require('./controller');
+const ROUTER = require('express').Router();
+const CONTROLLER = require('./controller');
 const { sanitizeElasticQuery } = require('../../middlewares/exhibits-api.elastic.middleware');
+const { exhibitIdValidator } = require('../../middlewares/exhibits-api.exhibit.middleware');
 
-router.get('/', (req, res) => {
-  controller.getExhibits(req, res);
+ROUTER.get('/', (req, res) => {
+  CONTROLLER.getExhibits(req, res);
 });
 
-router.use('/', sanitizeElasticQuery);
+ROUTER.use('/:id', [sanitizeElasticQuery, exhibitIdValidator]);
 
-router.get('/:id', (req, res) => {
-  controller.getExhibit(req, res);
+ROUTER.get('/:id', (req, res) => {
+  CONTROLLER.getExhibit(req, res);
 });
 
-router.get('/:id/items', (req, res) => {
-  controller.getExhibitItems(req, res);
+ROUTER.get('/:id/items', (req, res) => {
+  CONTROLLER.getExhibitItems(req, res);
 });
 
-module.exports = router;
+module.exports = ROUTER;
