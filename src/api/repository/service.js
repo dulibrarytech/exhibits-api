@@ -13,7 +13,7 @@ const AGENT = new HTTPS.Agent({
 let {
     repositoryDomain,
     repositoryApiKey,
-    repositoryItemSourceEndpoint,
+    repositoryItemDatastreamEndpoint,
     repositoryItemThumbnailEndpoint,
     repositoryItemDataEndpoint,
     repositorySearchEndpoint,
@@ -23,6 +23,7 @@ let {
 
 } = CONFIG;
 
+// TODO: add all directly to cfg?
 const ITEM_ID_FIELD = "pid";
 const COLLECTION_ID_FIELD = "is_member_of_collection";
 const COLLECTION_TITLE_FIELD = "title";
@@ -106,7 +107,7 @@ exports.search = async (queryString) => {
  * @param {*} fileExtension 
  * @returns 
  */
-exports.fetchSourceFile = async (repositoryItemId, exhibitItemId, fileExtension) => {
+exports.fetchSourceFile = async (repositoryItemId="null", exhibitItemId=null, fileExtension=null, datastreamId=null) => {
     let fileName = "";
     let status = false;
     let fileExists = false;
@@ -120,9 +121,10 @@ exports.fetchSourceFile = async (repositoryItemId, exhibitItemId, fileExtension)
         let exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
         let exhibitId = exhibitItem.is_member_of_exhibit || null;
         if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
+        if(datastreamId == null) datastreamId = fileExtension || "";
 
         // build the source file url for the repository item in local storage
-        fileName = `${exhibitItemId}_repository_item_media.${fileExtension}`;
+        fileName = `${exhibitItemId}_repository_item_${datastreamId}.${fileExtension}`;
         filePath = exhibitId;
         file = `./${resourceLocation}/${filePath}/${fileName}`;
 
@@ -132,13 +134,17 @@ exports.fetchSourceFile = async (repositoryItemId, exhibitItemId, fileExtension)
     }
     catch(error) {
         LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${file}`);
+        return {filename: "", status: false};
     }
 
     // if the file does not exist, fetch it from the repository
     if(fileExists == false) {
         try {
             // get the url for the repository source datastream
-            let url = `${repositoryDomain}/${repositoryItemSourceEndpoint}`.replace("{item_id}", repositoryItemId);
+            let url = `${repositoryDomain}/${repositoryItemDatastreamEndpoint}`
+                .replace("{item_id}", repositoryItemId) 
+                .replace("{datastream_id}", datastreamId);
+
             LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. datastream url: ${url}...`);
 
             // create the local resource file

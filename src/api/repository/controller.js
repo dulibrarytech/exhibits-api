@@ -26,11 +26,12 @@ exports.fetchSourceFile = async (req, res) => {
 
     let {
         exhibitItemId = null,
-        fileExtension = null
+        fileExtension = null,
+        datastreamId = null
 
     } = req.body;
 
-    response = await Repository.fetchSourceFile(repositoryItemId, exhibitItemId, fileExtension);
+    response = await Repository.fetchSourceFile(repositoryItemId, exhibitItemId, fileExtension, datastreamId);
     if(!response.status) res.status(500);
 
     res.send(response);
