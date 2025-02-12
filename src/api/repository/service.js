@@ -154,7 +154,7 @@ exports.fetchSourceFile = async (repositoryItemId="null", exhibitItemId=null, fi
             });
 
             writeStream.on('finish', () => {
-                console.log(`File written: ${fileName}`);
+                LOGGER.module().info(`File written: ${fileName}`);
             });
 
             // fetch and stream the file to local storage
