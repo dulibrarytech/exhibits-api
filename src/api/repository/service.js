@@ -107,7 +107,7 @@ exports.search = async (queryString) => {
  * @param {*} fileExtension 
  * @returns 
  */
-exports.fetchSourceFile = async (repositoryItemId="null", exhibitItemId=null, fileExtension=null, datastreamId=null) => {
+exports.verifySourceFile = async (repositoryItemId="null", exhibitItemId=null, fileExtension=null, datastreamId=null) => {
     let fileName = "";
     let status = false;
     let fileExists = false;
@@ -139,37 +139,18 @@ exports.fetchSourceFile = async (repositoryItemId="null", exhibitItemId=null, fi
 
     // if the file does not exist, fetch it from the repository
     if(fileExists == false) {
-        try {
-            // get the url for the repository source datastream
-            let url = `${repositoryDomain}/${repositoryItemDatastreamEndpoint}`
-                .replace("{item_id}", repositoryItemId) 
-                .replace("{datastream_id}", datastreamId);
 
-            LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. datastream url: ${url}...`);
+        // get the url for the repository source datastream
+        let url = `${repositoryDomain}/${repositoryItemDatastreamEndpoint}`
+            .replace("{item_id}", repositoryItemId) 
+            .replace("{datastream_id}", datastreamId);
 
-            // create the local resource file
-            let writeStream = FS.createWriteStream(file);
-            writeStream.on('error', (error) => {
-                LOGGER.module().error(`Error storing source file: ${error}`);
-            });
+        LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. Exhibit item source file: ${fileName}`);
 
-            writeStream.on('finish', () => {
-                LOGGER.module().info(`File written: ${fileName}`);
-            });
+        // fetch the datastream from the repository and write the file
+        let status = await fetchFile(url, file);
 
-            // fetch and stream the file to local storage
-            let response = await AXIOS.get(url, {
-                httpsAgent: AGENT,
-                responseType: 'stream'
-            });
-            LOGGER.module().info("Fetch successful. Writing file...", fileName);
-            response.data.pipe(writeStream);
-            
-            status = true;
-        }
-        catch(error) {
-            LOGGER.module().error(`Error storing source file: ${error}`);
-        }
+        return {fileName, status};
     }
     else {
         LOGGER.module().info("Repository source file found. File:", fileName);
@@ -177,4 +158,39 @@ exports.fetchSourceFile = async (repositoryItemId="null", exhibitItemId=null, fi
     }
 
     return {fileName, status}
+}
+
+const fetchFile = (url, file) => {
+    return new Promise(function(resolve, reject) {
+        let writeStream;
+
+        try {
+            writeStream = FS.createWriteStream(file);
+        }
+        catch(error) {
+            LOGGER.module().error(`Error creating file in media storage: ${error}`);
+            resolve(false)
+        }
+
+        writeStream.on('error', (error) => {
+            LOGGER.module().error(`Error writing source file: ${error}`);
+            resolve(false);
+        });
+
+        writeStream.on('finish', () => {
+            LOGGER.module().info(`File written.`);
+            resolve(true);
+        });
+
+        LOGGER.module().info(`Fetching file from url ${url}...`);
+
+        AXIOS.get(url, {
+            httpsAgent: AGENT,
+            responseType: 'stream'
+
+        }).then(function(response) {
+            LOGGER.module().info(`Fetch successful. Writing file ${file}...`);
+            response.data.pipe(writeStream);
+        });
+    });
 }
