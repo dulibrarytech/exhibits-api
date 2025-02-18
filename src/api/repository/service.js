@@ -1,7 +1,6 @@
 'use strict'
 
 const LOGGER = require('../../libs/log4js');
-const CONFIG = require('../../config/configuration.js');
 const ELASTIC = require('../../libs/elastic_search');
 const FS = require('fs');
 const HTTPS = require('https');
@@ -10,23 +9,20 @@ const AGENT = new HTTPS.Agent({
   rejectUnauthorized: false,
 });
 
+const CONFIG = require('../../config/configuration.js');
+
 let {
     repositoryDomain,
     repositoryApiKey,
-    repositoryItemDatastreamEndpoint,
+    repositoryObjectEndpoint,
+    repositoryCollectionEndpoint,
+    repositoryItemResourceEndpoint,
     repositoryItemThumbnailEndpoint,
     repositoryItemDataEndpoint,
     repositorySearchEndpoint,
-    repositoryObjectEndpoint,
-    repositoryCollectionEndpoint,
     resourceLocation
 
 } = CONFIG;
-
-// TODO: add all directly to cfg?
-const ITEM_ID_FIELD = "pid";
-const COLLECTION_ID_FIELD = "is_member_of_collection";
-const COLLECTION_TITLE_FIELD = "title";
 
 /**
  * 
@@ -34,43 +30,59 @@ const COLLECTION_TITLE_FIELD = "title";
  * @returns 
  */
 exports.getItemData = async (itemId) => {
-    let data = null, 
-        collectionData = {}, 
-        url, 
-        response;
+    let itemData = {};
+    let collectionData = {};
 
     // fetch repository item data
     try {
         LOGGER.module().info(`Fetching data for repository item: ${itemId}`);
-        url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", itemId);
-        response = await AXIOS.get(url, {
+
+        let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", itemId);
+        let {data} = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
+        itemData = data;
 
-        data = response.data;
-        data.link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", itemId);
-        data.thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", itemId);
-        data.collection_id = response.data[COLLECTION_ID_FIELD] || null;
     } catch (error) {
-        LOGGER.module().error(`Error retrieving repository item data. Axios response: ${error}`);
+        LOGGER.module().error(`Error retrieving repository item data. Axios error: ${error}`);
     }
+
+    // set object data fields
+    let title = itemData["title"] || "untitled item";
+    let collection_id = itemData["is_member_of_collection"] || null;
+    let mime_type = itemData.mime_type;
+
+    let local_identifier = itemData.display_record.identifiers.find((identifier) => {
+        return identifier.type == 'local';  
+    })?.identifier || "no identifier";
+
+    let subject = itemData.display_record.subjects.find((subject) => {
+        return subject.authority == 'local';
+    })?.title || "no subject";
 
     // fetch parent collection data
     try {
-        LOGGER.module().info(`Fetching data for repository collection: ${data.collection_id}`);
-        url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", data.collection_id);
-        response = await AXIOS.get(url, {
+        LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
+
+        let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
+        let {data} = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
+        collectionData = data;
 
-        collectionData = response.data;
-        data.collection_name = collectionData[COLLECTION_TITLE_FIELD] || "";
-        data.link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", data.collection_id || "null");
     } catch (error) {
         LOGGER.module().error(`Error retrieving repository collection data. Axios response: ${error}`);
     }
 
-    return data;
+    // set collection data fields
+    let collection_name = collectionData["title"] || "untitled collection";
+
+    // set link fields
+    let link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", itemId);
+    let link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", collection_id || "null");
+    let thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", itemId);
+
+    return {title, collection_id, mime_type, local_identifier, subject, collection_name, link_to_item, link_to_collection, thumbnail_datastream}
 }
 
 /**
@@ -90,7 +102,8 @@ exports.search = async (queryString) => {
 
         results = response.data;
         results.forEach((result) => {
-            result.thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", result[ITEM_ID_FIELD]);
+            result.link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", result["pid"]);
+            result.thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", result["pid"]);
         });
     }
     catch(error) {
@@ -107,7 +120,7 @@ exports.search = async (queryString) => {
  * @param {*} fileExtension 
  * @returns 
  */
-exports.verifySourceFile = async (repositoryItemId="null", exhibitItemId=null, fileExtension=null, datastreamId=null) => {
+exports.verifySourceFile = async (repositoryItemId="null", exhibitItemId=null, fileExtension=null) => {
     let fileName = "";
     let status = false;
     let fileExists = false;
@@ -121,10 +134,9 @@ exports.verifySourceFile = async (repositoryItemId="null", exhibitItemId=null, f
         let exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
         let exhibitId = exhibitItem.is_member_of_exhibit || null;
         if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
-        if(datastreamId == null) datastreamId = fileExtension || "";
 
         // build the source file url for the repository item in local storage
-        fileName = `${exhibitItemId}_repository_item_${datastreamId}.${fileExtension}`;
+        fileName = `${exhibitItemId}_repository_item_source.${fileExtension}`;
         filePath = exhibitId;
         file = `./${resourceLocation}/${filePath}/${fileName}`;
 
@@ -141,9 +153,8 @@ exports.verifySourceFile = async (repositoryItemId="null", exhibitItemId=null, f
     if(fileExists == false) {
 
         // get the url for the repository source datastream
-        let url = `${repositoryDomain}/${repositoryItemDatastreamEndpoint}`
+        let url = `${repositoryDomain}/${repositoryItemResourceEndpoint}`
             .replace("{item_id}", repositoryItemId) 
-            .replace("{datastream_id}", datastreamId);
 
         LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. Exhibit item source file: ${fileName}`);
 

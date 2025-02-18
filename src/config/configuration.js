@@ -6,7 +6,7 @@ module.exports = {
     elasticIndex: process.env.ELASTIC_INDEX,
     repositoryDomain: process.env.REPOSITORY_DOMAIN,
     repositoryApiKey: process.env.REPOSITORY_API_KEY,
-    repositoryItemDatastreamEndpoint: process.env.REPOSITORY_ITEM_DATASTREAM_ENDPOINT,
+    repositoryItemResourceEndpoint: process.env.REPOSITORY_ITEM_RESOURCE_ENDPOINT,
     repositoryItemThumbnailEndpoint: process.env.REPOSITORY_ITEM_THUMBNAIL_ENDPOINT,
     repositoryItemDataEndpoint: process.env.REPOSITORY_ITEM_DATA_ENDPOINT,
     repositorySearchEndpoint: process.env.REPOSITORY_SEARCH_ENDPOINT,

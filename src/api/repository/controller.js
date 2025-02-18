@@ -26,12 +26,11 @@ exports.fetchSourceFile = async (req, res) => {
 
     let {
         exhibitItemId = null,
-        fileExtension = null,
-        datastreamId = null
+        fileExtension = null
 
     } = req.body;
 
-    response = await Repository.verifySourceFile(repositoryItemId, exhibitItemId, fileExtension, datastreamId);  // DEV does not need to catch error. If error, response.status field will be false
+    response = await Repository.verifySourceFile(repositoryItemId, exhibitItemId, fileExtension);  // DEV does not need to catch error. If error, response.status field will be false
     if(!response.status) res.status(500);
 
     res.send(response);
