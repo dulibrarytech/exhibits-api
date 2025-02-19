@@ -7,7 +7,7 @@ const getDataValidator = async (req, res, next) => {
     ]);
 }
 
-const fetchSourceFileValidator = async (req, res, next) => {
+const fetchResourceFileValidator = async (req, res, next) => {
     validate(req, res, next, [
         param('id').isLength({min: 1, max: 50}).withMessage("id param length range: 1-50 characters"),
         body('exhibitItemId').notEmpty(),
@@ -19,5 +19,5 @@ const fetchSourceFileValidator = async (req, res, next) => {
   
 module.exports = {
     getDataValidator,
-    fetchSourceFileValidator
+    fetchResourceFileValidator
 };

@@ -20,7 +20,7 @@ exports.search = async (req, res) => {
     res.send(results);
 }
 
-exports.fetchSourceFile = async (req, res) => {
+exports.fetchResourceFile = async (req, res) => {
     let response = {filename: "null"}
     let repositoryItemId = req.params.id;
 
@@ -30,7 +30,7 @@ exports.fetchSourceFile = async (req, res) => {
 
     } = req.body;
 
-    response = await Repository.verifySourceFile(repositoryItemId, exhibitItemId, fileExtension);  // DEV does not need to catch error. If error, response.status field will be false
+    response = await Repository.verifyResourceFile(repositoryItemId, exhibitItemId, fileExtension);
     if(!response.status) res.status(500);
 
     res.send(response);

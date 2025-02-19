@@ -8,7 +8,7 @@ const ROUTER = require('express').Router();
 const CONTROLLER = require('./controller');
 
 const { validateApiKey } = require('../../middlewares/exhibits-api.authentication.middleware');
-const { fetchSourceFileValidator, getDataValidator } = require('../../middlewares/exhibits-api.repository.middleware');
+const { fetchResourceFileValidator, getDataValidator } = require('../../middlewares/exhibits-api.repository.middleware');
 
 /////////////////
 // public routes
@@ -24,10 +24,10 @@ ROUTER.post('/search', (req, res) => {
 ////////////////////
 // protected routes
 ////////////////////
-ROUTER.use('/source/fetch', validateApiKey);
+ROUTER.use('/resource/fetch', validateApiKey);
 
-ROUTER.post('/source/fetch/:id', fetchSourceFileValidator, async (req, res) => {  
-  CONTROLLER.fetchSourceFile(req, res);
+ROUTER.post('/resource/fetch/:id', fetchResourceFileValidator, async (req, res) => {  
+  CONTROLLER.fetchResourceFile(req, res);
 });
 
 module.exports = ROUTER;

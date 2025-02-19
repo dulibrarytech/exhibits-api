@@ -120,7 +120,7 @@ exports.search = async (queryString) => {
  * @param {*} fileExtension 
  * @returns 
  */
-exports.verifySourceFile = async (repositoryItemId="null", exhibitItemId=null, fileExtension=null) => {
+exports.verifyResourceFile = async (repositoryItemId="null", exhibitItemId=null, fileExtension=null) => {
     let fileName = "";
     let status = false;
     let fileExists = false;
