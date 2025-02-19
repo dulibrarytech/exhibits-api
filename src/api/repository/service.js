@@ -173,26 +173,6 @@ exports.verifySourceFile = async (repositoryItemId="null", exhibitItemId=null, f
 
 const fetchFile = (url, file) => {
     return new Promise(function(resolve, reject) {
-        let writeStream;
-
-        try {
-            writeStream = FS.createWriteStream(file);
-        }
-        catch(error) {
-            LOGGER.module().error(`Error creating file in media storage: ${error}`);
-            resolve(false)
-        }
-
-        writeStream.on('error', (error) => {
-            LOGGER.module().error(`Error writing source file: ${error}`);
-            resolve(false);
-        });
-
-        writeStream.on('finish', () => {
-            LOGGER.module().info(`File written.`);
-            resolve(true);
-        });
-
         LOGGER.module().info(`Fetching file from url ${url}...`);
 
         AXIOS.get(url, {
@@ -201,7 +181,26 @@ const fetchFile = (url, file) => {
 
         }).then(function(response) {
             LOGGER.module().info(`Fetch successful. Writing file ${file}...`);
-            response.data.pipe(writeStream);
+
+            try {
+                let writeStream = FS.createWriteStream(file);
+
+                writeStream.on('error', (error) => {
+                    LOGGER.module().error(`Error writing source file: ${error}`);
+                    resolve(false);
+                });
+    
+                writeStream.on('finish', () => {
+                    LOGGER.module().info(`File written.`);
+                    resolve(true);
+                });
+
+                response.data.pipe(writeStream);
+            }
+            catch(error) {
+                LOGGER.module().error(`Error creating file in media storage: ${error}`);
+                resolve(false)
+            }
         });
     });
 }
