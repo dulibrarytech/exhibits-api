@@ -8,7 +8,7 @@ const getDataValidator = async (req, res, next) => {
 }
 
 const fetchResourceFileValidator = async (req, res, next) => {
-    const validFileExtensions = ['png', 'jpg', 'jpeg', 'tif', 'tiff', 'mp3', 'mp4'];
+    const validFileExtensions = ['png', 'jpg', 'jpeg', 'tif', 'tiff', 'mp3', 'mp4', 'pdf'];
 
     validate(req, res, next, [
         param('id').isLength({min: 1, max: 50}).withMessage("id param length range: 1-50 characters"),
