@@ -136,7 +136,7 @@ exports.verifyResourceFile = async (repositoryItemId="null", exhibitItemId=null,
         if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
 
         // build the source file url for the repository item in local storage
-        fileName = `${exhibitItemId}_repository_item_source.${fileExtension}`;
+        fileName = `${exhibitItemId}_repository_item_media.${fileExtension}`;
         filePath = exhibitId;
         file = `./${resourceLocation}/${filePath}/${fileName}`;
 
