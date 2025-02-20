@@ -30,8 +30,8 @@ exports.fetchResourceFile = async (req, res) => {
 
     } = req.body;
 
-    response = await Repository.verifyResourceFile(repositoryItemId, exhibitItemId, fileExtension);
-    if(!response.status) res.status(500);
+    response = await Repository.verifyResourceFile({repositoryItemId, exhibitItemId, fileExtension});
+    if(response.error) res.status(500)
 
     res.send(response);
 }

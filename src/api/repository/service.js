@@ -120,55 +120,77 @@ exports.search = async (queryString) => {
  * @param {*} fileExtension 
  * @returns 
  */
-exports.verifyResourceFile = async (repositoryItemId="null", exhibitItemId=null, fileExtension=null) => {
-    let fileName = "";
-    let status = false;
-    let fileExists = false;
-    let file = "";
-    let filePath = "";
+exports.verifyResourceFile = async (params) => {
+    let {
+        repositoryItemId="null",
+        exhibitItemId="null",
+        fileExtension="jpg",
+        thumbnailFileExtension="jpg"
+        
+    } = params;
+
+    let mediaFile = "";
+    let thumbnailFile = "";
+    let mediaFileCreated = false;
+    let mediaFileExists = false;
+
+    let response = {}
+
+    let exhibitId;
 
     LOGGER.module().info(`Fetching source file for repository item: ${repositoryItemId}...`);
 
+    let exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
+    exhibitId = exhibitItem.is_member_of_exhibit || null;
+    if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
+
+    let fileLocation = `./${resourceLocation}/${exhibitId}`;
+    mediaFile = `${exhibitItemId}_repository_item_media.${fileExtension}`; 
+    let filePath = `${fileLocation}/${mediaFile}`;
+
     try {
-        // validate the exhibit item id, and extract the exhibit id for the file path
-        let exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
-        let exhibitId = exhibitItem.is_member_of_exhibit || null;
-        if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
-
-        // build the source file url for the repository item in local storage
-        fileName = `${exhibitItemId}_repository_item_media.${fileExtension}`;
-        filePath = exhibitId;
-        file = `./${resourceLocation}/${filePath}/${fileName}`;
-
-        // verify the local resource file
-        LOGGER.module().info(`Verifying source file in local storage: ${fileName}...`);
-        fileExists = FS.existsSync(file);
+        LOGGER.module().info(`Verifying media resource file in local storage: ${mediaFile}...`);
+        mediaFileExists = FS.existsSync(filePath);
     }
     catch(error) {
-        LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${file}`);
-        return {filename: "", status: false};
+        LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${filePath}`);
+        return {error};
     }
 
-    // if the file does not exist, fetch it from the repository
-    if(fileExists == false) {
+    if(mediaFileExists == false) {
+        LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. Exhibit item resource file: ${mediaFile}`);
 
-        // get the url for the repository source datastream
         let url = `${repositoryDomain}/${repositoryItemResourceEndpoint}`
             .replace("{item_id}", repositoryItemId) 
 
-        LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. Exhibit item source file: ${fileName}`);
+        // fetch the media datastream from the repository (url) and write the file (file)
+        let {error} = await fetchFile(url, filePath);
 
-        // fetch the datastream from the repository and write the file
-        let status = await fetchFile(url, file);
-
-        return {fileName, status};
+        if(error) return {error};
+        else mediaFileCreated = true;
     }
     else {
-        LOGGER.module().info("Repository source file found. File:", fileName);
-        status = true;
+        LOGGER.module().info("Repository resource file found. File:", mediaFile);
     }
 
-    return {fileName, status}
+    // fetch and store the repository item thumbnail when a media file is created
+    if(mediaFileCreated == true && repositoryItemThumbnailEndpoint) {
+        LOGGER.module().info(`Fetching thumbnail file...`);
+
+        thumbnailFile = `${exhibitItemId}_repository_item_thumbnail.${thumbnailFileExtension}`;
+        filePath = `${fileLocation}/${thumbnailFile}`;
+
+        let url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`
+            .replace("{item_id}", repositoryItemId) 
+
+        // fetch the thumbnail datastream from the repository (url) and write the file (file)   
+        let {error} = await fetchFile(url, filePath);
+
+        if(error) return {error};
+        else response = {...response, thumbnailFile};
+    }
+
+    return {...response, mediaFile, mediaFileCreated}
 }
 
 const fetchFile = (url, file) => {
@@ -187,19 +209,19 @@ const fetchFile = (url, file) => {
 
                 writeStream.on('error', (error) => {
                     LOGGER.module().error(`Error writing source file: ${error}`);
-                    resolve(false);
+                    resolve({error})
                 });
     
                 writeStream.on('finish', () => {
                     LOGGER.module().info(`File written.`);
-                    resolve(true);
+                    resolve({error: null})
                 });
 
                 response.data.pipe(writeStream);
             }
             catch(error) {
                 LOGGER.module().error(`Error creating file in media storage: ${error}`);
-                resolve(false)
+                resolve({error})
             }
         });
     });
