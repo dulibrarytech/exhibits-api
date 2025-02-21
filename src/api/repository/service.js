@@ -10,6 +10,8 @@ const AGENT = new HTTPS.Agent({
   rejectUnauthorized: false,
 });
 
+const FILE_FETCH_TIMEOUT=90000
+
 const CONFIG = require('../../config/configuration.js');
 
 let {
@@ -216,7 +218,8 @@ const fetchFile = (url, file) => {
 
         AXIOS.get(url, {
             httpsAgent: AGENT,
-            responseType: 'stream'
+            responseType: 'stream',
+            timeout: FILE_FETCH_TIMEOUT
 
         }).then(function(response) {
             LOGGER.module().info(`Fetch successful. Writing file ${file}...`);
@@ -230,14 +233,19 @@ const fetchFile = (url, file) => {
                 });
     
                 writeStream.on('finish', () => {
-                    LOGGER.module().info(`File written.`);
+                    LOGGER.module().info(`File write complete: ${file}`);
                     resolve({error: null})
                 });
 
                 response.data.pipe(writeStream);
             }
             catch(error) {
-                LOGGER.module().error(`Error creating file in media storage: ${error}`);
+                if (error.code === 'ECONNABORTED') {
+                    console.error('Request timed out');
+                }
+                else {
+                    LOGGER.module().error(`Error creating file in media storage: ${error}`);
+                }
                 resolve({error})
             }
         });
