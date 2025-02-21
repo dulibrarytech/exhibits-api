@@ -5,6 +5,7 @@ const ELASTIC = require('../../libs/elastic_search');
 const FS = require('fs');
 const HTTPS = require('https');
 const AXIOS = require('axios');
+const MIME_TYPES = require('mime-types');
 const AGENT = new HTTPS.Agent({
   rejectUnauthorized: false,
 });
@@ -124,7 +125,6 @@ exports.verifyResourceFile = async (params) => {
     let {
         repositoryItemId="null",
         exhibitItemId="null",
-        fileExtension="jpg",
         thumbnailFileExtension="jpg"
         
     } = params;
@@ -134,18 +134,35 @@ exports.verifyResourceFile = async (params) => {
     let mediaFileCreated = false;
     let mediaFileExists = false;
 
-    let response = {}
-
-    let exhibitId;
+    let response = {};
 
     LOGGER.module().info(`Fetching source file for repository item: ${repositoryItemId}...`);
 
     let exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
-    exhibitId = exhibitItem.is_member_of_exhibit || null;
+    let exhibitId = exhibitItem.is_member_of_exhibit || null;
     if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
 
+    let fileExtension;
+    try {
+        LOGGER.module().info(`Fetching data for repository item: ${repositoryItemId}`);
+
+        let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", repositoryItemId);
+        let {data} = await AXIOS.get(url, {
+            httpsAgent: AGENT,
+        });
+
+        console.log("TEST data rx:", data)
+
+        let mimeType = data.mime_type;
+        fileExtension = MIME_TYPES.extension(mimeType);
+
+    } catch (error) {
+        LOGGER.module().error(`Error retrieving repository item data. Axios error: ${error}`);
+        return {error};
+    }
+
     let fileLocation = `./${resourceLocation}/${exhibitId}`;
-    mediaFile = `${exhibitItemId}_repository_item_media.${fileExtension}`; 
+    mediaFile = `${exhibitItemId}_repository_item_media.${fileExtension}`; // TODO add repo item to filename IF exhibit verify is removed.
     let filePath = `${fileLocation}/${mediaFile}`;
 
     try {

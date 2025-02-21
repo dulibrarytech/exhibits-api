@@ -29,6 +29,7 @@
     "express-validator": "^7.2.1",
     "fs": "^0.0.1-security",
     "log4js": "^6.9.1",
+    "mime-type": "^5.0.2",
     "util": "^0.12.5"
   },
   "devDependencies": {
