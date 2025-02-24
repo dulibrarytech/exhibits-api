@@ -84,6 +84,10 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
                 {bool: {must: objectTypes}},
                 {bool: {should: itemTypes}},
                 {bool: {should: searchFields}}
+            ],
+
+            filter: [
+                {match: {is_published: 1}}
             ]
         }
     };
