@@ -25,12 +25,11 @@ exports.fetchResourceFile = async (req, res) => {
     let repositoryItemId = req.params.id;
 
     let {
-        exhibitItemId = null,
-        fileExtension = null
+        exhibitItemId = null
 
     } = req.body;
 
-    response = await Repository.verifyResourceFile({repositoryItemId, exhibitItemId, fileExtension});
+    response = await Repository.verifyResourceFile({repositoryItemId, exhibitItemId});
     if(response.error) res.status(500)
 
     res.send(response);
