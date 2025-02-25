@@ -132,29 +132,31 @@ exports.verifyResourceFile = async (params) => {
     } = params;
 
     let mediaFile = "";
+    let fileExtension = "";
     let thumbnailFile = "";
     let mediaFileCreated = false;
     let mediaFileExists = false;
 
     let response = {};
 
-    LOGGER.module().info(`Fetching source file for repository item: ${repositoryItemId}...`);
+    LOGGER.module().info(`Verifying exhibit item: ${exhibitItemId}...`);
 
+    // validate the exhibit item, and the repository item id from the exhibit item
     let exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
     let exhibitId = exhibitItem.is_member_of_exhibit || null;
     if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
+    if(exhibitItem.media != repositoryItemId) throw "Invalid repository item id";
 
-    let fileExtension;
     try {
         LOGGER.module().info(`Fetching data for repository item: ${repositoryItemId}`);
 
+        // get the repository item data
         let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", repositoryItemId);
         let {data} = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
 
-        console.log("TEST data rx:", data)
-
+        // get the file type of the repository item resource file
         let mimeType = data.mime_type;
         fileExtension = MIME_TYPES.extension(mimeType);
 
@@ -163,10 +165,12 @@ exports.verifyResourceFile = async (params) => {
         return {error};
     }
 
+    // get the path to the exhibits resource storage location, create the repository item media file name
     let fileLocation = `./${resourceLocation}/${exhibitId}`;
-    mediaFile = `${exhibitItemId}_repository_item_media.${fileExtension}`; // TODO add repo item to filename IF exhibit verify is removed.
+    mediaFile = `${exhibitItemId}_repository_item_media.${fileExtension}`;
     let filePath = `${fileLocation}/${mediaFile}`;
 
+    // check if the repository item media file exists
     try {
         LOGGER.module().info(`Verifying media resource file in local storage: ${mediaFile}...`);
         mediaFileExists = FS.existsSync(filePath);
@@ -176,13 +180,13 @@ exports.verifyResourceFile = async (params) => {
         return {error};
     }
 
+    // if repository item media file does not exist, fetch it from the repository and create the media file
     if(mediaFileExists == false) {
         LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. Exhibit item resource file: ${mediaFile}`);
 
         let url = `${repositoryDomain}/${repositoryItemResourceEndpoint}`
             .replace("{item_id}", repositoryItemId) 
 
-        // fetch the media datastream from the repository (url) and write the file (file)
         let {error} = await fetchFile(url, filePath);
 
         if(error) return {error};
@@ -202,13 +206,14 @@ exports.verifyResourceFile = async (params) => {
         let url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`
             .replace("{item_id}", repositoryItemId) 
 
-        // fetch the thumbnail datastream from the repository (url) and write the file (file)   
         let {error} = await fetchFile(url, filePath);
 
+        // add thumbnail file creation data to the response object
         if(error) return {error};
         else response = {...response, thumbnailFile};
     }
 
+    // add media file creation data to the response object
     return {...response, mediaFile, mediaFileCreated}
 }
 
@@ -228,7 +233,7 @@ const fetchFile = (url, file) => {
                 let writeStream = FS.createWriteStream(file);
 
                 writeStream.on('error', (error) => {
-                    LOGGER.module().error(`Error writing source file: ${error}`);
+                    LOGGER.module().error(`Error writing file: ${error}`);
                     resolve({error})
                 });
     
