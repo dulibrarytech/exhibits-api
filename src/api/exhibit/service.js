@@ -5,15 +5,16 @@ const Logger = require('../../libs/log4js');
 
 exports.getAll = async () => {
     let exhibits = null;
+    let page = null;
     let sort = [
-        {"title.keyword": "asc"}
+        {"order": "asc"}
     ];
 
     try {
-        let {results} = await Elastic.query({
+        let {results} = await Elastic.query({ 
             match: { type: 'exhibit' }
 
-        }, sort);
+        }, sort, page);
 
         exhibits = results;
     }
