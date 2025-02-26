@@ -10,7 +10,8 @@ const AGENT = new HTTPS.Agent({
   rejectUnauthorized: false,
 });
 
-const FILE_FETCH_TIMEOUT=90000
+let {fetchFile} = require('./helper');
+// const FILE_FETCH_TIMEOUT=90000 // to helper
 
 const CONFIG = require('../../config/configuration.js');
 
@@ -131,6 +132,8 @@ exports.verifyResourceFile = async (params) => {
         
     } = params;
 
+    let exhibitId = null;
+    let exhibitItem = {};
     let mediaFile = "";
     let fileExtension = "";
     let thumbnailFile = "";
@@ -139,18 +142,25 @@ exports.verifyResourceFile = async (params) => {
 
     let response = {};
 
+    // get the exhibit item data
     LOGGER.module().info(`Verifying exhibit item: ${exhibitItemId}...`);
+    exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items"); // TODO update for exhibits app specific function
 
-    // validate the exhibit item, and the repository item id from the exhibit item
-    let exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
-    let exhibitId = exhibitItem.is_member_of_exhibit || null;
-    if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
-    if(exhibitItem.media != repositoryItemId) throw "Invalid repository item id";
+    // if this is a container item, find the display item in the container 'items' array
+    if(exhibitItem.items) {
+        exhibitItem = exhibitItem.items.find((item) => {
+            return item.uuid == exhibitItemId;
+        });
+    }
 
     try {
-        LOGGER.module().info(`Fetching data for repository item: ${repositoryItemId}`);
+        // verify item is in an exhibit
+        exhibitId = exhibitItem.is_member_of_exhibit || null;
+        if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
+        if(exhibitItem.media != repositoryItemId) throw "Invalid repository item id";
 
         // get the repository item data
+        LOGGER.module().info(`Fetching data for repository item: ${repositoryItemId}`);
         let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", repositoryItemId);
         let {data} = await AXIOS.get(url, {
             httpsAgent: AGENT,
@@ -161,7 +171,7 @@ exports.verifyResourceFile = async (params) => {
         fileExtension = MIME_TYPES.extension(mimeType);
 
     } catch (error) {
-        LOGGER.module().error(`Error retrieving repository item data. Axios error: ${error}`);
+        LOGGER.module().error(`Error retrieving repository item data: ${error}`);
         return {error};
     }
 
@@ -215,44 +225,4 @@ exports.verifyResourceFile = async (params) => {
 
     // add media file creation data to the response object
     return {...response, mediaFile, mediaFileCreated}
-}
-
-const fetchFile = (url, file) => {
-    return new Promise(function(resolve, reject) {
-        LOGGER.module().info(`Fetching file from url ${url}...`);
-
-        AXIOS.get(url, {
-            httpsAgent: AGENT,
-            responseType: 'stream',
-            timeout: FILE_FETCH_TIMEOUT
-
-        }).then(function(response) {
-            LOGGER.module().info(`Fetch successful. Writing file ${file}...`);
-
-            try {
-                let writeStream = FS.createWriteStream(file);
-
-                writeStream.on('error', (error) => {
-                    LOGGER.module().error(`Error writing file: ${error}`);
-                    resolve({error})
-                });
-    
-                writeStream.on('finish', () => {
-                    LOGGER.module().info(`File write complete: ${file}`);
-                    resolve({error: null})
-                });
-
-                response.data.pipe(writeStream);
-            }
-            catch(error) {
-                if (error.code === 'ECONNABORTED') {
-                    console.error('Request timed out');
-                }
-                else {
-                    LOGGER.module().error(`Error creating file in media storage: ${error}`);
-                }
-                resolve({error})
-            }
-        });
-    });
 }
