@@ -27,7 +27,7 @@ try {
     });
 }
 catch (error) {
-    Logger.module().error(`Could not connect to Elastic cluster at ${elasticDomain}. Error: ${error}`);
+    Logger.module().error(`Could not connect to Elastic server at ${elasticDomain}. Error: ${error}`);
 }
 
 if(elastic_client) {
