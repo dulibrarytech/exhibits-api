@@ -3,24 +3,30 @@
 const Exhibit = require('./service');
 
 exports.getExhibits = async (req, res) => {
-    let data = [];    
-    data = await Exhibit.getAll();
+    let key = req.query.key || null;
+    let data = [];  
+      
+    data = await Exhibit.getAll(key);
     if(!data) res.status(500);
     res.send(data);
 }
 
 exports.getExhibit = async (req, res) => {
     let id = req.params.id || null;
+    let key = req.query.key || null;
     let data = {};
-    data = await Exhibit.get(id);
+
+    data = await Exhibit.get(id, key);
     if(!data) res.status(500);
     res.send(data);
 }
 
 exports.getExhibitItems = async (req, res) => {
     let id = req.params.id;
+    let key = req.query.key || null;
     let data = [];
-    data = await Exhibit.getItems(id);
+
+    data = await Exhibit.getItems(id, key);
     if(!data) res.status(500);
     res.send(data);
 }

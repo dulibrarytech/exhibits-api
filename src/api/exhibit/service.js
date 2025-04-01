@@ -1,9 +1,14 @@
 'use strict'
 
-const Elastic = require('../../libs/elastic_search');
-const Logger = require('../../libs/log4js');
+const CONFIG = require('../../config/configuration.js');
+const ELASTIC = require('../../libs/elastic_search');
+const LOGGER = require('../../libs/log4js');
 
-exports.getAll = async () => {
+const validateKey = (key) => {
+    return key && key == CONFIG.apiKey;
+}
+
+exports.getAll = async (key) => {
     let exhibits = null;
     let page = null;
     let sort = [
@@ -11,52 +16,44 @@ exports.getAll = async () => {
     ];
 
     try {
-        let {results} = await Elastic.query({ 
+        let {results} = await ELASTIC.query({ 
             match: { type: 'exhibit' }
 
         }, sort, page);
 
-        exhibits = results;
+        exhibits = results.filter((result) => {
+            return validateKey(key) ? true : result.is_published == 1;
+        });
     }
     catch(error) {
-        Logger.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
+        LOGGER.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
     }
 
     return exhibits;
 }
 
-exports.get = async (id) => {
+exports.get = async (id, key) => {
     let exhibit = null;
 
     try {
-        let {results} = await Elastic.query({
-            match: { 
-                uuid: {
-                    query: id,
-                    operator: "AND"
-                } 
-            }
-        });
-
-        if(results.length > 0) {
-            exhibit = results.at(0);
-        }
+        let data = await ELASTIC.get(id);
+        exhibit = (validateKey(key) || data.is_published == 1) ? data : false;
     }
     catch(error) {
-        Logger.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
+        LOGGER.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
     }
 
     return exhibit || {};
 }
 
-exports.getItems = async (id) => {
+exports.getItems = async (id, key) => {
     let items = null;
     let sort = [
         {"order": "asc"}
     ];
 
     try {
-        let {results} = await Elastic.query({
+        let {results} = await ELASTIC.query({
             match: { 
                 is_member_of_exhibit: {
                     query: id,
@@ -66,10 +63,12 @@ exports.getItems = async (id) => {
 
         }, sort, null);
 
-        items = results;
+        items = results.filter((result) => {
+            return validateKey(key) ? true : result.is_published == 1;
+        });
     }
     catch(error) {
-        Logger.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
+        LOGGER.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
     }
 
     return items;
