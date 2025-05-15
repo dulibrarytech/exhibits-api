@@ -54,16 +54,22 @@ exports.getItemData = async (itemId) => {
     // set object data fields
     let title = itemData["title"] || "untitled item";
     let collection_id = itemData["is_member_of_collection"] || null;
-    let mime_type = itemData.mime_type;
+    let mime_type = itemData.mime_type || null;
 
-    let local_identifier = itemData.display_record.identifiers.find((identifier) => {
-        return identifier.type == 'local';  
-    })?.identifier || "no identifier";
-
-    let subject = itemData.display_record.subjects.find((subject) => {
-        return subject.authority == 'local';
-    })?.title || "no subject";
-
+    let local_identifier = null;
+    if(itemData.display_record?.identifiers) {
+        local_identifier = itemData.display_record.identifiers.find((identifier) => {
+            return identifier.type == 'local';  
+        })?.identifier || "no identifier";
+    }
+    
+    let subject = null;
+    if(itemData.display_record?.subjects) {
+        subject = itemData.display_record.subjects.find((subject) => {
+            return subject.authority == 'local';
+        })?.title || "no subject";
+    }
+    
     // fetch parent collection data
     try {
         LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
