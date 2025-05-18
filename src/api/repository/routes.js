@@ -11,15 +11,15 @@ const { validateApiKey } = require('../../middlewares/exhibits-api.authenticatio
 const { fetchResourceFileValidator, getDataValidator } = require('../../middlewares/exhibits-api.repository.middleware');
 
 ROUTER.get('/data/:id', getDataValidator, (req, res) => {
-  CONTROLLER.getData(req, res);
+  CONTROLLER.data(req, res);
+});
+
+ROUTER.post('/item/:id', validateApiKey, fetchResourceFileValidator, async (req, res) => {
+  CONTROLLER.item(req, res);
 });
 
 ROUTER.post('/search', (req, res) => {
   CONTROLLER.search(req, res);
-});
-
-ROUTER.post('/resource/fetch/:id', validateApiKey, fetchResourceFileValidator, async (req, res) => {  
-  CONTROLLER.fetchResourceFile(req, res);
 });
 
 module.exports = ROUTER;

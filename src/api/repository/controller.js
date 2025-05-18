@@ -2,7 +2,7 @@
 
 const Repository = require('./service');
 
-exports.getData = async (req, res) => {
+exports.data = async (req, res) => {
     let data = {};
     let itemId = req.params.id || null;
     
@@ -20,16 +20,15 @@ exports.search = async (req, res) => {
     res.send(results);
 }
 
-exports.fetchResourceFile = async (req, res) => {
+exports.item = async (req, res) => {
     let response = {filename: "null"}
-    let repositoryItemId = req.params.id;
+    let itemId = req.params.id;
 
     let {
         exhibitItemId = null
-
     } = req.body;
 
-    response = await Repository.verifyResourceFile({repositoryItemId, exhibitItemId});
+    response = await Repository.getItemResource({itemId, exhibitItemId});
     if(response.error) res.status(500)
 
     res.send(response);

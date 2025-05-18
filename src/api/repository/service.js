@@ -125,14 +125,14 @@ exports.search = async (queryString) => {
 
 /**
  * 
- * @param {*} repositoryItemId 
+ * @param {*} itemId 
  * @param {*} exhibitItemId 
- * @param {*} fileExtension 
+ * @param {*} thumbnailFileExtension 
  * @returns 
  */
-exports.verifyResourceFile = async (params) => {
+exports.getItemResource = async (params) => {
     let {
-        repositoryItemId="null",
+        itemId="null",
         exhibitItemId="null",
         thumbnailFileExtension="jpg"
         
@@ -140,13 +140,12 @@ exports.verifyResourceFile = async (params) => {
 
     let exhibitId = null;
     let exhibitItem = {};
-    let mediaFile = "";
-    let fileExtension = "";
     let thumbnailFile = "";
     let mediaFileCreated = false;
     let mediaFileExists = false;
+    let itemData = {};
 
-    let response = {};
+    let response;
 
     // get the exhibit item data
     LOGGER.module().info(`Verifying exhibit item: ${exhibitItemId}...`);
@@ -163,27 +162,21 @@ exports.verifyResourceFile = async (params) => {
         // verify item is in an exhibit
         exhibitId = exhibitItem.is_member_of_exhibit || null;
         if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
-        if(exhibitItem.media != repositoryItemId) throw "Invalid repository item id";
+        if(exhibitItem.media != itemId) throw "Invalid repository item id";
 
         // get the repository item data
-        LOGGER.module().info(`Fetching data for repository item: ${repositoryItemId}`);
-        let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", repositoryItemId);
-        let {data} = await AXIOS.get(url, {
-            httpsAgent: AGENT,
-        });
+        LOGGER.module().info(`Fetching data for repository item: ${itemId}`);
+        itemData = await this.getItemData(itemId);
 
-        // get the file type of the repository item resource file
-        let mimeType = data.mime_type;
-        fileExtension = MIME_TYPES.extension(mimeType);
+        response = {...response, itemData};
 
     } catch (error) {
         LOGGER.module().error(`Error retrieving repository item data: ${error}`);
         return {error};
     }
 
-    // get the path to the exhibits resource storage location, create the repository item media file name
     let fileLocation = `./${resourceLocation}/${exhibitId}`;
-    mediaFile = `${exhibitItemId}_repository_item_media.${fileExtension}`;
+    let mediaFile = `${exhibitItemId}_repository_item_media.${MIME_TYPES.extension(itemData.mime_type || "")}`;
     let filePath = `${fileLocation}/${mediaFile}`;
 
     // check if the repository item media file exists
@@ -201,7 +194,7 @@ exports.verifyResourceFile = async (params) => {
         LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. Exhibit item resource file: ${mediaFile}`);
 
         let url = `${repositoryDomain}/${repositoryItemResourceEndpoint}`
-            .replace("{item_id}", repositoryItemId) 
+            .replace("{item_id}", itemId) 
 
         let {error} = await fetchFile(url, filePath);
 
@@ -220,7 +213,7 @@ exports.verifyResourceFile = async (params) => {
         filePath = `${fileLocation}/${thumbnailFile}`;
 
         let url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`
-            .replace("{item_id}", repositoryItemId) 
+            .replace("{item_id}", itemId) 
 
         let {error} = await fetchFile(url, filePath);
 
@@ -230,5 +223,5 @@ exports.verifyResourceFile = async (params) => {
     }
 
     // add media file creation data to the response object
-    return {...response, mediaFile, mediaFileCreated}
+    return {mediaFile, mediaFileCreated, ...response}
 }
