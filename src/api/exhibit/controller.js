@@ -7,8 +7,8 @@ exports.getExhibits = async (req, res) => {
     let data = [];  
       
     data = await Exhibit.getAll(key);
-    if(!data) res.status(500);
-    res.send(data);
+    if(!data) res.sendStatus(500);
+    else res.send(data);
 }
 
 exports.getExhibit = async (req, res) => {
@@ -17,8 +17,8 @@ exports.getExhibit = async (req, res) => {
     let data = {};
 
     data = await Exhibit.get(id, key);
-    if(!data) res.status(500);
-    res.send(data);
+    if(!data) res.sendStatus(500);
+    else res.send(data);
 }
 
 exports.getExhibitItems = async (req, res) => {
@@ -27,6 +27,6 @@ exports.getExhibitItems = async (req, res) => {
     let data = [];
 
     data = await Exhibit.getItems(id, key);
-    if(!data) res.status(500);
-    res.send(data);
+    if(!data) res.sendStatus(500);
+    else res.send(data);
 }

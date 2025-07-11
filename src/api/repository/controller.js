@@ -7,8 +7,8 @@ exports.data = async (req, res) => {
     let itemId = req.params.id || null;
     
     data = await Repository.getItemData(itemId);
-    if(!data) res.status(500);
-    res.send(data);
+    if(!data) res.sendStatus(500);
+    else res.send(data);
 }
 
 exports.search = async (req, res) => {
@@ -16,8 +16,8 @@ exports.search = async (req, res) => {
     let queryString = req.body.queryString || null;
 
     results = await Repository.search(queryString);
-    if(!results) res.status(500);
-    res.send(results);
+    if(!results) res.sendStatus(500);
+    else res.send(results);
 }
 
 exports.item = async (req, res) => {
@@ -29,7 +29,6 @@ exports.item = async (req, res) => {
     } = req.body;
 
     response = await Repository.getItemResource({itemId, exhibitItemId});
-    if(response.error) res.status(500)
-
-    res.send(response);
+    if(response.error) res.sendStatus(500)
+    else res.send(response);
 }

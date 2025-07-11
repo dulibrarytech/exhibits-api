@@ -13,9 +13,8 @@ exports.searchIndex = async (req, res) => {
 
     if(terms) {
         results = await Search.index(terms, type, facets, sort, page, exhibitId);
-        if(!results) res.status(500);
+        if(!results) res.sendStatus(500);
+        else res.send(results);
     }
-    else res.status(400);
-
-    res.send(results);
+    else res.sendStatus(400);
 }
