@@ -1,5 +1,6 @@
 'use strict'
 
+const CONFIG = require('../../config/configuration.js');
 const LOGGER = require('../../libs/log4js');
 const ELASTIC = require('../../libs/elastic_search');
 const FS = require('fs');
@@ -10,10 +11,7 @@ const AGENT = new HTTPS.Agent({
   rejectUnauthorized: false,
 });
 
-let {fetchFile} = require('./helper');
-// const FILE_FETCH_TIMEOUT=90000 // to helper
-
-const CONFIG = require('../../config/configuration.js');
+const {fetchFile} = require('./helper');
 
 let {
     repositoryDomain,
@@ -27,6 +25,8 @@ let {
     resourceLocation
 
 } = CONFIG;
+
+const SUBJECT_AUTHORITIES = ['local', 'lcsh', 'lcnaf', 'aat'];
 
 /**
  * 
@@ -42,18 +42,21 @@ exports.getItemData = async (itemId) => {
         LOGGER.module().info(`Fetching data for repository item: ${itemId}`);
 
         let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", itemId);
+        
         let {data} = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
+
         itemData = data;
 
     } catch (error) {
         LOGGER.module().error(`Error retrieving repository item data. Axios error: ${error}`);
     }
 
-    // set object data fields
-    let title = itemData["title"] || "untitled item";
-    let collection_id = itemData["is_member_of_collection"] || null;
+    // define object data fields
+    let id = itemData.pid || "";
+    let title = itemData.title || "untitled item";
+    let collection_id = itemData.is_member_of_collection || null;
     let mime_type = itemData.mime_type || null;
 
     let local_identifier = null;
@@ -65,9 +68,11 @@ exports.getItemData = async (itemId) => {
     
     let subject = null;
     if(itemData.display_record?.subjects) {
+
         subject = itemData.display_record.subjects.find((subject) => {
-            return subject.authority == 'local';
-        })?.title || "no subject";
+            return SUBJECT_AUTHORITIES.includes(subject.authority);
+
+        })?.title || null;
     }
     
     // fetch parent collection data
@@ -75,9 +80,11 @@ exports.getItemData = async (itemId) => {
         LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
 
         let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
+        
         let {data} = await AXIOS.get(url, {
             httpsAgent: AGENT,
         });
+
         collectionData = data;
 
     } catch (error) {
@@ -92,7 +99,7 @@ exports.getItemData = async (itemId) => {
     let link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", collection_id || "null");
     let thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", itemId);
 
-    return {title, collection_id, mime_type, local_identifier, subject, collection_name, link_to_item, link_to_collection, thumbnail_datastream}
+    return {id, title, collection_id, mime_type, local_identifier, subject, collection_name, link_to_item, link_to_collection, thumbnail_datastream}
 }
 
 /**
