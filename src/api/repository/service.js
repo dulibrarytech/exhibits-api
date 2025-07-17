@@ -10,6 +10,7 @@ const MIME_TYPES = require('mime-types');
 const AGENT = new HTTPS.Agent({
   rejectUnauthorized: false,
 });
+const CACHE = require('../../libs/cache').create();
 
 const {fetchFile} = require('./helper');
 
@@ -37,28 +38,38 @@ exports.getItemData = async (itemId) => {
     let itemData = {};
     let collectionData = {};
 
-    // fetch repository item data
-    try {
-        LOGGER.module().info(`Fetching data for repository item: ${itemId}`);
+    itemData = CACHE.get(itemId) || false;
 
-        let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", itemId);
-        
-        let {data} = await AXIOS.get(url, {
-            httpsAgent: AGENT,
-        });
+    if(!itemData)  {
+        try {
+            LOGGER.module().info(`Fetching data for repository item: ${itemId}`);
 
-        itemData = data;
+            let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", itemId);
+            
+            let {data} = await AXIOS.get(url, {
+                httpsAgent: AGENT,
+            });
+            LOGGER.module().info(`Fetch complete.`);
 
-    } catch (error) {
-        LOGGER.module().error(`Error retrieving repository item data. Axios error: ${error}`);
+            CACHE.set(itemId, data);
+            itemData = data;
+
+        } catch (error) {
+            LOGGER.module().error(`Error retrieving repository item data. Axios error: ${error}`);
+            return {};
+        }
+    }
+    else {
+        LOGGER.module().info(`Item data retrieved from cache: item: ${itemId}`);
     }
 
-    // define object data fields
+    // set object fields
     let id = itemData.pid || "";
     let title = itemData.title || "untitled item";
     let collection_id = itemData.is_member_of_collection || null;
     let mime_type = itemData.mime_type || null;
 
+    // set local_identifier field
     let local_identifier = null;
     if(itemData.display_record?.identifiers) {
         local_identifier = itemData.display_record.identifiers.find((identifier) => {
@@ -66,6 +77,7 @@ exports.getItemData = async (itemId) => {
         })?.identifier || "no identifier";
     }
     
+    // set subject field
     let subject = null;
     if(itemData.display_record?.subjects) {
 
@@ -75,20 +87,29 @@ exports.getItemData = async (itemId) => {
         })?.title || null;
     }
     
-    // fetch parent collection data
-    try {
-        LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
+    // parent collection
+    collectionData = CACHE.get(collection_id) || false;
 
-        let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
-        
-        let {data} = await AXIOS.get(url, {
-            httpsAgent: AGENT,
-        });
+    if(!collectionData) {
+        try {
+            LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
 
-        collectionData = data;
+            let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
+            
+            let {data} = await AXIOS.get(url, {
+                httpsAgent: AGENT,
+            });
 
-    } catch (error) {
-        LOGGER.module().error(`Error retrieving repository collection data. Axios response: ${error}`);
+            CACHE.set(collection_id, data);
+            collectionData = data;
+
+        } catch (error) {
+            LOGGER.module().error(`Error retrieving repository collection data. Axios response: ${error}`);
+            return {};
+        }
+    }
+    else {
+        LOGGER.module().info(`Collection data retrieved from cache: collection: ${itemId}`);
     }
 
     // set collection data fields
@@ -156,7 +177,7 @@ exports.getItemResource = async (params) => {
 
     // get the exhibit item data
     LOGGER.module().info(`Verifying exhibit item: ${exhibitItemId}...`);
-    exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items"); // TODO update for exhibits app specific function
+    exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
 
     // if this is a container item, find the display item in the container 'items' array
     if(exhibitItem.items) {
