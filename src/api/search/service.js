@@ -1,5 +1,6 @@
 'use strict'
 
+const util = require('util');
 const Elastic = require('../../libs/elastic_search');
 const Logger = require('../../libs/log4js');
 const {getSearchResultAggregations, combineAggregations} = require('./helper');
@@ -19,7 +20,7 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
     const NESTED_OBJECT_TYPES = ["grid", "vertical_timeline", "vertical_timeline_2"]
 
     // item types to include in search
-    const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf", "external"];
+    const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf", "external", "text"];
 
     // fulltext search fields
     const SEARCH_FIELDS = ["title", "description", "text", "caption"];
@@ -148,13 +149,6 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
      */
     let nestedResultsData = {}, nestedAggregations = {};
 
-    objectTypes = [];
-    for(let type of NESTED_OBJECT_TYPES) {
-        objectTypes.push({
-            match: { type }
-        });
-    }
-
     itemTypes = [];
     for(let item_type of ITEM_TYPES) {
         itemTypes.push({
@@ -170,7 +164,8 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
                 {bool: {should: [
                     {match: {[`items.title`] : terms}}, // TODO use SEARCH_FIELDS
                     {match: {[`items.description`] : terms}},
-                    {match: {[`items.text`] : terms}}
+                    {match: {[`items.text`] : terms}},
+                    {match: {[`items.caption`] : terms}}
                 ]}}
             ]
         }
@@ -199,21 +194,9 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
         }
     });
 
-    // build the search query object
     queryData = {
         bool: {
             must: [
-                {bool: {should: objectTypes}},
-                {bool: {should: searchFields}}
-            ]
-        }
-    };
-
-    queryData = {
-        bool: {
-            must: [
-                {bool: {must: objectTypes}},
-                {bool: {should: itemTypes}},
                 {bool: {should: searchFields}}
             ]
         }
@@ -249,7 +232,6 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
     catch(error) {
         Logger.module().error(`Error searching index. Elastic response: ${error}`);
     }
-
     /*
      * end nested query
      */
