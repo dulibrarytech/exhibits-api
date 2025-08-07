@@ -11,13 +11,18 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
     let sortData = null;
     let objectTypes = [];
     let itemTypes = [];
+    let nestedItemTypes = [];
     let searchFields = [];
+    let nestedSearchFields = [];
+    let facetQuery = [];
+    let nestedFacetQuery = [];
+
     let queryType = null;
     let resultsData = {};
 
     // object types to include in the search
-    const OBJECT_TYPES = ["exhibit", "item"];
-    const NESTED_OBJECT_TYPES = ["grid", "vertical_timeline", "vertical_timeline_2"]
+    const OBJECT_TYPES = ["item", "grid", "vertical_timeline", "vertical_timeline_2"];
+    //const OBJECT_TYPES = ["exhibit", "item", "grid", "vertical_timeline", "vertical_timeline_2"]; // include exhibits in search results
 
     // item types to include in search
     const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf", "external", "text"];
@@ -34,21 +39,27 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
         }
     ];
 
-    /*
-     * main query - searches in top level index documents
-     */
+    // object type (top level only (should))
     if(type) {
         objectTypes.push({
             match: { type }
         });
     }
-
-    for(let item_type of ITEM_TYPES) { // helper
-        itemTypes.push({
-            match: { item_type }
-        });
+    else {
+        objectTypes = OBJECT_TYPES.map((type) => {
+            return {match: {type}}
+        })
     }
-    
+
+    // match item type (top level and nested)
+    itemTypes = ITEM_TYPES.map((item_type) => {
+        return {match: { item_type }}
+    });
+
+    nestedItemTypes = ITEM_TYPES.map((item_type) => {
+        return {match: { [`items.item_type`]: item_type }}
+    });
+
     // allow items that have no 'item_type' field (exhibits, and item grids) to be hit
     itemTypes.push({
         bool: {
@@ -70,21 +81,72 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
     }
 
     // add top level index fields
-    for(let field of SEARCH_FIELDS) {
-        searchFields.push({
+    searchFields = SEARCH_FIELDS.map((field) => {
+        return {
             [queryType]: {
                 [field]: terms
             }
-        });
+        }
+    });
+    nestedSearchFields = SEARCH_FIELDS.map((field) => {
+        return {
+            [queryType]: {
+                [`items.${field}`]: terms
+            }
+        }
+    });
+
+    if(facets) {
+        for(let key in facets) {
+            facetQuery.push({
+                term: {
+                    [`${key}`]: facets[key]
+                }
+            });
+
+            nestedFacetQuery.push({
+                term: {
+                    [`items.${key}`]: facets[key]
+                }
+            });
+        }
     }
 
-    // build main search query object
+    let mainQuery = [
+        {
+            bool: {
+                must: [
+                    {bool: {should: itemTypes}},
+                    {bool: {should: searchFields}}
+                ],
+                filter: facetQuery
+            }
+        },
+        {
+            nested: {
+                path: "items",
+                query: {
+                    bool: {
+                        must: [
+                            {bool: {should: nestedItemTypes}},
+                            {bool: {should: nestedSearchFields}}
+                        ],
+                        filter: nestedFacetQuery                    }
+                },
+                inner_hits: {} 
+            }
+        }
+    ]
+    /*
+     * end main query
+     */
+
+    // build search query object
     queryData = {
         bool: {
             must: [
-                {bool: {must: objectTypes}},
-                {bool: {should: itemTypes}},
-                {bool: {should: searchFields}}
+                {bool: {should: objectTypes}},
+                {bool: {should: mainQuery}},
             ],
 
             filter: [
@@ -99,24 +161,17 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
             terms: { field }
         }
     }
-
-    // add facet clauses to main search query
-    if(facets) {
-        for(let field in facets) {
-            for(let value of facets[field].split(',')) {
-                queryData.bool.must.push({
-                    term: {
-                        [field]: value
-                    }
-                });
-            }
+    // nested aggs
+    let itemsAggs = {};
+    for(let {name, field} of AGGREGATION_FIELDS_ITEM) {
+        itemsAggs[`items.${name}`] = {
+            terms: { field: `items.${field}` }
         }
     }
 
     // Add sort field if sort value is present
     if(sort) {
-        let field = sort[0];
-        let value = sort[1];
+        let [field, value] = sort;
 
         sortData = [];
         sortData.push({
@@ -134,112 +189,18 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
     }
 
     try {
+        // DEV
+        // let objectStructure = util.inspect(queryData, {showHidden: false, depth: null});
+        // Logger.module().info('INFO: ' + `Search query object (top level): ${objectStructure}`);
+        // end DEV
+
         // execute the search for top level documents
         resultsData = await Elastic.query(queryData, sortData, page || 1, aggsData);
     }
     catch(error) {
         Logger.module().error(`Error searching index. Elastic response: ${error}`);
     }
-    /*
-     * end main query
-     */
 
-    /*
-     * nested query - searches in the "items" array of grid documents
-     */
-    let nestedResultsData = {}, nestedAggregations = {};
-
-    itemTypes = [];
-    for(let item_type of ITEM_TYPES) {
-        itemTypes.push({
-            match: { [`items.item_type`]: item_type }
-        });
-    }
-
-    // build nested search query object
-    let nestedQuery = {
-        bool: {
-            must: [
-                {bool: {should: itemTypes}},
-                {bool: {should: [
-                    {match: {[`items.title`] : terms}}, // TODO use SEARCH_FIELDS
-                    {match: {[`items.description`] : terms}},
-                    {match: {[`items.text`] : terms}},
-                    {match: {[`items.caption`] : terms}}
-                ]}}
-            ]
-        }
-    }
-
-    // add facet clauses to nested search query
-    if(facets) {
-        for(let field in facets) {
-            for(let value of facets[field].split(',')) {
-                nestedQuery.bool.must.push({
-                    term: {
-                        [`items.${field}`]: value
-                    }
-                });
-            }
-        }
-    }
-
-    // create the nested query to the main search fields array
-    searchFields = [];
-    searchFields.push({
-        nested: {
-            path: "items",
-            query: nestedQuery,
-            inner_hits: {} 
-        }
-    });
-
-    queryData = {
-        bool: {
-            must: [
-                {bool: {should: searchFields}}
-            ]
-        }
-    };
-
-    // add nested aggregations
-    let itemsAggs = {};
-    for(let {name, field} of AGGREGATION_FIELDS_ITEM) {
-        itemsAggs[`items.${name}`] = {
-            terms: { field: `items.${field}` }
-        }
-    }
-    aggsData = {};
-    aggsData.items = {
-        nested: {
-            path: "items"
-        },
-        aggregations: itemsAggs
-    }
-
-    // if exhibitId is present, scope the search to the exhibit
-    if(exhibitId) {
-        queryData.bool.must.push({
-            bool: {filter: {term: {"is_member_of_exhibit": exhibitId}}}
-        });
-    }
-
-    try {
-        // execute the search for nested documents
-        nestedResultsData = await Elastic.query(queryData, sortData, page || 1, aggsData);
-        nestedAggregations = getSearchResultAggregations(AGGREGATION_FIELDS_ITEM, nestedResultsData.results);
-    }
-    catch(error) {
-        Logger.module().error(`Error searching index. Elastic response: ${error}`);
-    }
-    /*
-     * end nested query
-     */
-
-    // add the nested search results data to the main search results data
-    if(resultsData.aggregations) resultsData.aggregations = combineAggregations(resultsData.aggregations, nestedAggregations);
-    resultsData.results = resultsData.results.concat(nestedResultsData.results);
-    resultsData.resultCount += nestedResultsData.resultCount;
-
+  
     return resultsData;
 }

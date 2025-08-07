@@ -1,5 +1,6 @@
 'use strict'
 
+const util = require('util');
 const { Client } = require('@elastic/elasticsearch');
 const CONFIG = require('../config/configuration.js');
 const fs = require('fs');
@@ -149,19 +150,38 @@ exports.query = async (query={}, sort=null, page=1, aggs=null) => {
 
         for(let result of hits.hits) {
 
-            // If inner_hits are present, add the inner results to the main results set
-            if(result.inner_hits) {
+            // update search results count and add aggregations data for 'inner hits' results
+            if(result.inner_hits.items.hits.total.value > 0) {
                 for(let field in result.inner_hits) {
                     response.resultCount += result.inner_hits[field].hits.total.value;
+
                     for(let innerResult of result.inner_hits[field].hits.hits) {
-                        response.results.push(innerResult._source);
+                        // add the container result uuid to the 'inner hits' result
+                        response.results.push({container_uuid: result._source.uuid, ...innerResult._source});
+
+                        // create aggregation buckets for nested search results (elastic does not do this for inner_hits results)
+                        for(let aggField in aggregations) {
+                            let bucket = aggregations[aggField].buckets.find((bucket) => {
+                                return bucket.key == innerResult._source[aggField]
+                            })
+
+                            if(bucket) {
+                                bucket.doc_count++;
+                            }
+                            else {
+                                aggregations[aggField].buckets.push({
+                                    key: innerResult._source[aggField],
+                                    doc_count: 1
+                                })
+                            }
+                        }
                     }
                 }
             }
 
             // Push the top level result to the results set
             else {
-                response.resultCount = hits.total.value;
+                response.resultCount++;
                 response.results.push(result['_source']);
             }
         }
