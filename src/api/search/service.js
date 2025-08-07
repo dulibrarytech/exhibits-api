@@ -117,7 +117,11 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
             bool: {
                 must: [
                     {bool: {should: itemTypes}},
-                    {bool: {should: searchFields}}
+                    {bool: {should: searchFields}},
+
+                    {bool: {must: [
+                        {match: {"is_published": 1}}
+                    ]}}
                 ],
                 filter: facetQuery
             }
@@ -129,9 +133,14 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
                     bool: {
                         must: [
                             {bool: {should: nestedItemTypes}},
-                            {bool: {should: nestedSearchFields}}
+                            {bool: {should: nestedSearchFields}},
+
+                            {bool: {must: [
+                                {match: {"items.is_published": 1}}
+                            ]}}
                         ],
-                        filter: nestedFacetQuery                    }
+                        filter: nestedFacetQuery                    
+                    }
                 },
                 inner_hits: {} 
             }
@@ -148,10 +157,6 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
                 {bool: {should: objectTypes}},
                 {bool: {should: mainQuery}},
             ],
-
-            filter: [
-                {match: {is_published: 1}}
-            ]
         }
     };
 
@@ -190,8 +195,8 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
 
     try {
         // DEV
-        // let objectStructure = util.inspect(queryData, {showHidden: false, depth: null});
-        // Logger.module().info('INFO: ' + `Search query object (top level): ${objectStructure}`);
+        let objectStructure = util.inspect(queryData, {showHidden: false, depth: null});
+        Logger.module().info('INFO: ' + `Search query object (top level): ${objectStructure}`);
         // end DEV
 
         // execute the search for top level documents
@@ -201,6 +206,5 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
         Logger.module().error(`Error searching index. Elastic response: ${error}`);
     }
 
-  
     return resultsData;
 }
