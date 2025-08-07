@@ -6,7 +6,7 @@ exports.getExhibits = async (req, res) => {
     let key = req.query.key || null;
     let data = [];  
       
-    data = await Exhibit.getAll(key);
+    data = await Exhibit.getExhibits(key);
     if(!data) res.sendStatus(500);
     else res.send(data);
 }
@@ -16,7 +16,7 @@ exports.getExhibit = async (req, res) => {
     let key = req.query.key || null;
     let data = {};
 
-    data = await Exhibit.get(id, key);
+    data = await Exhibit.getExhibit(id, key);
     if(!data) res.sendStatus(500);
     else res.send(data);
 }

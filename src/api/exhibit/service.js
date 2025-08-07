@@ -8,7 +8,7 @@ const validateKey = (key) => {
     return key && key == CONFIG.apiKey;
 }
 
-exports.getAll = async (key) => {
+exports.getExhibits = async (key) => {
     let exhibits = null;
     let page = null;
     let sort = [
@@ -32,7 +32,7 @@ exports.getAll = async (key) => {
     return exhibits;
 }
 
-exports.get = async (id, key) => {
+exports.getExhibit = async (id, key) => {
     let exhibit = null;
 
     try {
@@ -66,6 +66,20 @@ exports.getItems = async (id, key) => {
         items = results.filter((result) => {
             return validateKey(key) ? true : result.is_published == 1;
         });
+
+        items = items.map((item) => {
+
+            // is a container
+            if(item.items) {  
+
+                // filter unpublished items out of items[] array  
+                item.items = item.items.filter((item) => {
+                    return item.is_published == 1;
+                })
+            }
+
+            return item;
+        })
     }
     catch(error) {
         LOGGER.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
