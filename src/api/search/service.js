@@ -25,7 +25,7 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
     //const OBJECT_TYPES = ["exhibit", "item", "grid", "vertical_timeline", "vertical_timeline_2"]; // include exhibits in search results
 
     // item types to include in search
-    const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf", "external", "text"];
+    const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf"];
 
     // fulltext search fields
     const SEARCH_FIELDS = ["title", "description", "text", "caption"];
