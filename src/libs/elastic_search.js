@@ -151,24 +151,31 @@ exports.query = async (query={}, sort=null, page=1, aggs=null) => {
         for(let result of hits.hits) {
 
             // update search results count and add aggregations data for 'inner hits' results
-            if(result.inner_hits.items.hits.total.value > 0) {
+            if(result.inner_hits?.items?.hits.total.value > 0) {
                 for(let field in result.inner_hits) {
+
+                    // increment the current result count for this nested result
                     response.resultCount += result.inner_hits[field].hits.total.value;
 
                     for(let innerResult of result.inner_hits[field].hits.hits) {
-                        // add the container result uuid to the 'inner hits' result
+
+                        // add the top level result uuid to the nested result
                         response.results.push({container_uuid: result._source.uuid, ...innerResult._source});
 
-                        // create aggregation buckets for nested search results (elastic does not do this for inner_hits results)
+                        // update the aggregations for the nested results (elastic does not do this for inner_hits results)
                         for(let aggField in aggregations) {
+
+                            // find the bucket for this aggregation field if it exists
                             let bucket = aggregations[aggField].buckets.find((bucket) => {
-                                return bucket.key == innerResult._source[aggField]
+                                return bucket.key == innerResult._source[aggField];
                             })
 
                             if(bucket) {
+                                // increment the bucket count
                                 bucket.doc_count++;
                             }
                             else {
+                                // create a new bucket for the aggregation field
                                 aggregations[aggField].buckets.push({
                                     key: innerResult._source[aggField],
                                     doc_count: 1
