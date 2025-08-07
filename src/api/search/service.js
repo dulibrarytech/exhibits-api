@@ -195,8 +195,8 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
 
     try {
         // DEV
-        let objectStructure = util.inspect(queryData, {showHidden: false, depth: null});
-        Logger.module().info('INFO: ' + `Search query object (top level): ${objectStructure}`);
+        // let objectStructure = util.inspect(queryData, {showHidden: false, depth: null});
+        // Logger.module().info('INFO: ' + `Search query object (top level): ${objectStructure}`);
         // end DEV
 
         // execute the search for top level documents
