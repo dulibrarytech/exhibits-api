@@ -142,7 +142,9 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
                         filter: nestedFacetQuery                    
                     }
                 },
-                inner_hits: {} 
+                inner_hits: {
+                    "size": 100
+                } 
             }
         }
     ]
