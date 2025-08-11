@@ -5,10 +5,12 @@ const Elastic = require('../../libs/elastic_search');
 const Logger = require('../../libs/log4js');
 const {getSearchResultAggregations, combineAggregations} = require('./helper');
 
-exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhibitId=null) => {
+exports.search = async (terms, type=null, facets=null, sort=null, page=null, exhibitId=null) => {
     let queryData = null;
+    let queryType = null;
     let aggsData = {};
     let sortData = null;
+    let resultsData = {};
     let objectTypes = [];
     let itemTypes = [];
     let nestedItemTypes = [];
@@ -16,9 +18,6 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
     let nestedSearchFields = [];
     let facetQuery = [];
     let nestedFacetQuery = [];
-
-    let queryType = null;
-    let resultsData = {};
 
     // object types to include in the search
     const OBJECT_TYPES = ["item", "grid", "vertical_timeline", "vertical_timeline_2"];
@@ -31,13 +30,18 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
     const SEARCH_FIELDS = ["title", "description", "text", "caption"];
     
     // fields to aggregate in search results
-    const AGGREGATION_FIELDS_EXHIBIT = [];
     const AGGREGATION_FIELDS_ITEM = [
         {
             "name": "item_type",
             "field": "item_type.keyword"
+        },
+        {
+            "name": "type",
+            "field": "type.keyword"        
         }
     ];
+
+    const MAX_NESTED_ITEMS_RESULTS = 100;
 
     // object type (top level only (should))
     if(type) {
@@ -143,7 +147,7 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
                     }
                 },
                 inner_hits: {
-                    "size": 100
+                    "size": MAX_NESTED_ITEMS_RESULTS
                 } 
             }
         }
@@ -163,16 +167,9 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
     };
 
     // add the item aggregation fields to the main query
-    for(let {name, field} of exhibitId ? AGGREGATION_FIELDS_ITEM : AGGREGATION_FIELDS_EXHIBIT) {
+    for(let {name, field} of AGGREGATION_FIELDS_ITEM) {
         aggsData[name] = {
             terms: { field }
-        }
-    }
-    // nested aggs
-    let itemsAggs = {};
-    for(let {name, field} of AGGREGATION_FIELDS_ITEM) {
-        itemsAggs[`items.${name}`] = {
-            terms: { field: `items.${field}` }
         }
     }
 
@@ -202,7 +199,7 @@ exports.index = async (terms, type=null, facets=null, sort=null, page=null, exhi
         // end DEV
 
         // execute the search for top level documents
-        resultsData = await Elastic.query(queryData, sortData, page || 1, aggsData);
+        resultsData = await Elastic.query(queryData, sortData, page, aggsData);
     }
     catch(error) {
         Logger.module().error(`Error searching index. Elastic response: ${error}`);

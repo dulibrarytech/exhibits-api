@@ -12,7 +12,7 @@ exports.searchIndex = async (req, res) => {
     let results = [];
 
     if(terms) {
-        results = await Search.index(terms, type, facets, sort, page, exhibitId);
+        results = await Search.search(terms, type, facets, sort, page, exhibitId);
         if(!results) res.sendStatus(500);
         else res.send(results);
     }
