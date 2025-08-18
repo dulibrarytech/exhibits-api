@@ -20,7 +20,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     let nestedFacetQuery = [];
 
     // object types to include in the search
-    const OBJECT_TYPES = ["item", "grid", "vertical_timeline", "vertical_timeline_2"];
+    const OBJECT_TYPES = ["exhibit", "item", "grid", "vertical_timeline", "vertical_timeline_2"];
     //const OBJECT_TYPES = ["exhibit", "item", "grid", "vertical_timeline", "vertical_timeline_2"]; // include exhibits in search results
 
     // item types to include in search
