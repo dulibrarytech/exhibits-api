@@ -122,6 +122,14 @@ exports.fieldSearch = async (field, terms, nested = null) => {
 }
 
 /**
+ * custom elastic search for the exhibits app data model
+ * 
+ * performs a document level search and a nested object search
+ * combines document level results with nested object results
+ * combines all aggregations from the results into one object
+ * omits results that contain a nested field
+ * 
+ * expects nested objects to be in the field 'items[]' 
  * 
  * @param {*} query 
  * @param {*} sort 
@@ -187,8 +195,8 @@ exports.query = async (query={}, sort=null, page=null, aggs=null) => {
                 }
             }
 
-            else {
-                // Push the top level result to the results set
+            // Push the top level result to the results set if it is not a container item
+            else if(result._source.items == undefined) {
                 response.resultCount++;
                 response.results.push({...result._source, score: result._score});
             }
