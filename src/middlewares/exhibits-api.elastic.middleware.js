@@ -4,13 +4,11 @@ const sanitizeElasticQuery = async (req, res, next) => {
     let queryFields = Object.keys(req.query || {});
     for (let field of queryFields) {
         if(typeof req.query[field] == 'string') {
-            if(field == "exhibitId") req.query[field] = escapeElastic(req.query[field]).replace(/\\-/g, "-");
-            else req.query[field] = escapeElastic(req.query[field]);
+            req.query[field] = escapeElastic(req.query[field]).replace(/\\-/g, "-");
         }
         else {
             for(let index in req.query[field]) {
-                if(field == "exhibitId") req.query[field][index] = escapeElastic(req.query[field][index]).replace(/\\-/g, "-");
-                else req.query[field][index] = escapeElastic(req.query[field][index]);
+                req.query[field][index] = escapeElastic(req.query[field][index]).replace(/\\-/g, "-");
             }
         }
     }
