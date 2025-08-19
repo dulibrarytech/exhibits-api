@@ -41,6 +41,7 @@ if(elastic_client) {
 }
 
 /**
+ * get one document by id
  * 
  * @param {*} documentId 
  * @returns 
@@ -122,7 +123,7 @@ exports.fieldSearch = async (field, terms, nested = null) => {
 }
 
 /**
- * custom elastic search for the exhibits app data model
+ * custom elastic search engine for the exhibits app data model
  * 
  * performs a document level search and a nested object search
  * combines document level results with nested object results
@@ -217,6 +218,44 @@ exports.query = async (query={}, sort=null, page=null, aggs=null) => {
     response.results = response.results.sort((a, b) => {
         return b.score - a.score;
     });
+
+    return response;
+}
+
+/**
+ * fetch multiple documents by query
+ * 
+ * @param {*} query 
+ * @param {*} sort 
+ * @param {*} page 
+ * @returns 
+ */
+exports.fetch = async (query={}, sort=null, page=null) => {
+    let response = { results: [], resultCount: 0 };
+    let size = page ? RESULTS_PAGE_LENGTH : DEFAULT_RESULTS_SIZE;
+    let from = page ? size * (page-1) : 0;
+
+    try {
+        let elasticResponse = await elastic_client.search({
+            index: elasticIndex,
+            body: {
+                size,
+                from,
+                query,
+                sort: sort || undefined,
+            }
+        });
+
+        let {hits} = elasticResponse;
+
+        for(let result of hits.hits) {
+            response.results.push({...result._source, score: result._score});
+        }
+    }
+    catch(error) {
+        Logger.module().error(`Elastic search query error: ${error}`);
+        throw error;
+    }
 
     return response;
 }

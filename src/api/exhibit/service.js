@@ -16,7 +16,7 @@ exports.getExhibits = async (key) => {
     ];
 
     try {
-        let {results} = await ELASTIC.query({ 
+        let {results} = await ELASTIC.fetch({ 
             match: { type: 'exhibit' }
 
         }, sort, page);
@@ -53,7 +53,7 @@ exports.getItems = async (id, key) => {
     ];
 
     try {
-        let {results} = await ELASTIC.query({
+        let {results} = await ELASTIC.fetch({
             match: { 
                 is_member_of_exhibit: {
                     query: id,
