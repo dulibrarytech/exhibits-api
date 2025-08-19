@@ -21,7 +21,6 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
 
     // object types to include in the search
     const OBJECT_TYPES = ["exhibit", "item", "grid", "vertical_timeline", "vertical_timeline_2"];
-    //const OBJECT_TYPES = ["exhibit", "item", "grid", "vertical_timeline", "vertical_timeline_2"]; // include exhibits in search results
 
     // item types to include in search
     const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf"];
@@ -59,7 +58,6 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     itemTypes = ITEM_TYPES.map((item_type) => {
         return {match: { item_type }}
     });
-
     nestedItemTypes = ITEM_TYPES.map((item_type) => {
         return {match: { [`items.item_type`]: item_type }}
     });
@@ -200,6 +198,46 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
 
         // execute the search for top level documents
         resultsData = await Elastic.query(queryData, sortData, page, aggsData);
+
+        // add the aggs bucket for exhibits
+        let exhibitAggs = {
+            is_member_of_exhibit: []
+        };
+
+        // add the exhibits to the aggregation data
+        for(let {type, is_member_of_exhibit} of resultsData.results) {
+            if(type == "exhibit") continue;
+
+            let exhibitAgg = exhibitAggs.is_member_of_exhibit.find(({key}) => {
+                return key == is_member_of_exhibit;
+            })
+
+            if(!exhibitAgg) {
+                exhibitAggs.is_member_of_exhibit.push({
+                    key: is_member_of_exhibit,
+                    display: "",
+                    doc_count: 1
+                })
+            }
+            else {
+                exhibitAgg.doc_count++;
+            }
+        }
+
+        // sort the exhibit aggregations by count descending
+        exhibitAggs.is_member_of_exhibit = exhibitAggs.is_member_of_exhibit.sort((a, b) => {
+            return b.doc_count - a.doc_count;
+        })
+
+        // get the exhibit title
+        for(let agg of exhibitAggs.is_member_of_exhibit) {
+            let exhibit = await Elastic.get(agg.key);
+            agg.display = exhibit.title;
+        }
+
+        // append the exhibit aggregations to the main aggregations
+        resultsData.aggregations = {...resultsData.aggregations, ...exhibitAggs}
+
     }
     catch(error) {
         Logger.module().error(`Error searching index. Elastic response: ${error}`);
