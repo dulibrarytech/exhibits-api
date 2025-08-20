@@ -63,18 +63,16 @@ exports.getItems = async (id, key) => {
 
         }, sort, null);
 
+        // filter out unpublished items if api key is absent
         items = results.filter((result) => {
             return validateKey(key) ? true : result.is_published == 1;
         });
 
+        // filter out unpublished grid items (in items []) if api key is absent
         items = items.map((item) => {
-
-            // is a container
             if(item.items) {  
-
-                // filter unpublished items out of items[] array  
                 item.items = item.items.filter((item) => {
-                    return item.is_published == 1;
+                    return validateKey(key) ? true : item.is_published == 1;
                 })
             }
 
