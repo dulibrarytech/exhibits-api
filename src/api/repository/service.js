@@ -49,7 +49,7 @@ exports.getItemData = async (itemId) => {
             let {data} = await AXIOS.get(url, {
                 httpsAgent: AGENT,
             });
-            LOGGER.module().info(`Fetch complete.`);
+            LOGGER.module().info(`Data fetch complete for repository item: ${itemId}.`);
 
             CACHE.set(itemId, data);
             itemData = data;
@@ -77,10 +77,9 @@ exports.getItemData = async (itemId) => {
         })?.identifier || "no identifier";
     }
     
-    // set subject field
+    // set subject field * this is identical to pulling the values from the "f_subjects" array *
     let subject = null;
     if(itemData.display_record?.subjects) {
-
         subject = itemData.display_record.subjects.find((subject) => {
             return SUBJECT_AUTHORITIES.includes(subject.authority);
 

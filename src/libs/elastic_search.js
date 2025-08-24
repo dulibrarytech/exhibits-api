@@ -48,6 +48,7 @@ if(elastic_client) {
  */
 exports.get = async (documentId) => {
     let document = {};
+
     try {
         document = await elastic_client.get({
             index: elasticIndex,
@@ -58,7 +59,7 @@ exports.get = async (documentId) => {
         Logger.module().error(`Elastic error: ${error}`);
         throw error;
     }
-    return document._source;
+    return document._source || {};
 }
 
 /**

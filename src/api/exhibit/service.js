@@ -3,6 +3,7 @@
 const CONFIG = require('../../config/configuration.js');
 const ELASTIC = require('../../libs/elastic_search');
 const LOGGER = require('../../libs/log4js');
+const FS = require('fs');
 
 const validateKey = (key) => {
     return key && key == CONFIG.apiKey;
@@ -40,7 +41,7 @@ exports.getExhibit = async (id, key) => {
         exhibit = (validateKey(key) || data.is_published == 1) ? data : false;
     }
     catch(error) {
-        LOGGER.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
+        LOGGER.module().error(`Error retrieving exhibit. Elastic response: ${error}`);
     }
 
     return exhibit || {};
@@ -80,8 +81,22 @@ exports.getItems = async (id, key) => {
         })
     }
     catch(error) {
-        LOGGER.module().error(`Error retrieving exhibits. Elastic response: ${error}`);
+        LOGGER.module().error(`Error retrieving exhibit items. Elastic response: ${error}`);
     }
 
     return items;
+}
+
+exports.resourceExists = async (exhibitId, filename) => {
+    let exists;
+    let filePath = `${CONFIG.resourceLocation}/${exhibitId}/${filename}`;
+
+    try {
+        exists = FS.existsSync(filePath);
+    }
+    catch(error) {
+        LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${filePath}`);
+    }
+
+    return exists || false;
 }
