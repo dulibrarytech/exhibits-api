@@ -49,7 +49,7 @@ exports.getItemData = async (itemId) => {
             let {data} = await AXIOS.get(url, {
                 httpsAgent: AGENT,
             });
-            LOGGER.module().info(`Data fetch complete for repository item: ${itemId}.`);
+            LOGGER.module().info(`Repository item data fetch complete for repository item: ${itemId}.`);
 
             CACHE.set(itemId, data);
             itemData = data;
@@ -60,7 +60,7 @@ exports.getItemData = async (itemId) => {
         }
     }
     else {
-        LOGGER.module().info(`Item data retrieved from cache: item: ${itemId}`);
+        LOGGER.module().info(`Repository item data retrieved from cache: item: ${itemId}`);
     }
 
     // set object fields
@@ -108,7 +108,7 @@ exports.getItemData = async (itemId) => {
         }
     }
     else {
-        LOGGER.module().info(`Collection data retrieved from cache: collection: ${itemId}`);
+        LOGGER.module().info(`Repository collection data retrieved from cache: collection: ${itemId}`);
     }
 
     // set collection data fields
