@@ -3,6 +3,7 @@
 const CONFIG = require('../../config/configuration.js');
 const ELASTIC = require('../../libs/elastic_search');
 const LOGGER = require('../../libs/log4js');
+const REPOSITORY = require('../repository/service');    // UPDATE
 const FS = require('fs');
 
 const validateKey = (key) => {
@@ -78,7 +79,9 @@ exports.getItems = async (id, key) => {
             }
 
             return item;
-        })
+        });
+
+        await getRepositoryData(items);
     }
     catch(error) {
         LOGGER.module().error(`Error retrieving exhibit items. Elastic response: ${error}`);
@@ -87,16 +90,41 @@ exports.getItems = async (id, key) => {
     return items;
 }
 
-exports.resourceExists = async (exhibitId, filename) => {
-    let exists;
-    let filePath = `${CONFIG.resourceLocation}/${exhibitId}/${filename}`;
+const getRepositoryData = async (items) => {
+    let repositoryItemId, data = {};
+    
+    for(let item of items) {
 
-    try {
-        exists = FS.existsSync(filePath);
-    }
-    catch(error) {
-        LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${filePath}`);
-    }
+        if(item.is_repo_item) {
+            repositoryItemId = item.media;
+            LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
 
-    return exists || false;
+            data = await REPOSITORY.getItemData({
+                repositoryItemId,
+                resourcePath: `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`,
+                resourceFilename: `${item.uuid}_repository_item_media`
+            });
+
+            item.media = data.media;
+            item.repository_data = data;
+        }
+        else if(item.items) {
+            getRepositoryData(item.items);
+        }
+    }
 }
+
+// UPDATE remove if not used by the client
+// exports.resourceExists = async (exhibitId, filename) => {
+//     let exists;
+//     let filePath = `${CONFIG.resourceLocalStorageLocation}/${exhibitId}/${filename}`;
+
+//     try {
+//         exists = FS.existsSync(filePath);
+//     }
+//     catch(error) {
+//         LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${filePath}`);
+//     }
+
+//     return exists || false;
+// }

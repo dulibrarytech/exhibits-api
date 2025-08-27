@@ -23,7 +23,6 @@ let {
     repositoryItemThumbnailEndpoint,
     repositoryItemDataEndpoint,
     repositorySearchEndpoint,
-    resourceLocation
 
 } = CONFIG;
 
@@ -31,45 +30,61 @@ const SUBJECT_AUTHORITIES = ['local', 'lcsh', 'lcnaf', 'aat'];
 
 /**
  * 
- * @param {*} itemId 
+ * @param {*} itemId the repository item id (digitaldu pid)
  * @returns 
  */
-exports.getItemData = async (itemId) => {
+exports.getItemData = async (params) => {
     let itemData = {};
     let collectionData = {};
 
-    itemData = CACHE.get(itemId) || false;
+    const {
+        repositoryItemId,
+        resourcePath,
+        resourceFilename
+    } = params;
 
+    itemData = CACHE.get(repositoryItemId) || false;
+
+    // fetch the item data from the repository
     if(!itemData)  {
         try {
-            LOGGER.module().info(`Fetching data for repository item: ${itemId}`);
-
-            let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", itemId);
+            let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", repositoryItemId);
             
+            LOGGER.module().info(`Fetching data for repository item: ${repositoryItemId}...`);
             let {data} = await AXIOS.get(url, {
                 httpsAgent: AGENT,
             });
-            LOGGER.module().info(`Repository item data fetch complete for repository item: ${itemId}.`);
-
-            CACHE.set(itemId, data);
             itemData = data;
+            LOGGER.module().info(`Data fetch complete for repository item: ${repositoryItemId}`);
+
+            LOGGER.module().info(`Fetching resource file for repository item: ${repositoryItemId}...`);
+            let file = `${resourceFilename}.${MIME_TYPES.extension(itemData.mime_type || "")}`;
+            let resourceFile = `${resourcePath}/${file}`;
+            // await getItemResource(repositoryItemId, resourceFile); // sync fetch/write (request completes when all files are written to local storage)
+            getItemResource(repositoryItemId, resourceFile); // async fetch/write (request completes before all files are written to storage)
+            LOGGER.module().info(`Resource file fetch complete for repository item: ${repositoryItemId}`);
+
+            itemData = {...itemData, media: file};
+
+            CACHE.set(repositoryItemId, itemData);
 
         } catch (error) {
-            LOGGER.module().error(`Error retrieving repository item data. Axios error: ${error}`);
+            LOGGER.module().error(`Error retrieving repository item data. Error: ${error}`);
             return {};
         }
     }
     else {
-        LOGGER.module().info(`Repository item data retrieved from cache: item: ${itemId}`);
+        LOGGER.module().info(`Repository item data retrieved from cache: id: ${repositoryItemId}`);
     }
 
-    // set object fields
+    // set repository data fields
     let id = itemData.pid || "";
     let title = itemData.title || "untitled item";
     let collection_id = itemData.is_member_of_collection || null;
     let mime_type = itemData.mime_type || null;
+    let media = itemData.media || "";
+    let thumbnail = itemData.thumbnail || "";
 
-    // set local_identifier field
     let local_identifier = null;
     if(itemData.display_record?.identifiers) {
         local_identifier = itemData.display_record.identifiers.find((identifier) => {
@@ -77,7 +92,6 @@ exports.getItemData = async (itemId) => {
         })?.identifier || "no identifier";
     }
     
-    // set subject field * this is identical to pulling the values from the "f_subjects" array *
     let subject = null;
     if(itemData.display_record?.subjects) {
         subject = itemData.display_record.subjects.find((subject) => {
@@ -85,10 +99,10 @@ exports.getItemData = async (itemId) => {
 
         })?.title || null;
     }
+    let subjects = itemData.f_subjects;
     
-    // parent collection
+    // get the parent collection
     collectionData = CACHE.get(collection_id) || false;
-
     if(!collectionData) {
         try {
             LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
@@ -103,23 +117,36 @@ exports.getItemData = async (itemId) => {
             collectionData = data;
 
         } catch (error) {
-            LOGGER.module().error(`Error retrieving repository collection data. Axios response: ${error}`);
+            LOGGER.module().error(`Error retrieving repository collection data. Response: ${error}`);
             return {};
         }
     }
     else {
-        LOGGER.module().info(`Repository collection data retrieved from cache: collection: ${itemId}`);
+        LOGGER.module().info(`Repository collection data retrieved from cache: id: ${repositoryItemId}`);
     }
 
-    // set collection data fields
     let collection_name = collectionData["title"] || "untitled collection";
 
     // set link fields
-    let link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", itemId);
+    let link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", repositoryItemId);
     let link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", collection_id || "null");
-    let thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", itemId);
+    let thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", repositoryItemId);
 
-    return {id, title, collection_id, mime_type, local_identifier, subject, collection_name, link_to_item, link_to_collection, thumbnail_datastream}
+    return {
+        id, 
+        title, 
+        collection_id, 
+        mime_type, 
+        media,
+        thumbnail,
+        local_identifier, 
+        subject, 
+        subjects, 
+        collection_name, 
+        link_to_item, 
+        link_to_collection, 
+        thumbnail_datastream
+    }
 }
 
 /**
@@ -152,103 +179,37 @@ exports.search = async (queryString) => {
 
 /**
  * 
- * @param {*} itemId 
- * @param {*} exhibitItemId 
- * @param {*} thumbnailFileExtension 
- * @returns 
+ * @param {*} repositoryItemId 
+ * @param {*} resourceFile 
  */
-exports.getItemResource = async (params) => {
-    let {
-        itemId="null",
-        exhibitItemId="null",
-        thumbnailFileExtension="jpg"
-        
-    } = params;
-
-    let exhibitId = null;
-    let exhibitItem = {};
-    let thumbnailFile = "";
-    let mediaFileCreated = false;
-    let mediaFileExists = false;
-    let itemData = {};
-
-    let response;
-
-    // get the exhibit item data
-    LOGGER.module().info(`Verifying exhibit item: ${exhibitItemId}...`);
-    exhibitItem = await ELASTIC.fieldSearch("uuid", exhibitItemId, "items");
-
-    // if this is a container item, find the display item in the container 'items' array
-    if(exhibitItem.items) {
-        exhibitItem = exhibitItem.items.find((item) => {
-            return item.uuid == exhibitItemId;
-        });
-    }
+const getItemResource = async (repositoryItemId, resourceFile) => {
+    let resourceFileExists = false;
+    let resourceFileCreated = false;
 
     try {
-        // verify item is in an exhibit
-        exhibitId = exhibitItem.is_member_of_exhibit || null;
-        if(exhibitId == null) throw `Exhibit item not found: ID: ${exhibitItemId}`;
-        if(exhibitItem.media != itemId) throw "Invalid repository item id";
-
-        // get the repository item data
-        LOGGER.module().info(`Fetching data for repository item: ${itemId}`);
-        itemData = await this.getItemData(itemId);
-
-        response = {...response, itemData};
-
-    } catch (error) {
-        LOGGER.module().error(`Error retrieving repository item data: ${error}`);
-        return {error};
-    }
-
-    let fileLocation = `./${resourceLocation}/${exhibitId}`;
-    let mediaFile = `${exhibitItemId}_repository_item_media.${MIME_TYPES.extension(itemData.mime_type || "")}`;
-    let filePath = `${fileLocation}/${mediaFile}`;
-
-    // check if the repository item media file exists
-    try {
-        LOGGER.module().info(`Verifying media resource file in local storage: ${mediaFile}...`);
-        mediaFileExists = FS.existsSync(filePath);
+        LOGGER.module().info(`Verifying media resource file in local storage: ${resourceFile}...`);
+        resourceFileExists = FS.existsSync(resourceFile);
     }
     catch(error) {
         LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${filePath}`);
         return {error};
     }
 
-    // if repository item media file does not exist, fetch it from the repository and create the media file
-    if(mediaFileExists == false) {
-        LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. Exhibit item resource file: ${mediaFile}`);
+    // if no file, run fetch ops (fetch media, write media, fetch tn, write tn, )
+    if(resourceFileExists == false) {
+        LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. Exhibit item resource file: ${resourceFile}`);
 
         let url = `${repositoryDomain}/${repositoryItemResourceEndpoint}`
-            .replace("{item_id}", itemId) 
+            .replace("{item_id}", repositoryItemId) 
 
-        let {error} = await fetchFile(url, filePath);
+        let {error} = await fetchFile(url, resourceFile);
 
         if(error) return {error};
-        else mediaFileCreated = true;
+        else resourceFileCreated = true;
     }
     else {
-        LOGGER.module().info("Repository resource file found. File:", mediaFile);
+        LOGGER.module().info("Repository resource file found:", resourceFile);
     }
 
-    // fetch and store the repository item thumbnail when a media file is created
-    if(mediaFileCreated == true && repositoryItemThumbnailEndpoint) {
-        LOGGER.module().info(`Fetching thumbnail file...`);
-
-        thumbnailFile = `${exhibitItemId}_repository_item_thumbnail.${thumbnailFileExtension}`;
-        filePath = `${fileLocation}/${thumbnailFile}`;
-
-        let url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`
-            .replace("{item_id}", itemId) 
-
-        let {error} = await fetchFile(url, filePath);
-
-        // add thumbnail file creation data to the response object
-        if(error) return {error};
-        else response = {...response, thumbnailFile};
-    }
-
-    // add media file creation data to the response object
-    return {mediaFile, mediaFileCreated, ...response}
+    return {resourceFileCreated}
 }

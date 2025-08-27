@@ -12,5 +12,5 @@ module.exports = {
     repositorySearchEndpoint: process.env.REPOSITORY_SEARCH_ENDPOINT,
     repositoryObjectEndpoint: process.env.REPOSITORY_OBJECT_ENDPOINT,
     repositoryCollectionEndpoint: process.env.REPOSITORY_COLLECTION_ENDPOINT,
-    resourceLocation: process.env.RESOURCE_LOCATION
+    resourceLocalStorageLocation: process.env.RESOURCE_LOCATION
 }

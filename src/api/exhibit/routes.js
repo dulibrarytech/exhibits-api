@@ -25,7 +25,6 @@ ROUTER.get('/:id/items', (req, res) => {
 });
 
 ROUTER.get('/:id/resource/:filename', (req, res) => {
-  console.log("TEST GET /:id/resource/:filename")
   CONTROLLER.getExhibitItemResource(req, res);
 });
 
