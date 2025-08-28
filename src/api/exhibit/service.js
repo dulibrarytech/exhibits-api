@@ -114,17 +114,16 @@ const getRepositoryData = async (items) => {
     }
 }
 
-// UPDATE remove if not used by the client
-// exports.resourceExists = async (exhibitId, filename) => {
-//     let exists;
-//     let filePath = `${CONFIG.resourceLocalStorageLocation}/${exhibitId}/${filename}`;
+exports.resourceExists = async (exhibitId, filename) => {
+    let exists;
+    let filePath = `${CONFIG.resourceLocalStorageLocation}/${exhibitId}/${filename}`;
 
-//     try {
-//         exists = FS.existsSync(filePath);
-//     }
-//     catch(error) {
-//         LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${filePath}`);
-//     }
+    try {
+        exists = FS.existsSync(filePath);
+    }
+    catch(error) {
+        LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${filePath}`);
+    }
 
-//     return exists || false;
-// }
+    return exists || false;
+}
