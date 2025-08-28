@@ -106,6 +106,7 @@ const getRepositoryData = async (items) => {
             });
 
             item.media = data.media;
+            item.subjects = data.subjects;
             item.repository_data = data;
         }
         else if(item.items) {
