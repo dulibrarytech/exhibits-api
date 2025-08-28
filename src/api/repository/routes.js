@@ -14,10 +14,6 @@ ROUTER.get('/data/:id', getDataValidator, (req, res) => {
   CONTROLLER.data(req, res);
 });
 
-ROUTER.post('/item/:id', validateApiKey, fetchResourceFileValidator, async (req, res) => {
-  CONTROLLER.item(req, res);
-});
-
 ROUTER.post('/search', (req, res) => {
   CONTROLLER.search(req, res);
 });

@@ -19,16 +19,3 @@ exports.search = async (req, res) => {
     if(!results) res.sendStatus(500);
     else res.send(results);
 }
-
-exports.item = async (req, res) => {
-    let response = {filename: "null"}
-    let itemId = req.params.id;
-
-    let {
-        exhibitItemId = null
-    } = req.body;
-
-    response = await Repository.getItemResource({itemId, exhibitItemId});
-    if(response.error) res.sendStatus(500)
-    else res.send(response);
-}
