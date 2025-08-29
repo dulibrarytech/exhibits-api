@@ -1,5 +1,6 @@
 'use strict'
 
+const CONFIG = require('../../config/configuration.js');
 const LOGGER = require('../../libs/log4js');
 const AXIOS = require('axios');
 const FS = require('fs');
@@ -9,6 +10,12 @@ const AGENT = new HTTPS.Agent({
 });
 
 const FILE_FETCH_TIMEOUT=90000;
+
+const {
+    repositoryDomain,
+    repositoryItemThumbnailEndpoint,
+
+} = CONFIG;
 
 exports.fetchFile = (url, file) => {
     return new Promise(function(resolve, reject) {
@@ -48,4 +55,8 @@ exports.fetchFile = (url, file) => {
             }
         });
     });
+}
+
+exports.getRepositoryThumbnailUri = (repositoryItemId) => {
+    return `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", repositoryItemId);
 }

@@ -3,7 +3,8 @@
 const util = require('util');
 const Elastic = require('../../libs/elastic_search');
 const Logger = require('../../libs/log4js');
-const {getSearchResultAggregations, combineAggregations} = require('./helper');
+// const {getSearchResultAggregations, combineAggregations} = require('./helper');
+const {getRepositoryThumbnailUri} = require('../repository/helper');
 
 exports.search = async (terms, type=null, facets=null, sort=null, page=null, exhibitId=null) => {
     let queryData = null;
@@ -234,6 +235,16 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
             let exhibit = await Elastic.get(agg.key);
             agg.display = exhibit.title;
         }
+
+        // add repository thumbnail uri "thumbnail" field if the field has not been set
+        resultsData.results = resultsData.results.map((result) => {
+            if(result.is_repo_item && !result.thumbnail) {
+                return {...result, thumbnail: getRepositoryThumbnailUri(result.media)};
+            }
+            else {
+                return result;
+            }
+        });
 
         // append the exhibit aggregations to the main aggregations
         resultsData.aggregations = {...resultsData.aggregations, ...exhibitAggs}
