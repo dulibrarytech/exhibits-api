@@ -3,7 +3,7 @@
 const util = require('util');
 const Elastic = require('../../libs/elastic_search');
 const Logger = require('../../libs/log4js');
-// const {getSearchResultAggregations, combineAggregations} = require('./helper');
+// const Settings = require('../../config/settings');
 const {getRepositoryThumbnailUri} = require('../repository/helper');
 
 exports.search = async (terms, type=null, facets=null, sort=null, page=null, exhibitId=null) => {
@@ -20,6 +20,14 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     let facetQuery = [];
     let nestedFacetQuery = [];
 
+    // let {
+    //     OBJECT_TYPES,
+    //     ITEM_TYPES,
+    //     SEARCH_FIELDS,
+    //     AGGREGATION_FIELDS_ITEM
+    // } = Settings;
+
+    // TODO: move to settings
     // object types to include in the search
     const OBJECT_TYPES = ["exhibit", "item", "grid", "vertical_timeline", "vertical_timeline_2"];
 
@@ -27,7 +35,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf"];
 
     // fulltext search fields
-    const SEARCH_FIELDS = ["title", "description", "text", "caption"];
+    const SEARCH_FIELDS = ["title", "description", "text", "caption", "item_subjects"];
     
     // fields to aggregate in search results
     const AGGREGATION_FIELDS_ITEM = [
@@ -38,10 +46,15 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         {
             "name": "type",
             "field": "type.keyword"        
-        }
+        },
+        {
+            "name": "subject",
+            "field": "item_subjects.keyword"
+        },
     ];
 
     const MAX_NESTED_ITEMS_RESULTS = 100;
+    // END move to settings
 
     // object type (top level only (should))
     if(type) {
@@ -193,8 +206,8 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
 
     try {
         // DEV
-        // let objectStructure = util.inspect(queryData, {showHidden: false, depth: null});
-        // Logger.module().info('INFO: ' + `Search query object (top level): ${objectStructure}`);
+        let objectStructure = util.inspect(queryData, {showHidden: false, depth: null});
+        Logger.module().info('INFO: ' + `Search query object (top level): ${objectStructure}`);
         // end DEV
 
         // execute the search for top level documents
