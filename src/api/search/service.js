@@ -4,6 +4,7 @@ const util = require('util');
 const Elastic = require('../../libs/elastic_search');
 const Logger = require('../../libs/log4js');
 // const Settings = require('../../config/settings');
+const Configuration = require('../../config/configuration');
 const {getRepositoryThumbnailUri} = require('../repository/helper');
 
 exports.search = async (terms, type=null, facets=null, sort=null, page=null, exhibitId=null) => {
@@ -205,11 +206,11 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     }
 
     try {
-        // DEV
-        let objectStructure = util.inspect(queryData, {showHidden: false, depth: null});
-        Logger.module().info('INFO: ' + `Search query object (top level): ${objectStructure}`);
-        // end DEV
-
+        if(Configuration.nodeEnv == 'development') {
+            let objectStructure = util.inspect(queryData, {showHidden: false, depth: null});
+            Logger.module().info('INFO: ' + `Search query object (top level): ${objectStructure}`);
+        }
+        
         // execute the search for top level documents
         resultsData = await Elastic.query(queryData, sortData, page, aggsData);
 
