@@ -21,6 +21,8 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     let facetQuery = [];
     let nestedFacetQuery = [];
 
+    console.log("TEST SVC::search(): facets in:", facets)
+
     // let {
     //     OBJECT_TYPES,
     //     ITEM_TYPES,
@@ -36,7 +38,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf"];
 
     // fulltext search fields
-    const SEARCH_FIELDS = ["title", "description", "text", "caption", "item_subjects"];
+    const SEARCH_FIELDS = ["title", "description", "text", "caption", "subjects"];
     
     // fields to aggregate in search results
     const AGGREGATION_FIELDS_ITEM = [
@@ -49,10 +51,24 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
             "field": "type.keyword"        
         },
         {
-            "name": "subject",
-            "field": "item_subjects.keyword"
+            "name": "subjects",
+            "field": "subjects.keyword"
         },
     ];
+    // const AGGREGATION_FIELDS_ITEM = [
+    //     {
+    //         "field": "item_type",
+    //         "path": "item_type.keyword"
+    //     },
+    //     {
+    //         "field": "type",
+    //         "path": "type.keyword"        
+    //     },
+    //     {
+    //         "field": "item_subjects",
+    //         "path": "item_subjects.keyword"
+    //     },
+    // ];
 
     const MAX_NESTED_ITEMS_RESULTS = 100;
     // END move to settings
@@ -116,13 +132,13 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     if(facets) {
         for(let key in facets) {
             facetQuery.push({
-                term: {
+                match: {
                     [`${key}`]: facets[key]
                 }
             });
 
             nestedFacetQuery.push({
-                term: {
+                match: {
                     [`items.${key}`]: facets[key]
                 }
             });
@@ -185,6 +201,11 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
             terms: { field }
         }
     }
+    // for(let {field, path} of AGGREGATION_FIELDS_ITEM) {
+    //     aggsData[field] = {
+    //         terms: { path }
+    //     }
+    // }
 
     // Add sort field if sort value is present
     if(sort) {
@@ -262,6 +283,8 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
 
         // append the exhibit aggregations to the main aggregations
         resultsData.aggregations = {...resultsData.aggregations, ...exhibitAggs}
+
+        console.log("TEST results:", resultsData.results)
 
     }
     catch(error) {
