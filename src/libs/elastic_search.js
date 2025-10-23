@@ -1,9 +1,12 @@
+/**
+ * Elasticsearch interface functions
+ */
+
 'use strict'
 
-const util = require('util');
 const { Client } = require('@elastic/elasticsearch');
-const CONFIG = require('../config/configuration.js');
-const fs = require('fs');
+const CONFIG = require('../config/configuration');
+const HELPER = require('./elastic_search_helper')
 const Logger = require('../libs/log4js');
 
 const RESULTS_PAGE_LENGTH = 10;
@@ -140,7 +143,11 @@ exports.fieldSearch = async (field, terms, nested = null) => {
  * @returns 
  */
 exports.query = async (query={}, sort=null, page=null, aggs=null) => {
-    let response = { results: [], resultCount: 0 };
+    let queryResponse = { 
+        results: [], 
+        resultCount: 0 
+    };
+
     let size = page ? RESULTS_PAGE_LENGTH : DEFAULT_RESULTS_SIZE;
     let from = page ? size * (page-1) : 0;
 
@@ -156,58 +163,15 @@ exports.query = async (query={}, sort=null, page=null, aggs=null) => {
             }
         });
 
-        let {hits, aggregations = null} = elasticResponse;
+        let {results, aggregations = null} = HELPER.addNestedResultsAggregations(elasticResponse, "items");
 
-        for(let result of hits.hits) {
-
-            // update search results count and add aggregations data for 'inner hits' results
-            if(result.inner_hits?.items?.hits.total.value > 0) {
-
-                for(let field in result.inner_hits) {
-
-                    // increment the current result count for this nested result
-                    response.resultCount += result.inner_hits[field].hits.total.value;
-
-                    for(let innerResult of result.inner_hits[field].hits.hits) {
-
-                        // add the top level result uuid to the nested result
-                        response.results.push({container_uuid: result._source.uuid, ...innerResult._source, score: innerResult._score});
-
-                        // add the aggregations for the nested results to the outer aggregations (elastic does not do this for inner_hits results)
-                        for(let aggField in aggregations) {
-
-                            // find the bucket for this aggregation field if it exists
-                            let bucket = aggregations[aggField].buckets.find((bucket) => {
-                                return bucket.key == innerResult._source[aggField];
-                            })
-
-                            if(bucket) {
-                                // increment the nested aggregation bucket count
-                                bucket.doc_count++;
-                            }
-                            else {
-                                // create a new bucket for the aggregation field if it does not exist
-                                aggregations[aggField].buckets.push({
-                                    key: innerResult._source[aggField],
-                                    doc_count: 1
-                                })
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Push the top level result to the results set if it is not a container item
-            else if(result._source.items == undefined) {
-                response.resultCount++;
-                response.results.push({...result._source, score: result._score});
-            }
-        }
+        queryResponse.resultCount = results.length;
+        queryResponse.results = results;
 
         if(aggregations) {
-            if(!response.aggregations) response.aggregations = {};
+            if(!queryResponse.aggregations) queryResponse.aggregations = {};
             for(let field in aggregations) {
-                response.aggregations[field] = aggregations[field].buckets;
+                queryResponse.aggregations[field] = aggregations[field].buckets;
             }
         }
     }
@@ -216,11 +180,11 @@ exports.query = async (query={}, sort=null, page=null, aggs=null) => {
         throw error;
     }
 
-    response.results = response.results.sort((a, b) => {
+    queryResponse.results = queryResponse.results.sort((a, b) => {
         return b.score - a.score;
     });
 
-    return response;
+    return queryResponse;
 }
 
 /**

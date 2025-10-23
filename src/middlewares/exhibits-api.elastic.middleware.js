@@ -1,14 +1,27 @@
 const escapeElastic = require('elasticsearch-sanitize');
 
 const sanitizeElasticQuery = async (req, res, next) => {
+    
     let queryFields = Object.keys(req.query || {});
+
     for (let field of queryFields) {
         if(typeof req.query[field] == 'string') {
             req.query[field] = escapeElastic(req.query[field]).replace(/\\-/g, "-");
         }
         else {
+            
             for(let index in req.query[field]) {
-                req.query[field][index] = escapeElastic(req.query[field][index]).replace(/\\-/g, "-");
+                let queryValue = req.query[field][index];
+
+                if(typeof queryValue == "string") {
+                    queryValue = escapeElastic(req.query[field][index]).replace(/\\-/g, "-");
+                }
+                else {
+                    for(let index of queryValue) {
+                        index = escapeElastic(index).replace(/\\-/g, "-");
+                    }
+                    req.query[field][index] = queryValue;
+                }
             }
         }
     }

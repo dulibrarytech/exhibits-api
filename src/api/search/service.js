@@ -1,3 +1,7 @@
+/**
+ * Exhibits@DU search engine
+ */
+
 'use strict'
 
 const util = require('util');
@@ -43,32 +47,18 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     // fields to aggregate in search results
     const AGGREGATION_FIELDS_ITEM = [
         {
-            "name": "item_type",
-            "field": "item_type.keyword"
+            "field": "item_type",
+            "path": "item_type.keyword"
         },
         {
-            "name": "type",
-            "field": "type.keyword"        
+            "field": "type",
+            "path": "type.keyword"        
         },
         {
-            "name": "subjects",
-            "field": "subjects.keyword"
+            "field": "subjects",
+            "path": "subjects.keyword"
         },
     ];
-    // const AGGREGATION_FIELDS_ITEM = [
-    //     {
-    //         "field": "item_type",
-    //         "path": "item_type.keyword"
-    //     },
-    //     {
-    //         "field": "type",
-    //         "path": "type.keyword"        
-    //     },
-    //     {
-    //         "field": "item_subjects",
-    //         "path": "item_subjects.keyword"
-    //     },
-    // ];
 
     const MAX_NESTED_ITEMS_RESULTS = 100;
     // END move to settings
@@ -131,17 +121,23 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
 
     if(facets) {
         for(let key in facets) {
-            facetQuery.push({
-                match: {
-                    [`${key}`]: facets[key]
-                }
-            });
 
-            nestedFacetQuery.push({
-                match: {
-                    [`items.${key}`]: facets[key]
-                }
-            });
+            let values = facets[key];
+            if(typeof values != "object") values = [values];
+
+            for(let value of values) {
+                facetQuery.push({
+                    match: {
+                        [`${key}.keyword`]: value
+                    }
+                });
+
+                nestedFacetQuery.push({
+                    match: {
+                        [`items.${key}.keyword`]: value
+                    }
+                });
+            }
         }
     }
 
@@ -195,17 +191,11 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         }
     };
 
-    // add the item aggregation fields to the main query
-    for(let {name, field} of AGGREGATION_FIELDS_ITEM) {
-        aggsData[name] = {
-            terms: { field }
+    for(let {field, path} of AGGREGATION_FIELDS_ITEM) {
+        aggsData[field] = {
+            terms: { field: path }
         }
     }
-    // for(let {field, path} of AGGREGATION_FIELDS_ITEM) {
-    //     aggsData[field] = {
-    //         terms: { path }
-    //     }
-    // }
 
     // Add sort field if sort value is present
     if(sort) {
@@ -285,6 +275,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         resultsData.aggregations = {...resultsData.aggregations, ...exhibitAggs}
 
         console.log("TEST results:", resultsData.results)
+        console.log("TEST aggregations:", resultsData.aggregations.subjects)
 
     }
     catch(error) {
