@@ -33,8 +33,10 @@ exports.addNestedResultsAggregations = (elasticResponse, nestedField) => {
 
                 // create an agg bucket for each agg field in the top level search, and push it if the field is present in the nested result
                 for(let aggField in aggregations) {
-
                     let field = innerResult._source[aggField]
+
+                    if(!field) continue;
+
                     if(typeof field != "object") field = [field];
 
                     for(let value of field) {
