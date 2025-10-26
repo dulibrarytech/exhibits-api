@@ -25,8 +25,6 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     let facetQuery = [];
     let nestedFacetQuery = [];
 
-    console.log("TEST SVC::search(): facets in:", facets)
-
     // let {
     //     OBJECT_TYPES,
     //     ITEM_TYPES,
@@ -273,10 +271,6 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
 
         // append the exhibit aggregations to the main aggregations
         resultsData.aggregations = {...resultsData.aggregations, ...exhibitAggs}
-
-        console.log("TEST results:", resultsData.results)
-        console.log("TEST aggregations:", resultsData.aggregations.subjects)
-
     }
     catch(error) {
         Logger.module().error(`Error searching index. Elastic response: ${error}`);
