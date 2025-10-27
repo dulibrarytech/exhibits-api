@@ -110,7 +110,7 @@ const getRepositoryData = async (items) => {
             item.repository_data = data;
         }
         else if(item.items) {
-            getRepositoryData(item.items);
+            await getRepositoryData(item.items);
         }
     }
 }
