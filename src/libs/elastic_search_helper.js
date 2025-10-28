@@ -11,19 +11,20 @@
  * 
  * @returns {CombinedResults} - Combined search results and aggregations of both top-level and nested queries
  */
+var _ = require('lodash');
+
 exports.addNestedResultsAggregations = (elasticResponse, nestedField) => {
   let {hits, aggregations = null} = elasticResponse;
 
   let results = []
-
   for(let result of hits.hits) {
 
     // check if there are inner_hits present on this search result
-    if(result.inner_hits && result.inner_hits[nestedField]?.hits.total.value > 0) {
+    if(_.get(result, ['inner_hits', nestedField, 'hits', 'total', 'value']) > 0) {
 
         for(let field in result.inner_hits) {
-            for(let innerResult of result.inner_hits[field].hits.hits) {
 
+            for(let innerResult of _.get(result, ['inner_hits', field, 'hits', 'hits'])) {
                 // push the inner result for each field to the top level results
                 results.push({
                     container_uuid: result._source.uuid,
@@ -33,12 +34,11 @@ exports.addNestedResultsAggregations = (elasticResponse, nestedField) => {
 
                 // create an agg bucket for each agg field in the top level search, and push it if the field is present in the nested result
                 for(let aggField in aggregations) {
-                    let field = innerResult._source[aggField]
 
+                    let field = _.get(innerResult, ['_source', aggField]);
                     if(!field) continue;
 
                     if(typeof field != "object") field = [field];
-
                     for(let value of field) {
 
                         // find the bucket for this aggregation field if it exists
@@ -71,6 +71,8 @@ exports.addNestedResultsAggregations = (elasticResponse, nestedField) => {
         });
     }
   }
+
+  console.log("TEST: helper returns obj:", {results, aggregations})
 
   return {results, aggregations}
 }
