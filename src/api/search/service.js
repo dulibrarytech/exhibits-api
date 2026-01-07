@@ -215,11 +215,6 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     }
 
     try {
-        if(Configuration.nodeEnv == 'development') {
-            let objectStructure = util.inspect(queryData, {showHidden: false, depth: null});
-            Logger.module().info('INFO: ' + `Search query object (top level): ${objectStructure}`);
-        }
-        
         // execute the search for top level documents
         resultsData = await Elastic.query(queryData, sortData, page, aggsData);
 

@@ -72,7 +72,5 @@ exports.addNestedResultsAggregations = (elasticResponse, nestedField) => {
     }
   }
 
-  console.log("TEST: helper returns obj:", {results, aggregations})
-
   return {results, aggregations}
 }
