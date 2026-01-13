@@ -95,27 +95,49 @@ const getRepositoryItemData = async (items) => {
     let repositoryItemId, data = {};
     
     for(let item of items) {
+        console.log("TEST item")
 
         if(item.is_repo_item) {
+            console.log("TEST repo item")
             repositoryItemId = item.media;
 
             data = CACHE.get(repositoryItemId) || false;
 
             if(data == false) {
+                console.log("TEST is_repo_item: not in cache:", repositoryItemId)
                 LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
 
-                data = await REPOSITORY.importItem({
+                // if consolidated in repository service
+                // data = await REPOSITORY.importItem({
+                //     repositoryItemId,
+                //     resourcePath: `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`,
+                //     resourceFilename: `${item.uuid}_repository_item_media`
+                // });
+
+                data = await REPOSITORY.importItemData({ // importItemData
                     repositoryItemId,
-                    resourcePath: `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`,
-                    resourceFilename: `${item.uuid}_repository_item_media`
                 });
 
                 CACHE.set(repositoryItemId, data);
+
+                if (item.is_kaltura_item) {
+                    data.media = data.kaltura_id;
+                }
+                else {
+                    const resourcePath = `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
+                    const resourceFilename = `${item.uuid}_repository_item_media`;
+
+                    LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
+                    data.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
+                    LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
+                }
             }
             
             item.media = data.media;
             item.subjects = data.subjects;
             item.repository_data = data;
+
+            console.log("TEST updated item:", item)
         }
         else if(item.items) {
             await getRepositoryItemData(item.items);

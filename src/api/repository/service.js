@@ -30,19 +30,14 @@ const SUBJECT_AUTHORITIES = ['local', 'lcsh', 'lcnaf', 'aat'];
 /**
  * 
  * @param {*} repositoryItemId the repository item id (digitaldu pid)
- * @param {*} resourcePath pthe to the repository resource file
- * @param {*} resourceFilename filename of the repository resource file
  * @returns repository item data object
  */
-exports.importItem = async (params) => {
+exports.importItemData = async (params) => {
     let itemData = {};
-    let mediaFileName = "";
     let collectionData = {};
 
     const {
         repositoryItemId,
-        resourcePath,
-        resourceFilename
     } = params;
 
     let objectDataUrl = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", repositoryItemId);
@@ -55,27 +50,20 @@ exports.importItem = async (params) => {
         });
         LOGGER.module().info(`Data fetch complete for repository item: ${repositoryItemId}`);
 
-        LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
-        mediaFileName = await importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
-        LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
-
-        itemData = {
-            ...data, 
-            media: mediaFileName
-        };
+        itemData = data;
 
     } catch (error) {
-        LOGGER.module().error(`Error retrieving repository item data and/or resource. Error: ${error} Url: ${objectDataUrl}`);
+        LOGGER.module().error(`Error retrieving repository item data. Error: ${error} Url: ${objectDataUrl}`);
         return {};
     }
 
     /* define the repository data fields for the exhibit item */
-    let id = itemData.pid || "";
-    let title = itemData.title || "untitled item";
-    let collection_id = itemData.is_member_of_collection || null;
-    let mime_type = itemData.mime_type || null;
-    let media = itemData.media || "";
-    let thumbnail = itemData.thumbnail || "";
+    let id              = itemData.pid || "";
+    let title           = itemData.title || "untitled item";
+    let collection_id   = itemData.is_member_of_collection || null;
+    let mime_type       = itemData.mime_type || null;
+    let kaltura_id      = itemData.entry_id || itemData.kaltura_id || null;
+    let thumbnail       = itemData.thumbnail || "";
 
     let local_identifier = null;
     if(itemData.display_record?.identifiers) {
@@ -124,7 +112,7 @@ exports.importItem = async (params) => {
         title, 
         collection_id, 
         mime_type, 
-        media,
+        kaltura_id,
         thumbnail,
         local_identifier, 
         subject, 
@@ -141,7 +129,7 @@ exports.importItem = async (params) => {
  * @param {*} repositoryItemId 
  * @param {*} resourceFile 
  */
-const importItemResourceFile = async (repositoryItemId, writeFilePath, writeFileName) => {
+exports.importItemResourceFile = async (repositoryItemId, writeFilePath, writeFileName) => {
     let resourceFileExists = false;
     let repositoryStream = null;
 
