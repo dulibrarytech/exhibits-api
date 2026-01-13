@@ -45,12 +45,12 @@ exports.importItem = async (params) => {
         resourceFilename
     } = params;
 
-    let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", repositoryItemId);
+    let objectDataUrl = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", repositoryItemId);
 
     try {
-        
+        /* fetch the repository object data for the exhibit item */
         LOGGER.module().info(`Fetching data for repository item: ${repositoryItemId}...`);
-        let {data} = await AXIOS.get(url, {
+        let {data} = await AXIOS.get(objectDataUrl, {
             httpsAgent: AGENT,
         });
         LOGGER.module().info(`Data fetch complete for repository item: ${repositoryItemId}`);
@@ -65,11 +65,11 @@ exports.importItem = async (params) => {
         };
 
     } catch (error) {
-        LOGGER.module().error(`Error retrieving repository item data and/or resource. Error: ${error} Url: ${url}`);
+        LOGGER.module().error(`Error retrieving repository item data and/or resource. Error: ${error} Url: ${objectDataUrl}`);
         return {};
     }
 
-    // set repository data fields
+    /* define the repository data fields for the exhibit item */
     let id = itemData.pid || "";
     let title = itemData.title || "untitled item";
     let collection_id = itemData.is_member_of_collection || null;
@@ -92,10 +92,13 @@ exports.importItem = async (params) => {
         })?.title || null;
     }
     let subjects = itemData.f_subjects;
+    /* end define the repository data fields for the exhibit item */
+
+    let collectionDataUrl = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
 
     try {
+        /* fetch the repository collection data for the exhibit item */
         LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
-        let collectionDataUrl = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
         let {data} = await AXIOS.get(collectionDataUrl, {
             httpsAgent: AGENT,
         });
@@ -104,12 +107,14 @@ exports.importItem = async (params) => {
         collectionData = data;
 
     } catch (error) {
-        LOGGER.module().error(`Error retrieving repository collection data. Response: ${error}`);
+        LOGGER.module().error(`Error retrieving repository collection data. Error: ${error} Url: ${collectionDataUrl}`);
         return {};
     }
 
+    /* define the repository data fields for the exhibit item */
     let collection_name = collectionData["title"] || "untitled collection";
 
+    /* define the links to the repository for the exhibit item */
     let link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", repositoryItemId);
     let link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", collection_id || "null");
     let thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", repositoryItemId);
