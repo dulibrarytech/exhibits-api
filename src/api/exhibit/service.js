@@ -5,6 +5,7 @@ const ELASTIC = require('../../libs/elastic_search');
 const LOGGER = require('../../libs/log4js');
 const REPOSITORY = require('../repository/service');    // UPDATE
 const FS = require('fs');
+const CACHE = require('../../libs/cache').create();
 
 const validateKey = (key) => {
     return key && key == CONFIG.apiKey;
@@ -81,36 +82,43 @@ exports.getItems = async (id, key) => {
             return item;
         });
 
-        await getRepositoryData(items);
+        await getRepositoryItemData(items);
     }
     catch(error) {
-        LOGGER.module().error(`Error retrieving exhibit items. Elastic response: ${error}`);
+        LOGGER.module().error(`Error retrieving exhibit items: ${error}`);
     }
 
     return items;
 }
 
-const getRepositoryData = async (items) => {
+const getRepositoryItemData = async (items) => {
     let repositoryItemId, data = {};
     
     for(let item of items) {
 
         if(item.is_repo_item) {
             repositoryItemId = item.media;
-            LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
 
-            data = await REPOSITORY.getItemData({
-                repositoryItemId,
-                resourcePath: `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`,
-                resourceFilename: `${item.uuid}_repository_item_media`
-            });
+            data = CACHE.get(repositoryItemId) || false;
 
+            if(data == false) {
+                LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
+
+                data = await REPOSITORY.importItem({
+                    repositoryItemId,
+                    resourcePath: `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`,
+                    resourceFilename: `${item.uuid}_repository_item_media`
+                });
+
+                CACHE.set(repositoryItemId, data);
+            }
+            
             item.media = data.media;
             item.subjects = data.subjects;
             item.repository_data = data;
         }
         else if(item.items) {
-            await getRepositoryData(item.items);
+            await getRepositoryItemData(item.items);
         }
     }
 }

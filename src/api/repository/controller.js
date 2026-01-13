@@ -2,14 +2,14 @@
 
 const Repository = require('./service');
 
-exports.data = async (req, res) => {
-    let data = {};
-    let itemId = req.params.id || null;
+// exports.data = async (req, res) => {
+//     let data = {};
+//     let itemId = req.params.id || null;
     
-    data = await Repository.getItemData(itemId);
-    if(!data) res.sendStatus(500);
-    else res.send(data);
-}
+//     data = await Repository.getItemData(itemId);
+//     if(!data) res.sendStatus(500);
+//     else res.send(data);
+// }
 
 exports.search = async (req, res) => {
     let results = [];

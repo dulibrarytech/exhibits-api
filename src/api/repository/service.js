@@ -10,9 +10,8 @@ const MIME_TYPES = require('mime-types');
 const AGENT = new HTTPS.Agent({
   rejectUnauthorized: false,
 });
-const CACHE = require('../../libs/cache').create();
 
-const {fetchFile} = require('./helper');
+const FILE_FETCH_TIMEOUT = 90000;
 
 let {
     repositoryDomain,
@@ -30,11 +29,14 @@ const SUBJECT_AUTHORITIES = ['local', 'lcsh', 'lcnaf', 'aat'];
 
 /**
  * 
- * @param {*} itemId the repository item id (digitaldu pid)
- * @returns 
+ * @param {*} repositoryItemId the repository item id (digitaldu pid)
+ * @param {*} resourcePath pthe to the repository resource file
+ * @param {*} resourceFilename filename of the repository resource file
+ * @returns repository item data object
  */
-exports.getItemData = async (params) => {
+exports.importItem = async (params) => {
     let itemData = {};
+    let mediaFileName = "";
     let collectionData = {};
 
     const {
@@ -43,38 +45,28 @@ exports.getItemData = async (params) => {
         resourceFilename
     } = params;
 
-    itemData = CACHE.get(repositoryItemId) || false;
+    let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", repositoryItemId);
 
-    // fetch the item data from the repository
-    if(!itemData)  {
-        try {
-            let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", repositoryItemId);
-            
-            LOGGER.module().info(`Fetching data for repository item: ${repositoryItemId}...`);
-            let {data} = await AXIOS.get(url, {
-                httpsAgent: AGENT,
-            });
-            itemData = data;
-            LOGGER.module().info(`Data fetch complete for repository item: ${repositoryItemId}`);
+    try {
+        
+        LOGGER.module().info(`Fetching data for repository item: ${repositoryItemId}...`);
+        let {data} = await AXIOS.get(url, {
+            httpsAgent: AGENT,
+        });
+        LOGGER.module().info(`Data fetch complete for repository item: ${repositoryItemId}`);
 
-            LOGGER.module().info(`Fetching resource file for repository item: ${repositoryItemId}...`);
-            let file = `${resourceFilename}.${MIME_TYPES.extension(itemData.mime_type || "")}`;
-            let resourceFile = `${resourcePath}/${file}`;
-            // await getItemResource(repositoryItemId, resourceFile); // sync fetch/write (request completes when all files are written to local storage)
-            getItemResource(repositoryItemId, resourceFile); // async fetch/write (request completes before all files are written to storage)
-            LOGGER.module().info(`Resource file fetch complete for repository item: ${repositoryItemId}`);
+        LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
+        mediaFileName = await importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
+        LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
 
-            itemData = {...itemData, media: file};
+        itemData = {
+            ...data, 
+            media: mediaFileName
+        };
 
-            CACHE.set(repositoryItemId, itemData);
-
-        } catch (error) {
-            LOGGER.module().error(`Error retrieving repository item data. Error: ${error}`);
-            return {};
-        }
-    }
-    else {
-        LOGGER.module().info(`Repository item data retrieved from cache: id: ${repositoryItemId}`);
+    } catch (error) {
+        LOGGER.module().error(`Error retrieving repository item data and/or resource. Error: ${error} Url: ${url}`);
+        return {};
     }
 
     // set repository data fields
@@ -100,34 +92,24 @@ exports.getItemData = async (params) => {
         })?.title || null;
     }
     let subjects = itemData.f_subjects;
-    
-    // get the parent collection
-    collectionData = CACHE.get(collection_id) || false;
-    if(!collectionData) {
-        try {
-            LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
 
-            let url = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
-            
-            let {data} = await AXIOS.get(url, {
-                httpsAgent: AGENT,
-            });
+    try {
+        LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
+        let collectionDataUrl = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
+        let {data} = await AXIOS.get(collectionDataUrl, {
+            httpsAgent: AGENT,
+        });
 
-            CACHE.set(collection_id, data);
-            collectionData = data;
+        LOGGER.module().info(`Collection data fetch successful.`);
+        collectionData = data;
 
-        } catch (error) {
-            LOGGER.module().error(`Error retrieving repository collection data. Response: ${error}`);
-            return {};
-        }
-    }
-    else {
-        LOGGER.module().info(`Repository collection data retrieved from cache: id: ${repositoryItemId}`);
+    } catch (error) {
+        LOGGER.module().error(`Error retrieving repository collection data. Response: ${error}`);
+        return {};
     }
 
     let collection_name = collectionData["title"] || "untitled collection";
 
-    // set link fields
     let link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", repositoryItemId);
     let link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", collection_id || "null");
     let thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", repositoryItemId);
@@ -146,6 +128,80 @@ exports.getItemData = async (params) => {
         link_to_item, 
         link_to_collection, 
         thumbnail_datastream
+    }
+}
+
+/**
+ * 
+ * @param {*} repositoryItemId 
+ * @param {*} resourceFile 
+ */
+const importItemResourceFile = async (repositoryItemId, writeFilePath, writeFileName) => {
+    let resourceFileExists = false;
+    let repositoryStream = null;
+
+    const streamUrl = `${repositoryDomain}/${repositoryItemResourceEndpoint}`.replace("{item_id}", repositoryItemId);
+
+    let head = await AXIOS.head(streamUrl, {
+        httpsAgent: AGENT
+    });
+    
+    const fileExtension = MIME_TYPES.extension(head.headers.get('content-type') || "");
+    const resourceFilePath = `${writeFilePath}/${writeFileName}.${fileExtension}`;
+    const resourceFileName = `${writeFileName}.${fileExtension}`;
+
+    try {
+        LOGGER.module().info(`Verifying media resource file in local storage: ${resourceFilePath}...`);
+        resourceFileExists = FS.existsSync(resourceFilePath);
+    }
+    catch(error) {
+        LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${writeFilePath}`);
+        return false;
+    }
+
+    if(resourceFileExists) {
+        LOGGER.module().info("Repository resource file found:", resourceFileName);
+        return resourceFileName;
+    }
+
+    try {
+        LOGGER.module().info(`Repository resource file not found. Fetching file from repository: ${streamUrl}...`);
+        repositoryStream = await AXIOS.get(streamUrl, {
+            httpsAgent: AGENT,
+            responseType: 'stream',
+            timeout: FILE_FETCH_TIMEOUT
+        });
+
+    } catch (error) {
+        LOGGER.module().error(`Error fetching file: ${error}`);
+        return false;
+    }
+
+    LOGGER.module().info(`Fetch successful. Writing file ${resourceFileName}...`);
+
+    try {
+        let writeStream = FS.createWriteStream(resourceFilePath);
+
+        writeStream.on('error', (error) => {
+            LOGGER.module().error(`Error writing file: ${error} Repository item id: ${repositoryItemId}`);
+        });
+
+        writeStream.on('finish', () => {
+            LOGGER.module().info(`File write complete: ${resourceFileName}`);
+        });
+
+        repositoryStream.data.pipe(writeStream);
+
+        return resourceFileName;
+    }
+    catch(error) {
+        if (error.code === 'ECONNABORTED') {
+            LOGGER.module().error(`Request timed out. Repository item id: ${repositoryItemId}`);
+        }
+        else {
+            LOGGER.module().error(`Error creating file in media storage: ${error}`);
+        }
+        return false;
     }
 }
 
@@ -175,41 +231,4 @@ exports.search = async (queryString) => {
     }
     
     return results;
-}
-
-/**
- * 
- * @param {*} repositoryItemId 
- * @param {*} resourceFile 
- */
-const getItemResource = async (repositoryItemId, resourceFile) => {
-    let resourceFileExists = false;
-    let resourceFileCreated = false;
-
-    try {
-        LOGGER.module().info(`Verifying media resource file in local storage: ${resourceFile}...`);
-        resourceFileExists = FS.existsSync(resourceFile);
-    }
-    catch(error) {
-        LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${filePath}`);
-        return {error};
-    }
-
-    // if no file, run fetch ops (fetch media, write media, fetch tn, write tn, )
-    if(resourceFileExists == false) {
-        LOGGER.module().info(`File is not present in local storage. Fetching file for exhibit from repository. Exhibit item resource file: ${resourceFile}`);
-
-        let url = `${repositoryDomain}/${repositoryItemResourceEndpoint}`
-            .replace("{item_id}", repositoryItemId) 
-
-        let {error} = await fetchFile(url, resourceFile);
-
-        if(error) return {error};
-        else resourceFileCreated = true;
-    }
-    else {
-        LOGGER.module().info("Repository resource file found:", resourceFile);
-    }
-
-    return {resourceFileCreated}
 }
