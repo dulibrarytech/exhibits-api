@@ -1,6 +1,6 @@
 {
   "name": "exhibits-frontend-api",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "API to provide exhibit data to the exhibits frontend client application",
   "engines": {
     "node": ">=20.7.0",
