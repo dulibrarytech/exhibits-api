@@ -80,6 +80,9 @@ exports.importItemData = async (params) => {
         })?.title || null;
     }
     let subjects = itemData.f_subjects;
+
+    let archivalObjectPath = itemData.display_record?.uri || null;
+    let archival_object_url = archivalObjectPath ? `${CONFIG.archivalMetadataProviderDomain}${archivalObjectPath}` : null;
     /* end define the repository data fields for the exhibit item */
 
     let collectionDataUrl = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
@@ -105,7 +108,7 @@ exports.importItemData = async (params) => {
     /* define the links to the repository for the exhibit item */
     let link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", repositoryItemId);
     let link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", collection_id || "null");
-    let thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", repositoryItemId);
+    let thumbnail_datastream_url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", repositoryItemId);
 
     return {
         id, 
@@ -120,7 +123,8 @@ exports.importItemData = async (params) => {
         collection_name, 
         link_to_item, 
         link_to_collection, 
-        thumbnail_datastream
+        thumbnail_datastream_url,
+        archival_object_url
     }
 }
 
@@ -216,7 +220,7 @@ exports.search = async (queryString) => {
         results = response.data;
         results.forEach((result) => {
             result.link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", result["pid"]);
-            result.thumbnail_datastream = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", result["pid"]);
+            result.thumbnail_datastream_url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", result["pid"]);
         });
     }
     catch(error) {
