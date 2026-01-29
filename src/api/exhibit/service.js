@@ -126,7 +126,7 @@ const getRepositoryItemData = async (items) => {
                 }
             }
             
-            item.subjects = data.subjects; // this will replace the exhibits subjects[]
+            item.subjects = item.subjects.concat(data.subjects);
             item.repository_data = data;
         }
         else if(item.items) {
