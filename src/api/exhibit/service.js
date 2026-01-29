@@ -110,8 +110,9 @@ const getRepositoryItemData = async (items) => {
 
                 CACHE.set(repositoryItemId, data);
 
-                if (item.is_kaltura_item) {
-                    data.media = data.kaltura_id;
+                if (data.kaltura_id) {
+                    item.media = data.kaltura_id;
+                    item.is_kaltura_item = 1;
                 }
                 else {
                     const resourcePath = `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
@@ -120,11 +121,12 @@ const getRepositoryItemData = async (items) => {
                     LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
                     data.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
                     LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
+
+                    item.media = data.media;
                 }
             }
             
-            item.media = data.media;
-            item.subjects = data.subjects;
+            item.subjects = data.subjects; // this will replace the exhibits subjects[]
             item.repository_data = data;
         }
         else if(item.items) {
