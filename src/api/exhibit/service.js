@@ -101,6 +101,8 @@ const getRepositoryItemData = async (items) => {
             repositoryItemId = item.media;
             data = CACHE.get(repositoryItemId) || false;
 
+            console.log("TEST repo data from cache:", data)
+
             if(data == false) {
 
                 LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
@@ -108,22 +110,24 @@ const getRepositoryItemData = async (items) => {
                     repositoryItemId,
                 });
 
+                console.log("TEST repo item data: setting cache:", data)
+
                 CACHE.set(repositoryItemId, data);
+            }
 
-                if (data.kaltura_id) {
-                    item.media = data.kaltura_id;
-                    item.is_kaltura_item = 1;
-                }
-                else {
-                    const resourcePath = `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
-                    const resourceFilename = `${item.uuid}_repository_item_media`;
+            if (data.kaltura_id) {
+                item.media = data.kaltura_id;
+                item.is_kaltura_item = 1;
+            }
+            else {
+                const resourcePath = `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
+                const resourceFilename = `${item.uuid}_repository_item_media`;
 
-                    LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
-                    data.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
-                    LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
+                LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
+                data.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
+                LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
 
-                    item.media = data.media;
-                }
+                item.media = data.media;
             }
             
             item.subjects = item.subjects.concat(data.subjects);
