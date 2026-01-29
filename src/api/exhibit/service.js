@@ -101,16 +101,12 @@ const getRepositoryItemData = async (items) => {
             repositoryItemId = item.media;
             data = CACHE.get(repositoryItemId) || false;
 
-            console.log("TEST repo data from cache:", data)
-
             if(data == false) {
 
                 LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
                 data = await REPOSITORY.importItemData({
                     repositoryItemId,
                 });
-
-                console.log("TEST repo item data: setting cache:", data)
 
                 CACHE.set(repositoryItemId, data);
             }
