@@ -4,6 +4,9 @@
 
 'use strict'
 
+// test
+const util = require('util')
+
 const { Client } = require('@elastic/elasticsearch');
 const CONFIG = require('../config/configuration');
 const HELPER = require('./elastic_search_helper')
@@ -143,7 +146,7 @@ exports.fieldSearch = async (field, terms, nested = null) => {
  * @returns 
  */
 exports.query = async (query={}, sort=null, page=null, aggs=null) => {
-    let queryResponse = { 
+    let searchResponse = { 
         results: [], 
         resultCount: 0 
     };
@@ -163,15 +166,25 @@ exports.query = async (query={}, sort=null, page=null, aggs=null) => {
             }
         });
 
+        // test
+        let objectStructure = util.inspect(query, {showHidden: false, depth: null});
+        Logger.module().info('INFO: ' + `Search query object: ${objectStructure}`);
+
         let {results, aggregations = null} = HELPER.addNestedResultsAggregations(elasticResponse, "items");
 
-        queryResponse.resultCount = results.length;
-        queryResponse.results = results;
+        // append elastic results and data to search response object
+        searchResponse.resultCount = results.length;
+        searchResponse.results = results;
 
         if(aggregations) {
-            if(!queryResponse.aggregations) queryResponse.aggregations = {};
+            // ensure aggregations object exists in response
+            if(!searchResponse.aggregations) searchResponse.aggregations = {};
+
+            // filter out null and empty string buckets from all aggregations 2/11/2026
             for(let field in aggregations) {
-                queryResponse.aggregations[field] = aggregations[field].buckets;
+                searchResponse.aggregations[field] = aggregations[field].buckets.filter((bucket) => {
+                    return bucket.key != "null" && bucket.key != "";
+                });
             }
         }
     }
@@ -180,11 +193,11 @@ exports.query = async (query={}, sort=null, page=null, aggs=null) => {
         throw error;
     }
 
-    queryResponse.results = queryResponse.results.sort((a, b) => {
+    searchResponse.results = searchResponse.results.sort((a, b) => {
         return b.score - a.score;
     });
 
-    return queryResponse;
+    return searchResponse;
 }
 
 /**

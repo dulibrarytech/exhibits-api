@@ -264,8 +264,10 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
             }
         });
 
-        // append the exhibit aggregations to the main aggregations
+        // append the 'is_member_of_exhibit' aggregations to the main aggregations
         resultsData.aggregations = {...resultsData.aggregations, ...exhibitAggs}
+
+
     }
     catch(error) {
         Logger.module().error(`Error searching index. Elastic response: ${error}`);
