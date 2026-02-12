@@ -125,12 +125,8 @@ const getRepositoryItemData = async (items) => {
 
                 item.media = data.media;
             }
-            
-            // temporary: remove if repo item subjcets transferred to exhibit subjects are managed by user in exhibit builder 2/11/26
-            if(!item.subjects) item.subjects = [];
-            item.subjects = item.subjects.concat(data.subjects);
-            // end temporary
 
+            // append all repository data to the item object in a "repository_data" field so that it is available for use in the frontend if needed
             item.repository_data = data;
         }
         else if(item.items) {
