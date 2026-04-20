@@ -16,6 +16,7 @@ const RESULTS_PAGE_LENGTH = 10;
 const DEFAULT_RESULTS_SIZE = 1000;
 
 let {
+    nodeEnv,
     elasticDomain, 
     elasticIndex
 
@@ -168,7 +169,9 @@ exports.query = async (query={}, sort=null, page=null, aggs=null) => {
 
         // test
         let objectStructure = util.inspect(query, {showHidden: false, depth: null});
-        Logger.module().info('INFO: ' + `Search query object: ${objectStructure}`);
+        if(nodeEnv != "production") {
+            Logger.module().info('INFO: ' + `Elastic search query: ${objectStructure}`);
+        }
 
         let {results, aggregations = null} = HELPER.addNestedResultsAggregations(elasticResponse, "items");
 
