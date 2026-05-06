@@ -60,7 +60,6 @@ exports.getExhibit = async (id, key) => {
 exports.getItems = async (id, key) => {
     let items = null;
 
-    // to f()
     let sort = [
         {"order": "asc"}
     ];
@@ -73,7 +72,6 @@ exports.getItems = async (id, key) => {
                     operator: "AND"
                 } 
             }
-
         }, sort, null);
 
         // filter out unpublished items if api key is absent
@@ -92,61 +90,46 @@ exports.getItems = async (id, key) => {
             return item;
         });
 
-        // await getRepositoryItemData(items);
-        // await getIIIFData(items);
+        // await getItems();
+        await getKalturaData(items);
+        await getRepositoryItemData(items);
+        await getIIIFData(items);
     }
     catch(error) {
         LOGGER.module().error(`Error retrieving exhibit items: ${error}`);
     }
-    // END to f()
-
-    // await getItems();
-    await getRepositoryItemData(items);
-    await getIIIFData(items);
 
     return items;
 }
 
 const getRepositoryItemData = async (items) => {
-    console.log("test: getRepositoryItemData")
     let repositoryItemId, data = {};
     
     for(let item of items) {
-
         if(item.is_repo_item) {
-
             repositoryItemId = item.media;
             data = CACHE.get(repositoryItemId) || false;
 
             if(data == false) {
-
                 LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
                 data = await REPOSITORY.importItemData({
                     repositoryItemId,
                 });
-
                 CACHE.set(repositoryItemId, data);
             }
 
-            //const resourceFilename = `${item.uuid}_repository_item_media`;
-
-            console.log("test: resourceFilename")
-
             if (data.kaltura_id) {
-                item.media = data.kaltura_id;
                 item.is_kaltura_item = 1;
+                item.media = data.kaltura_id;
             }
-            // TODO: else if(Settings.importRepositoryItemResourceFile) // repo item import file is not needed for iiif source
             
-            // else if(FETCH_REPOSITORY_RESOURCE_FILE){
-                const resourcePath = `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
-                const resourceFilename = `${item.uuid}_repository_item_media`;
+            const resourcePath = `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
+            const resourceFilename = `${item.uuid}_repository_item_media`;
 
-                LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
-                data.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
-                LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
-
-                item.media = data.media;
+            LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
+            data.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
+            item.media = data.media;
+            LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
 
             // append all repository data to the item object in a "repository_data" field so that it is available for use in the frontend if needed
             item.repository_data = data;
@@ -159,17 +142,20 @@ const getRepositoryItemData = async (items) => {
 
 const getIIIFData = async (items) => {
 
-    await Promise.all(items.map(async ({uuid, media_iiif}) => {
+    await Promise.all(items.map(async (item) => {
+        const {uuid, media_iiif} = item;
+
         if(media_iiif) {
             const {manifest_url = ""} = media_iiif;
 
+            // TODO: verify manifest url domain
             // const url = new Url(manifest_url)
             // if url.domain == config.EXHIBITS_IIIF_DOMAIN => do insecure fetch
 
             try {
                 const response = await AXIOS.get(manifest_url, { httpsAgent: AGENT });
-
                 const {success = null, message = "Unspecified error from IIIF manifest server"} = response.data;
+
                 if(typeof success != undefined && success === false) {
                     media_iiif.manifest = null;
                     throw message;
@@ -182,10 +168,22 @@ const getIIIFData = async (items) => {
                 LOGGER.module().error(`Error fetching iiif manifest: ${error} Item: ${uuid}`);
             }
         }
+        else if(item.items) {
+            await getIIIFData(item.items)
+        }
     }))
+}
 
-    //console.log("test: init items:", items)
-
+const getKalturaData = async (items) => {
+    await Promise.all(items.map((item) => {
+        const {is_kaltura_item, media} = item;
+        if(is_kaltura_item) {
+            item.kaltura_id = media;
+        }
+        else if(item.items) {
+            getKalturaData(item.items);
+        }
+    }))
 }
 
 exports.resourceExists = async (exhibitId, filename) => {
