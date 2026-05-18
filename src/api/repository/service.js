@@ -43,7 +43,6 @@ exports.importItemData = async (params) => {
     let objectDataUrl = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", repositoryItemId);
 
     try {
-        /* fetch the repository object data for the exhibit item */
         LOGGER.module().info(`Fetching data for repository item: ${repositoryItemId}...`);
         let {data} = await AXIOS.get(objectDataUrl, {
             httpsAgent: AGENT,
@@ -53,11 +52,10 @@ exports.importItemData = async (params) => {
         itemData = data;
 
     } catch (error) {
-        LOGGER.module().error(`Error retrieving repository item data. Error: ${error} Url: ${objectDataUrl}`);
+        LOGGER.module().error(`Error retrieving repository item data. Fetch error: ${error} Url: ${objectDataUrl}`);
         return {};
     }
 
-    /* define the repository data fields for the exhibit item */
     let id              = itemData.pid || "";
     let title           = itemData.title || "untitled item";
     let collection_id   = itemData.is_member_of_collection || null;
@@ -83,12 +81,10 @@ exports.importItemData = async (params) => {
 
     let archivalObjectPath = itemData.display_record?.uri || null;
     let archival_object_url = archivalObjectPath ? `${CONFIG.archivalMetadataProviderDomain}${archivalObjectPath}` : null;
-    /* end define the repository data fields for the exhibit item */
 
     let collectionDataUrl = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
 
     try {
-        /* fetch the repository collection data for the exhibit item */
         LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
         let {data} = await AXIOS.get(collectionDataUrl, {
             httpsAgent: AGENT,
@@ -103,12 +99,12 @@ exports.importItemData = async (params) => {
     }
 
     /* define the repository data fields for the exhibit item */
-    let collection_name = collectionData["title"] || "untitled collection";
+    const collection_name = collectionData["title"] || "untitled collection";
 
     /* define the links to the repository for the exhibit item */
-    let link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", repositoryItemId);
-    let link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", collection_id || "null");
-    let thumbnail_datastream_url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", repositoryItemId);
+    const link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", repositoryItemId);
+    const link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", collection_id || "null");
+    const thumbnail_datastream_url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", repositoryItemId);
 
     return {
         id, 
