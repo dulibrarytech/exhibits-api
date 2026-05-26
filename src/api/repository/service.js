@@ -83,7 +83,6 @@ exports.importItemData = async (params) => {
     let archival_object_url = archivalObjectPath ? `${CONFIG.archivalMetadataProviderDomain}${archivalObjectPath}` : null;
 
     let collectionDataUrl = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
-
     try {
         LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
         let {data} = await AXIOS.get(collectionDataUrl, {
@@ -133,13 +132,19 @@ exports.importItemResourceFile = async (repositoryItemId, writeFilePath, writeFi
     let resourceFileExists = false;
     let repositoryStream = null;
 
-    const streamUrl = `${repositoryDomain}/${repositoryItemResourceEndpoint}`.replace("{item_id}", repositoryItemId);
-
-    let head = await AXIOS.head(streamUrl, {
-        httpsAgent: AGENT
-    });
+    let streamResponseData;
+    try {
+        const streamUrl = `${repositoryDomain}/${repositoryItemResourceEndpoint}`.replace("{item_id}", repositoryItemId);
+        streamResponseData = await AXIOS.head(streamUrl, {
+            httpsAgent: AGENT
+        });
+    }
+    catch(error) {
+        LOGGER.module().error(`Error connecting to repository: ${error} Url: ${repositoryDomain} Can't retrieve resource data`);
+        return false;
+    }
     
-    const fileExtension = MIME_TYPES.extension(head.headers.get('content-type') || "");
+    const fileExtension = MIME_TYPES.extension(streamResponseData.headers.get('content-type') || "");
     const resourceFilePath = `${writeFilePath}/${writeFileName}.${fileExtension}`;
     const resourceFileName = `${writeFileName}.${fileExtension}`;
 

@@ -89,15 +89,14 @@ exports.getItems = async (id, key) => {
 
             return item;
         });
-
-        // await getItems();
-        await getKalturaData(items);
-        await getRepositoryItemData(items);
-        await getIIIFData(items);
     }
     catch(error) {
         LOGGER.module().error(`Error retrieving exhibit items: ${error}`);
     }
+
+    await getKalturaData(items);
+    await getRepositoryItemData(items);
+    await getIIIFData(items);
 
     return items;
 }
@@ -141,6 +140,7 @@ const getRepositoryItemData = async (items) => {
 }
 
 const getIIIFData = async (items) => {
+    console.log("test: get iiif data")
 
     await Promise.all(items.map(async (item) => {
         const {uuid, media_iiif} = item;
