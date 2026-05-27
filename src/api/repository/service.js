@@ -34,7 +34,6 @@ const SUBJECT_AUTHORITIES = ['local', 'lcsh', 'lcnaf', 'aat'];
  */
 exports.importItemData = async (params) => {
     let itemData = {};
-    let collectionData = {};
 
     const {
         repositoryItemId,
@@ -53,7 +52,7 @@ exports.importItemData = async (params) => {
 
     } catch (error) {
         LOGGER.module().error(`Error retrieving repository item data. Fetch error: ${error} Url: ${objectDataUrl}`);
-        return {};
+        return false;
     }
 
     let id              = itemData.pid || "";
@@ -79,9 +78,12 @@ exports.importItemData = async (params) => {
     }
     let subjects = itemData.f_subjects;
 
+    // get archival object url
     let archivalObjectPath = itemData.display_record?.uri || null;
     let archival_object_url = archivalObjectPath ? `${CONFIG.archivalMetadataProviderDomain}${archivalObjectPath}` : null;
 
+    // get any collection object data
+    let collectionData = {};
     let collectionDataUrl = `${repositoryDomain}/${repositoryItemDataEndpoint}?key=${repositoryApiKey}`.replace("{item_id}", collection_id);
     try {
         LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
@@ -94,15 +96,15 @@ exports.importItemData = async (params) => {
 
     } catch (error) {
         LOGGER.module().error(`Error retrieving repository collection data. Error: ${error} Url: ${collectionDataUrl}`);
-        return {};
     }
 
     /* define the repository data fields for the exhibit item */
-    const collection_name = collectionData["title"] || "untitled collection";
+    const collection_name = collectionData["title"] || null;
 
     /* define the links to the repository for the exhibit item */
     const link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", repositoryItemId);
     const link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", collection_id || "null");
+    const object_datastream_url = `${repositoryDomain}/${repositoryItemDataEndpoint}`.replace("{item_id}", repositoryItemId);
     const thumbnail_datastream_url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", repositoryItemId);
 
     return {
@@ -118,6 +120,7 @@ exports.importItemData = async (params) => {
         collection_name, 
         link_to_item, 
         link_to_collection, 
+        object_datastream_url,
         thumbnail_datastream_url,
         archival_object_url
     }

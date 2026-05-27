@@ -114,7 +114,15 @@ const getRepositoryItemData = async (items) => {
                 data = await REPOSITORY.importItemData({
                     repositoryItemId,
                 });
-                CACHE.set(repositoryItemId, data);
+
+                // TODO - can this f() return false? if so, don't set cache here and skip all else in this block
+
+                if(data) {
+                    CACHE.set(repositoryItemId, data);
+                }
+                else {
+                    data = {};
+                }
             }
 
             if (data.kaltura_id) {
@@ -122,13 +130,18 @@ const getRepositoryItemData = async (items) => {
                 item.media = data.kaltura_id;
             }
             
-            const resourcePath = `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
-            const resourceFilename = `${item.uuid}_repository_item_media`;
+            if (FETCH_REPOSITORY_RESOURCE_FILE) {
+                LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
+                
+                const resourcePath = `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
+                const resourceFilename = `${item.uuid}_repository_item_media`;
 
-            LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
-            data.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
-            item.media = data.media;
-            LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
+                data.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
+                LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
+            }
+            
+            // update media field to point to repository media file or url, if present
+            item.media = data.media || null;
 
             // append all repository data to the item object in a "repository_data" field so that it is available for use in the frontend if needed
             item.repository_data = data;
@@ -140,7 +153,6 @@ const getRepositoryItemData = async (items) => {
 }
 
 const getIIIFData = async (items) => {
-    console.log("test: get iiif data")
 
     await Promise.all(items.map(async (item) => {
         const {uuid, media_iiif} = item;
