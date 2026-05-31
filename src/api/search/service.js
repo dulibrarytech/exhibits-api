@@ -32,7 +32,9 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     //     AGGREGATION_FIELDS_ITEM
     // } = Settings;
 
+    //////////////////////////
     // TODO: move to settings
+    //////////////////////////
     // object types to include in the search
     const OBJECT_TYPES = ["exhibit", "item", "grid", "vertical_timeline", "vertical_timeline_2"];
 
@@ -40,7 +42,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf"];
 
     // fulltext search fields
-    const SEARCH_FIELDS = ["title", "description", "text", "caption", "subjects"];
+    const SEARCH_FIELDS = ["title", "description", "text", "caption", "media_subjects.topics", "media_subjects.genre_form", "media_subjects.places"];
     
     // fields to aggregate in search results
     const AGGREGATION_FIELDS_ITEM = [
@@ -53,13 +55,23 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
             "path": "type.keyword"        
         },
         {
-            "field": "subjects",
-            "path": "subjects.keyword"
+            "field": "media_subjects.topics",
+            "path": "media_subjects.topics.keyword"
+        },
+        {
+            "field": "media_subjects.genre_form",
+            "path": "media_subjects.genre_form.keyword"
+        },
+        {
+            "field": "media_subjects.places",
+            "path": "media_subjects.places.keyword"
         },
     ];
 
     const MAX_NESTED_ITEMS_RESULTS = 100;
+    ////////////////////////
     // END move to settings
+    ////////////////////////
 
     // object type (top level only (should))
     if(type) {

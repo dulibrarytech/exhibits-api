@@ -8,8 +8,8 @@ const CACHE = require('../../libs/cache').create();
 const FS = require('fs');
 const AXIOS = require('axios');
 
-const https = require('https');
-const AGENT = new https.Agent({  
+const HTTPS = require('https');
+const AGENT = new HTTPS.Agent({  
   rejectUnauthorized: false
 });
 
@@ -64,6 +64,33 @@ exports.getItems = async (id, key) => {
         {"order": "asc"}
     ];
 
+    let unpublishedFilter = validateKey(key) ? {
+
+        bool: {
+            should: [
+                { 
+                    bool: {
+                        must_not: {
+                            term: { is_published: 0 }
+                        }
+                    }
+                },
+                {
+                    nested: {   
+                        path: "items",
+                        query: {
+                            bool: {
+                                must_not: {
+                                    term: { "items.is_published": 0 }
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }: null;
+
     try {
         let {results} = await ELASTIC.fetch({
             match: { 
@@ -72,8 +99,16 @@ exports.getItems = async (id, key) => {
                     operator: "AND"
                 } 
             }
+
+            // filter: [
+            //     unpublishedFilter
+            // ] 
+
         }, sort, null);
 
+        ////////////////////////////
+        // REMOVE for filter testing
+        ////////////////////////////
         // filter out unpublished items if api key is absent
         items = results.filter((result) => {
             return validateKey(key) ? true : result.is_published == 1;
@@ -89,22 +124,58 @@ exports.getItems = async (id, key) => {
 
             return item;
         });
+        ////////////////////////////
+        // end REMOVE for filter testing
+        ////////////////////////////
     }
     catch(error) {
         LOGGER.module().error(`Error retrieving exhibit items: ${error}`);
     }
 
-    await getKalturaData(items);
-    await getRepositoryItemData(items);
-    await getIIIFData(items);
+    await addSearchData(items);
+    await addKalturaData(items);
+    await addRepositoryData(items);
+    await addIIIFData(items);
 
     return items;
 }
 
-const getRepositoryItemData = async (items) => {
+const addSearchData = async (items) => {
+    await Promise.all(items.map(async (item) => {
+        let {
+            subjects = null, 
+            media_subjects = null
+        } = item;
+
+        if(!subjects) { subjects = [] }
+        
+        // subjects
+        if(media_subjects) {
+            for(let bucket of Object.keys(media_subjects)) {
+                const values = media_subjects[bucket];
+                if(!values || !values.length) continue;
+                subjects = subjects.concat(values);
+            }
+            item.subjects = subjects;
+        }
+
+        if(item.items) {
+            await addSearchData(item.items);
+        }
+    }));
+}
+
+const addRepositoryData = async (items) => {
     let repositoryItemId, data = {};
     
     for(let item of items) {
+
+        const {
+            is_repo_item = null,
+            media = null,
+            subjects = null
+        } = item;
+
         if(item.is_repo_item) {
             repositoryItemId = item.media;
             data = CACHE.get(repositoryItemId) || false;
@@ -115,14 +186,17 @@ const getRepositoryItemData = async (items) => {
                     repositoryItemId,
                 });
 
-                // TODO - can this f() return false? if so, don't set cache here and skip all else in this block
-
                 if(data) {
                     CACHE.set(repositoryItemId, data);
                 }
                 else {
                     data = {};
                 }
+            }
+
+            if(data.subjects) {
+                if(!item.subjects) item.subjects = [];
+                item.subjects = [...new Set([...item.subjects, ...data.subjects])];
             }
 
             if (data.kaltura_id) {
@@ -147,12 +221,12 @@ const getRepositoryItemData = async (items) => {
             item.repository_data = data;
         }
         else if(item.items) {
-            await getRepositoryItemData(item.items);
+            await addRepositoryData(item.items);
         }
     }
 }
 
-const getIIIFData = async (items) => {
+const addIIIFData = async (items) => {
 
     await Promise.all(items.map(async (item) => {
         const {uuid, media_iiif} = item;
@@ -181,19 +255,19 @@ const getIIIFData = async (items) => {
             }
         }
         else if(item.items) {
-            await getIIIFData(item.items)
+            await addIIIFData(item.items)
         }
     }))
 }
 
-const getKalturaData = async (items) => {
+const addKalturaData = async (items) => {
     await Promise.all(items.map((item) => {
         const {is_kaltura_item, media} = item;
         if(is_kaltura_item) {
             item.kaltura_id = media;
         }
         else if(item.items) {
-            getKalturaData(item.items);
+            addKalturaData(item.items);
         }
     }))
 }

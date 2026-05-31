@@ -167,12 +167,6 @@ exports.query = async (query={}, sort=null, page=null, aggs=null) => {
             }
         });
 
-        // test
-        let objectStructure = util.inspect(query, {showHidden: false, depth: null});
-        if(nodeEnv != "production") {
-            Logger.module().info('INFO: ' + `Elastic search query: ${objectStructure}`);
-        }
-
         let {results, aggregations = null} = HELPER.addNestedResultsAggregations(elasticResponse, "items");
 
         // append elastic results and data to search response object
