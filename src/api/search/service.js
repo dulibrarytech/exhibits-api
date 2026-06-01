@@ -26,10 +26,11 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     let nestedFacetQuery = [];
 
     // let {
-    //     OBJECT_TYPES,
-    //     ITEM_TYPES,
-    //     SEARCH_FIELDS,
-    //     AGGREGATION_FIELDS_ITEM
+    //     objectTypes:         OBJECT_TYPES,
+    //     itemTypes:           ITEM_TYPES,
+    //     searchFields:        SEARCH_FIELDS,
+    //     aggregationFields:   AGGREGATION_FIELDS_ITEM,
+    //     maxAggregationCount: MAX_AGGREGATION_COUNT
     // } = Settings;
 
     //////////////////////////
@@ -69,6 +70,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     ];
 
     const MAX_NESTED_ITEMS_RESULTS = 100;
+    const MAX_AGGREGATION_COUNT = 100;
     ////////////////////////
     // END move to settings
     ////////////////////////
@@ -203,7 +205,10 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
 
     for(let {field, path} of AGGREGATION_FIELDS_ITEM) {
         aggsData[field] = {
-            terms: { field: path }
+            terms: { 
+                field: path,
+                size: MAX_AGGREGATION_COUNT
+            }
         }
     }
 
