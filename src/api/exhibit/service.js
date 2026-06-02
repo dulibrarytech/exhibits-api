@@ -15,16 +15,10 @@ const AGENT = new HTTPS.Agent({
 
 const FETCH_REPOSITORY_RESOURCE_FILE = false;
 
-// TODO:
-// move to helper
-// pass in isAdmin to these functions, set in controller
-const validateKey = (key) => {
-    return key && key == CONFIG.apiKey;
-}
-
-exports.getExhibits = async (key) => {
+exports.getExhibits = async (isAdmin) => {
     let exhibits = null;
     let page = null;
+
     let sort = [
         {"order": "asc"}
     ];
@@ -36,7 +30,7 @@ exports.getExhibits = async (key) => {
         }, sort, page);
 
         exhibits = results.filter((result) => {
-            return validateKey(key) ? true : result.is_published == 1;
+            return isAdmin ? true : result.is_published == 1;
         });
     }
     catch(error) {
@@ -46,12 +40,12 @@ exports.getExhibits = async (key) => {
     return exhibits;
 }
 
-exports.getExhibit = async (id, key) => {
+exports.getExhibit = async (id, isAdmin) => {
     let exhibit = null;
 
     try {
         let data = await ELASTIC.get(id);
-        exhibit = (validateKey(key) || data.is_published == 1) ? data : false;
+        exhibit = (isAdmin || data.is_published == 1) ? data : null;
     }
     catch(error) {
         LOGGER.module().error(`Error retrieving exhibit. Elastic response: ${error}`);
@@ -60,7 +54,7 @@ exports.getExhibit = async (id, key) => {
     return exhibit || {};
 }
 
-exports.getItems = async (id, key) => {
+exports.getItems = async (id, isAdmin) => {
     let items = [];
 
     const sort = [
@@ -92,14 +86,14 @@ exports.getItems = async (id, key) => {
 
     // remove unpublished items if api key is absent
     items = items.filter((result) => {
-        return validateKey(key) ? true : result.is_published == 1;
+        return isAdmin ? true : result.is_published == 1;
     });
 
     // remove unpublished grid items (in items []) if api key is absent
     items = items.map((item) => {
         if(item.items) {  
             item.items = item.items.filter((item) => {
-                return validateKey(key) ? true : item.is_published == 1;
+                return isAdmin ? true : item.is_published == 1;
             })
         }
         return item;
@@ -247,6 +241,7 @@ const addKalturaData = async (items) => {
     }))
 }
 
+// REMOVE
 exports.resourceExists = async (exhibitId, filename) => {
     let exists;
     let filePath = `${CONFIG.resourceLocalStorageLocation}/${exhibitId}/${filename}`;
@@ -260,3 +255,4 @@ exports.resourceExists = async (exhibitId, filename) => {
 
     return exists || false;
 }
+// end REMOVE

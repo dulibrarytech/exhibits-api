@@ -1,12 +1,15 @@
 'use strict'
 
+const { validateKey } = require('../../libs/auth_helper');
 const Exhibit = require('./service');
 
 exports.getExhibits = async (req, res) => {
     let key = req.query.key || null;
     let data = [];  
-      
-    data = await Exhibit.getExhibits(key);
+
+    const isAdmin = validateKey(key);
+    data = await Exhibit.getExhibits(isAdmin);
+    //data = await Exhibit.getExhibits(key);
     if(!data) res.sendStatus(500);
     else res.send(data);
 }
@@ -16,7 +19,9 @@ exports.getExhibit = async (req, res) => {
     let key = req.query.key || null;
     let data = {};
 
-    data = await Exhibit.getExhibit(id, key);
+    const isAdmin = validateKey(key);
+    data = await Exhibit.getExhibit(id, isAdmin);
+    //data = await Exhibit.getExhibit(id, key);
     if(!data) res.sendStatus(500);
     else res.send(data);
 }
@@ -26,11 +31,14 @@ exports.getExhibitItems = async (req, res) => {
     let key = req.query.key || null;
     let data = [];
 
-    data = await Exhibit.getItems(id, key);
+    const isAdmin = validateKey(key);
+    data = await Exhibit.getItems(id, isAdmin);
+    //data = await Exhibit.getItems(id, key);
     if(!data) res.sendStatus(500);
     else res.send(data);
 }
 
+// REMOVE
 exports.getExhibitItemResource = async (req, res) => {
     let {id, filename} = req.params;
     let verifyFile = req.query.verify || false;
@@ -45,3 +53,4 @@ exports.getExhibitItemResource = async (req, res) => {
         res.sendStatus(400);
     }
 }
+// end REMOVE
