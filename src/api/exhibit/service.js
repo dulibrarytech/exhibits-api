@@ -62,40 +62,10 @@ exports.getExhibit = async (id, key) => {
 
 exports.getItems = async (id, key) => {
     let items = [];
-    let filters = [];
 
     const sort = [
         {"order": "asc"}
     ];
-
-    // filter out unpublished items if no api key is present. TODO: if(isAdmin)
-    if(!validateKey(key)) {
-        filters.push({
-            bool: {
-                should: [
-                    { 
-                        bool: {
-                            must_not: {
-                                term: { is_published: 0 }
-                            }
-                        }
-                    },
-                    {
-                        nested: {   
-                            path: "items",
-                            query: {
-                                bool: {
-                                    must_not: {
-                                        term: { "items.is_published": 0 }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                ]
-            }
-        })
-    }
 
     const query = {
         bool: {
@@ -109,7 +79,6 @@ exports.getItems = async (id, key) => {
                     }
                 }
             ],
-            filter: filters.length ? filters : undefined
         }
     };
 
@@ -120,6 +89,21 @@ exports.getItems = async (id, key) => {
     catch(error) {
         LOGGER.module().error(`Error retrieving exhibit items: ${error}`);
     }
+
+    // remove unpublished items if api key is absent
+    items = items.filter((result) => {
+        return validateKey(key) ? true : result.is_published == 1;
+    });
+
+    // remove unpublished grid items (in items []) if api key is absent
+    items = items.map((item) => {
+        if(item.items) {  
+            item.items = item.items.filter((item) => {
+                return validateKey(key) ? true : item.is_published == 1;
+            })
+        }
+        return item;
+    });
 
     if(items.length) {
         await addSearchData(items);
