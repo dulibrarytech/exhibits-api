@@ -15,6 +15,9 @@ const AGENT = new HTTPS.Agent({
 
 const FETCH_REPOSITORY_RESOURCE_FILE = false;
 
+// TODO:
+// move to helper
+// pass in isAdmin to these functions, set in controller
 const validateKey = (key) => {
     return key && key == CONFIG.apiKey;
 }
@@ -58,84 +61,72 @@ exports.getExhibit = async (id, key) => {
 }
 
 exports.getItems = async (id, key) => {
-    let items = null;
+    let items = [];
+    let filters = [];
 
-    let sort = [
+    const sort = [
         {"order": "asc"}
     ];
 
-    let unpublishedFilter = validateKey(key) ? {
-
-        bool: {
-            should: [
-                { 
-                    bool: {
-                        must_not: {
-                            term: { is_published: 0 }
+    // filter out unpublished items if no api key is present. TODO: if(isAdmin)
+    if(!validateKey(key)) {
+        filters.push({
+            bool: {
+                should: [
+                    { 
+                        bool: {
+                            must_not: {
+                                term: { is_published: 0 }
+                            }
                         }
-                    }
-                },
-                {
-                    nested: {   
-                        path: "items",
-                        query: {
-                            bool: {
-                                must_not: {
-                                    term: { "items.is_published": 0 }
+                    },
+                    {
+                        nested: {   
+                            path: "items",
+                            query: {
+                                bool: {
+                                    must_not: {
+                                        term: { "items.is_published": 0 }
+                                    }
                                 }
                             }
                         }
                     }
+                ]
+            }
+        })
+    }
+
+    const query = {
+        bool: {
+            must: [
+                {
+                    match: { 
+                        is_member_of_exhibit: {
+                            query: id,
+                            operator: "AND"
+                        } 
+                    }
                 }
-            ]
+            ],
+            filter: filters.length ? filters : undefined
         }
-    }: null;
+    };
 
     try {
-        let {results} = await ELASTIC.fetch({
-            match: { 
-                is_member_of_exhibit: {
-                    query: id,
-                    operator: "AND"
-                } 
-            }
-
-            // filter: [
-            //     unpublishedFilter
-            // ] 
-
-        }, sort, null);
-
-        ////////////////////////////
-        // REMOVE for filter testing
-        ////////////////////////////
-        // filter out unpublished items if api key is absent
-        items = results.filter((result) => {
-            return validateKey(key) ? true : result.is_published == 1;
-        });
-
-        // filter out unpublished grid items (in items []) if api key is absent
-        items = items.map((item) => {
-            if(item.items) {  
-                item.items = item.items.filter((item) => {
-                    return validateKey(key) ? true : item.is_published == 1;
-                })
-            }
-
-            return item;
-        });
-        ////////////////////////////
-        // end REMOVE for filter testing
-        ////////////////////////////
+        let {results} = await ELASTIC.fetch(query, sort, null);
+        items = results || [];
     }
     catch(error) {
         LOGGER.module().error(`Error retrieving exhibit items: ${error}`);
     }
 
-    await addSearchData(items);
-    await addKalturaData(items);
-    await addRepositoryData(items);
-    await addIIIFData(items);
+    if(items.length) {
+        await addSearchData(items);
+        await addKalturaData(items);
+        await addRepositoryData(items);
+        await addIIIFData(items);
+    }
 
     return items;
 }
