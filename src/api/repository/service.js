@@ -1,7 +1,6 @@
 'use strict'
 
 const CONFIG = require('../../config/configuration.js');
-const {repository: REPOSITORY_SETTINGS} = require('../../config/appSettings.js');
 const LOGGER = require('../../libs/log4js');
 const ELASTIC = require('../../libs/elastic_search');
 const FS = require('fs');
@@ -17,8 +16,8 @@ const FILE_FETCH_TIMEOUT = 90000;
 const {
     repositoryDomain,
     repositoryApiKey,
-    repositoryObjectEndpoint,
-    repositoryCollectionEndpoint,
+    repositoryObjectPageUrl,
+    repositoryCollectionPageUrl,
     repositoryItemResourceEndpoint,
     repositoryItemThumbnailEndpoint,
     repositoryItemDataEndpoint,
@@ -104,8 +103,8 @@ exports.importItemData = async (params) => {
     const collection_name = collectionData["title"] || null;
 
     /* define the links to the repository for the exhibit item */
-    const link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", repositoryItemId);
-    const link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", collection_id || "null");
+    const link_to_item = `${repositoryDomain}/${repositoryObjectPageUrl}`.replace("{item_id}", repositoryItemId);
+    const link_to_collection = `${repositoryDomain}/${repositoryCollectionPageUrl}`.replace("{collection_id}", collection_id || "null");
     const object_datastream_url = `${repositoryDomain}/${repositoryItemDataEndpoint}`.replace("{item_id}", repositoryItemId);
     const thumbnail_datastream_url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", repositoryItemId);
 
@@ -226,7 +225,7 @@ exports.search = async (queryString) => {
         });
         
         results = response.data.map((result) => {
-            result.link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", result["pid"]);
+            result.link_to_item = `${repositoryDomain}/${repositoryObjectPageUrl}`.replace("{item_id}", result["pid"]);
             result.thumbnail_url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", result["pid"]);
 
             return result;
