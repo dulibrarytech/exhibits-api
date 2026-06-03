@@ -1,6 +1,7 @@
 'use strict'
 
 const CONFIG = require('../../config/configuration.js');
+const {repository: REPOSITORY_SETTINGS} = require('../../config/appSettings.js');
 const ELASTIC = require('../../libs/elastic_search');
 const LOGGER = require('../../libs/log4js');
 const REPOSITORY = require('../repository/service');
@@ -13,7 +14,23 @@ const AGENT = new HTTPS.Agent({
   rejectUnauthorized: false
 });
 
-const FETCH_REPOSITORY_RESOURCE_FILE = false;
+// const FETCH_REPOSITORY_RESOURCE_FILE = false; // TODO to settings
+
+const {
+    repositoryIIIFImageUrl,
+    repositoryIIIFThumbnailUrl,
+    repositoryIIIFManifestUrl,
+    repositoryIIIFServiceUrl,
+    resourceLocalStorageLocation
+
+} = CONFIG;
+
+const {
+    enableIIIFThumbnail,
+    enableIIIFItem,
+    fetchResourceFile,
+
+} = REPOSITORY_SETTINGS;
 
 exports.getExhibits = async (isAdmin) => {
     let exhibits = null;
@@ -138,17 +155,21 @@ const addRepositoryData = async (items) => {
     let repositoryItemId, data = {};
     
     for(let item of items) {
-
         const {
             is_repo_item = null,
-            media = null,
-            subjects = null
         } = item;
 
         if(item.is_repo_item) {
+            const {
+                media = null,
+                subjects = null
+            } = item;
+
             repositoryItemId = item.media;
+            item.media = null; // remove the repository item id
             data = CACHE.get(repositoryItemId) || false;
 
+            // fetch the repository item data
             if(data == false) {
                 LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
                 data = await REPOSITORY.importItemData({
@@ -163,28 +184,39 @@ const addRepositoryData = async (items) => {
                 }
             }
 
+            // assign repository item subjects to the existing item subjects
             if(data.subjects) {
                 if(!item.subjects) item.subjects = [];
                 item.subjects = [...new Set([...item.subjects, ...data.subjects])];
             }
 
-            if (data.kaltura_id) {
+            // flag item as kaltura item if kaltura id is present in the repository data, and assign the kaltura id to the media field for the item
+            if(data.kaltura_id) {
                 item.is_kaltura_item = 1;
                 item.media = data.kaltura_id;
             }
-            
-            if (FETCH_REPOSITORY_RESOURCE_FILE) {
-                LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
-                
-                const resourcePath = `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
-                const resourceFilename = `${item.uuid}_repository_item_media`;
 
-                data.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
-                LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
+            if(enableIIIFItem) {
+                item.media_iiif = {
+                    manifest_url:   `${repositoryIIIFManifestUrl}`.replace("{item_id}", repositoryItemId),
+                    image_url:      `${repositoryIIIFImageUrl}`.replace("{item_id}", repositoryItemId),
+                    service_url:    `${repositoryIIIFServiceUrl}`.replace("{item_id}", repositoryItemId),
+                };
+            }
+            if(enableIIIFThumbnail) {
+                item.thumbnail_iiif = {
+                    thumbnail_url:  `${repositoryIIIFThumbnailUrl}`.replace("{item_id}", repositoryItemId),
+                }
             }
             
-            // update media field to point to repository media file or url, if present
-            item.media = data.media || null;
+            // fetch and store the repository resource file
+            if (fetchResourceFile) {
+                LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
+                const resourcePath = `${resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
+                const resourceFilename = `${item.uuid}_repository_item_media`;
+                item.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
+                LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
+            }
 
             // append all repository data to the item object in a "repository_data" field so that it is available for use in the frontend if needed
             item.repository_data = data;
@@ -244,7 +276,7 @@ const addKalturaData = async (items) => {
 // REMOVE
 exports.resourceExists = async (exhibitId, filename) => {
     let exists;
-    let filePath = `${CONFIG.resourceLocalStorageLocation}/${exhibitId}/${filename}`;
+    let filePath = `${resourceLocalStorageLocation}/${exhibitId}/${filename}`;
 
     try {
         exists = FS.existsSync(filePath);
