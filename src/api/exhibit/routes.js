@@ -24,10 +24,4 @@ ROUTER.get('/:id/items', (req, res) => {
   CONTROLLER.getExhibitItems(req, res);
 });
 
-// REMOVE
-ROUTER.get('/:id/resource/:filename', (req, res) => {
-  CONTROLLER.getExhibitItemResource(req, res);
-});
-// end REMOVE
-
 module.exports = ROUTER;

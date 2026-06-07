@@ -284,19 +284,3 @@ const addKalturaData = async (items) => {
         }
     }))
 }
-
-// REMOVE
-exports.resourceExists = async (exhibitId, filename) => {
-    let exists;
-    let filePath = `${resourceLocalStorageLocation}/${exhibitId}/${filename}`;
-
-    try {
-        exists = FS.existsSync(filePath);
-    }
-    catch(error) {
-        LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${filePath}`);
-    }
-
-    return exists || false;
-}
-// end REMOVE
