@@ -117,7 +117,7 @@ exports.getItems = async (id, isAdmin) => {
     });
 
     if(items.length) {
-        await addSearchData(items);
+        await addMetadataFields(items);
         await addKalturaData(items);
         await addRepositoryData(items);
         await addIIIFData(items);
@@ -126,7 +126,7 @@ exports.getItems = async (id, isAdmin) => {
     return items;
 }
 
-const addSearchData = async (items) => {
+const addMetadataFields = async (items) => {
     await Promise.all(items.map(async (item) => {
         let {
             subjects = null, 
@@ -146,7 +146,7 @@ const addSearchData = async (items) => {
         }
 
         if(item.items) {
-            await addSearchData(item.items);
+            await addMetadataFields(item.items);
         }
     }));
 }
@@ -263,9 +263,11 @@ const addIIIFData = async (items) => {
 
 const addKalturaData = async (items) => {
     await Promise.all(items.map((item) => {
-        const {is_kaltura_item, media} = item;
+        const {is_kaltura_item = null, media = null} = item;
+
         if(is_kaltura_item) {
-            item.kaltura_id = media;
+            const {kaltura_id: kalturaId = null} = item.kaltura || {};
+            item.kaltura_id = kalturaId || media || null;
         }
         else if(item.items) {
             addKalturaData(item.items);
