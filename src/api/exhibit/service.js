@@ -10,6 +10,7 @@ const FS = require('fs');
 const AXIOS = require('axios');
 
 const HTTPS = require('https');
+const { isNull } = require('util');
 const AGENT = new HTTPS.Agent({  
   rejectUnauthorized: false
 });
@@ -127,21 +128,22 @@ exports.getItems = async (id, isAdmin) => {
 }
 
 const addMetadataFields = async (items) => {
-    await Promise.all(items.map(async (item) => {
+    await Promise.all(items.map(async (item) => { // remove, convert to single item input
         let {
-            subjects = null, 
             media_subjects = null
-        } = item;
-
-        if(!subjects) { subjects = [] }
+        } = item; 
         
         // subjects
         if(media_subjects) {
+            let {subjects = null} = item;
+            if(!subjects) { subjects = [] } 
+
             for(let bucket of Object.keys(media_subjects)) {
                 const values = media_subjects[bucket];
                 if(!values || !values.length) continue;
                 subjects = subjects.concat(values);
             }
+           
             item.subjects = subjects;
         }
 
@@ -152,9 +154,9 @@ const addMetadataFields = async (items) => {
 }
 
 const addRepositoryData = async (items) => {
-    let repositoryItemId, data = {};
+    let repositoryItemId, repositoryItemData = {};
     
-    for(let item of items) {
+    for(let item of items) { 
         const {
             is_repo_item = null,
         } = item;
@@ -166,34 +168,39 @@ const addRepositoryData = async (items) => {
             } = item;
 
             repositoryItemId = item.media;
-            item.media = null; // remove the repository item id
-            data = CACHE.get(repositoryItemId) || false;
+            item.media = null; // remove the repository item id from the media field
+            repositoryItemData = CACHE.get(repositoryItemId) || false;
 
             // fetch the repository item data
-            if(data == false) {
+            if(repositoryItemData == false) {
                 LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
-                data = await REPOSITORY.importItemData({
+                repositoryItemData = await REPOSITORY.importItemData({
                     repositoryItemId,
                 });
 
-                if(data) {
-                    CACHE.set(repositoryItemId, data);
+                if(repositoryItemData) {
+                    CACHE.set(repositoryItemId, repositoryItemData);
                 }
                 else {
-                    data = {};
+                    repositoryItemData = {};
                 }
             }
 
+            const {
+                subjects:   repositoryItemSubjects = null,
+                kaltura_id: repositoryItemKalturaId = null
+            } = repositoryItemData;
+
             // assign repository item subjects to the existing item subjects
-            if(data.subjects) {
+            if(repositoryItemSubjects) {
                 if(!item.subjects) item.subjects = [];
-                item.subjects = [...new Set([...item.subjects, ...data.subjects])];
+                item.subjects = [...new Set([...item.subjects, ...repositoryItemSubjects])];
             }
 
             // flag item as kaltura item if kaltura id is present in the repository data, and assign the kaltura id to the media field for the item
-            if(data.kaltura_id) {
+            if(repositoryItemKalturaId) {
                 item.is_kaltura_item = 1;
-                item.media = data.kaltura_id;
+                item.media = repositoryItemKalturaId;
             }
 
             if(enableIIIFItem) {
@@ -209,7 +216,6 @@ const addRepositoryData = async (items) => {
                 }
             }
             
-            // fetch and store the repository resource file
             if (fetchResourceFile) {
                 LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
                 const resourcePath = `${resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
@@ -218,8 +224,7 @@ const addRepositoryData = async (items) => {
                 LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
             }
 
-            // append all repository data to the item object in a "repository_data" field so that it is available for use in the frontend if needed
-            item.repository_data = data;
+            item.repository_data = repositoryItemData;
         }
         else if(item.items) {
             await addRepositoryData(item.items);
@@ -228,9 +233,11 @@ const addRepositoryData = async (items) => {
 }
 
 const addIIIFData = async (items) => {
-
-    await Promise.all(items.map(async (item) => {
-        const {uuid, media_iiif} = item;
+    await Promise.all(items.map(async (item) => { 
+        const {
+            uuid, 
+            media_iiif
+        } = item;
 
         if(media_iiif) {
             const {manifest_url = ""} = media_iiif;
@@ -262,8 +269,11 @@ const addIIIFData = async (items) => {
 }
 
 const addKalturaData = async (items) => {
-    await Promise.all(items.map((item) => {
-        const {is_kaltura_item = null, media = null} = item;
+    await Promise.all(items.map((item) => { 
+        const {
+            is_kaltura_item = null, 
+            media = null
+        } = item;
 
         if(is_kaltura_item) {
             const {kaltura_id: kalturaId = null} = item.kaltura || {};
