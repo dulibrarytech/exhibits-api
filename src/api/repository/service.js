@@ -230,8 +230,6 @@ exports.search = async (queryString) => {
 
             return result;
         });
-
-        console.log("test: repo search results: ", results);
     }
     catch(error) {
         LOGGER.module().error(`Error searching repository: ${error}`);
