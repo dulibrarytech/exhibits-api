@@ -56,6 +56,10 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
             "path": "type.keyword"        
         },
         {
+            "field": "subjects",
+            "path": "subjects.keyword"
+        },
+        {
             "field": "media_subjects.topics",
             "path": "media_subjects.topics.keyword"
         },
