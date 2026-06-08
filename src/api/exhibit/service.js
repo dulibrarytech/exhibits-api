@@ -1,7 +1,7 @@
 'use strict'
 
 const CONFIG = require('../../config/configuration.js');
-const {repository: REPOSITORY_SETTINGS} = require('../../config/appSettings.js');
+const APP_SETTINGS = require('../../config/appSettings.js');
 const ELASTIC = require('../../libs/elastic_search');
 const LOGGER = require('../../libs/log4js');
 const REPOSITORY = require('../repository/service');
@@ -10,12 +10,9 @@ const FS = require('fs');
 const AXIOS = require('axios');
 
 const HTTPS = require('https');
-const { isNull } = require('util');
 const AGENT = new HTTPS.Agent({  
   rejectUnauthorized: false
 });
-
-// const FETCH_REPOSITORY_RESOURCE_FILE = false; // TODO to settings
 
 const {
     repositoryIIIFImageUrl,
@@ -25,6 +22,10 @@ const {
     resourceLocalStorageLocation
 
 } = CONFIG;
+
+const {
+    repository: REPOSITORY_SETTINGS
+} = APP_SETTINGS;
 
 const {
     enableIIIFThumbnail,
