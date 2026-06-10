@@ -103,12 +103,12 @@ exports.getItems = async (id, isAdmin) => {
         LOGGER.module().error(`Error retrieving exhibit items: ${error}`);
     }
 
-    // remove unpublished items if api key is absent
+    // remove unpublished items if not admin request
     items = items.filter((result) => {
         return isAdmin ? true : result.is_published == 1;
     });
 
-    // remove unpublished grid items (in items []) if api key is absent
+    // remove unpublished grid items (in items []) if not admin request
     items = items.map((item) => {
         if(item.items) {  
             item.items = item.items.filter((item) => {
@@ -272,16 +272,24 @@ const addIIIFData = async (items) => {
 const addKalturaData = async (items) => {
     await Promise.all(items.map((item) => { 
         const {
-            is_kaltura_item = null, 
-            media = null
+            kaltura: kalturaData = null, 
+            media = null,
         } = item;
 
-        if(is_kaltura_item) {
-            const {kaltura_id: kalturaId = null} = item.kaltura || {};
+        if(kalturaData) {
+            const {
+                kaltura_id: kalturaId = null
+            } = kalturaData;
+
+            item.is_kaltura_item = 1;
             item.kaltura_id = kalturaId || media || null;
+
+            if(!item.kaltura_id) {
+                LOGGER.module().error(`Kaltura id not found in kaltura item: ${item.uuid}`);
+            }
         }
         else if(item.items) {
             addKalturaData(item.items);
         }
-    }))
+    }));
 }
