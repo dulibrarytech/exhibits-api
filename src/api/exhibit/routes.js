@@ -24,8 +24,4 @@ ROUTER.get('/:id/items', (req, res) => {
   CONTROLLER.getExhibitItems(req, res);
 });
 
-ROUTER.get('/:id/resource/:filename', (req, res) => {
-  CONTROLLER.getExhibitItemResource(req, res);
-});
-
 module.exports = ROUTER;

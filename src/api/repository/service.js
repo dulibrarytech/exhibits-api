@@ -7,21 +7,22 @@ const FS = require('fs');
 const HTTPS = require('https');
 const AXIOS = require('axios');
 const MIME_TYPES = require('mime-types');
-const AGENT = new HTTPS.Agent({
+const HTTPS_AGENT = new HTTPS.Agent({
   rejectUnauthorized: false,
 });
 
 const FILE_FETCH_TIMEOUT = 90000;
 
-let {
+const {
     repositoryDomain,
     repositoryApiKey,
-    repositoryObjectEndpoint,
-    repositoryCollectionEndpoint,
+    repositoryObjectPageUrl,
+    repositoryCollectionPageUrl,
     repositoryItemResourceEndpoint,
     repositoryItemThumbnailEndpoint,
     repositoryItemDataEndpoint,
     repositorySearchEndpoint,
+    repositoryIIIFThumbnailUrl,
 
 } = CONFIG;
 
@@ -44,7 +45,7 @@ exports.importItemData = async (params) => {
     try {
         LOGGER.module().info(`Fetching data for repository item: ${repositoryItemId}...`);
         let {data} = await AXIOS.get(objectDataUrl, {
-            httpsAgent: AGENT,
+            httpsAgent: HTTPS_AGENT,
         });
         LOGGER.module().info(`Data fetch complete for repository item: ${repositoryItemId}`);
 
@@ -88,7 +89,7 @@ exports.importItemData = async (params) => {
     try {
         LOGGER.module().info(`Fetching data for repository collection: ${collection_id}`);
         let {data} = await AXIOS.get(collectionDataUrl, {
-            httpsAgent: AGENT,
+            httpsAgent: HTTPS_AGENT,
         });
 
         LOGGER.module().info(`Collection data fetch successful.`);
@@ -102,8 +103,8 @@ exports.importItemData = async (params) => {
     const collection_name = collectionData["title"] || null;
 
     /* define the links to the repository for the exhibit item */
-    const link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", repositoryItemId);
-    const link_to_collection = `${repositoryDomain}/${repositoryCollectionEndpoint}`.replace("{collection_id}", collection_id || "null");
+    const link_to_item = `${repositoryDomain}/${repositoryObjectPageUrl}`.replace("{item_id}", repositoryItemId);
+    const link_to_collection = `${repositoryDomain}/${repositoryCollectionPageUrl}`.replace("{collection_id}", collection_id || "null");
     const object_datastream_url = `${repositoryDomain}/${repositoryItemDataEndpoint}`.replace("{item_id}", repositoryItemId);
     const thumbnail_datastream_url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", repositoryItemId);
 
@@ -134,12 +135,13 @@ exports.importItemData = async (params) => {
 exports.importItemResourceFile = async (repositoryItemId, writeFilePath, writeFileName) => {
     let resourceFileExists = false;
     let repositoryStream = null;
+    let streamResponseData = {};
+    let streamUrl = "";
 
-    let streamResponseData;
     try {
-        const streamUrl = `${repositoryDomain}/${repositoryItemResourceEndpoint}`.replace("{item_id}", repositoryItemId);
+        streamUrl = `${repositoryDomain}/${repositoryItemResourceEndpoint}`.replace("{item_id}", repositoryItemId);
         streamResponseData = await AXIOS.head(streamUrl, {
-            httpsAgent: AGENT
+            httpsAgent: HTTPS_AGENT
         });
     }
     catch(error) {
@@ -147,7 +149,7 @@ exports.importItemResourceFile = async (repositoryItemId, writeFilePath, writeFi
         return false;
     }
     
-    const fileExtension = MIME_TYPES.extension(streamResponseData.headers.get('content-type') || "");
+    const fileExtension = MIME_TYPES.extension(streamResponseData.headers?.get('content-type') || "");
     const resourceFilePath = `${writeFilePath}/${writeFileName}.${fileExtension}`;
     const resourceFileName = `${writeFileName}.${fileExtension}`;
 
@@ -168,7 +170,7 @@ exports.importItemResourceFile = async (repositoryItemId, writeFilePath, writeFi
     try {
         LOGGER.module().info(`Repository resource file not found. Fetching file from repository: ${streamUrl}...`);
         repositoryStream = await AXIOS.get(streamUrl, {
-            httpsAgent: AGENT,
+            httpsAgent: HTTPS_AGENT,
             responseType: 'stream',
             timeout: FILE_FETCH_TIMEOUT
         });
@@ -216,15 +218,17 @@ exports.search = async (queryString) => {
     
     try {
         LOGGER.module().info(`Searching repository: query: ${queryString}`);
+
         url = `${repositoryDomain}/${repositorySearchEndpoint}?${queryString}`;
         response = await AXIOS.get(url, {
-            httpsAgent: AGENT,
+            httpsAgent: HTTPS_AGENT,
         });
+        
+        results = response.data.map((result) => {
+            result.link_to_item = `${repositoryDomain}/${repositoryObjectPageUrl}`.replace("{item_id}", result["pid"]);
+            result.thumbnail_url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", result["pid"]);
 
-        results = response.data;
-        results.forEach((result) => {
-            result.link_to_item = `${repositoryDomain}/${repositoryObjectEndpoint}`.replace("{item_id}", result["pid"]);
-            result.thumbnail_datastream_url = `${repositoryDomain}/${repositoryItemThumbnailEndpoint}`.replace("{item_id}", result["pid"]);
+            return result;
         });
     }
     catch(error) {

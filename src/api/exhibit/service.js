@@ -1,6 +1,7 @@
 'use strict'
 
 const CONFIG = require('../../config/configuration.js');
+const APP_SETTINGS = require('../../config/appSettings.js');
 const ELASTIC = require('../../libs/elastic_search');
 const LOGGER = require('../../libs/log4js');
 const REPOSITORY = require('../repository/service');
@@ -8,20 +9,35 @@ const CACHE = require('../../libs/cache').create();
 const FS = require('fs');
 const AXIOS = require('axios');
 
-const https = require('https');
-const AGENT = new https.Agent({  
+const HTTPS = require('https');
+const AGENT = new HTTPS.Agent({  
   rejectUnauthorized: false
 });
 
-const FETCH_REPOSITORY_RESOURCE_FILE = false;
+const {
+    repositoryIIIFImageUrl,
+    repositoryIIIFThumbnailUrl,
+    repositoryIIIFManifestUrl,
+    repositoryIIIFServiceUrl,
+    resourceLocalStorageLocation
 
-const validateKey = (key) => {
-    return key && key == CONFIG.apiKey;
-}
+} = CONFIG;
 
-exports.getExhibits = async (key) => {
+const {
+    repository: REPOSITORY_SETTINGS
+} = APP_SETTINGS;
+
+const {
+    enableIIIFThumbnail,
+    enableIIIFItem,
+    fetchResourceFile,
+
+} = REPOSITORY_SETTINGS;
+
+exports.getExhibits = async (isAdmin) => {
     let exhibits = null;
     let page = null;
+
     let sort = [
         {"order": "asc"}
     ];
@@ -33,7 +49,7 @@ exports.getExhibits = async (key) => {
         }, sort, page);
 
         exhibits = results.filter((result) => {
-            return validateKey(key) ? true : result.is_published == 1;
+            return isAdmin ? true : result.is_published == 1;
         });
     }
     catch(error) {
@@ -43,12 +59,12 @@ exports.getExhibits = async (key) => {
     return exhibits;
 }
 
-exports.getExhibit = async (id, key) => {
+exports.getExhibit = async (id, isAdmin) => {
     let exhibit = null;
 
     try {
         let data = await ELASTIC.get(id);
-        exhibit = (validateKey(key) || data.is_published == 1) ? data : false;
+        exhibit = (isAdmin || data.is_published == 1) ? data : null;
     }
     catch(error) {
         LOGGER.module().error(`Error retrieving exhibit. Elastic response: ${error}`);
@@ -57,105 +73,172 @@ exports.getExhibit = async (id, key) => {
     return exhibit || {};
 }
 
-exports.getItems = async (id, key) => {
-    let items = null;
+exports.getItems = async (id, isAdmin) => {
+    let items = [];
 
-    let sort = [
+    const sort = [
         {"order": "asc"}
     ];
 
+    const query = {
+        bool: {
+            must: [
+                {
+                    match: { 
+                        is_member_of_exhibit: {
+                            query: id,
+                            operator: "AND"
+                        } 
+                    }
+                }
+            ],
+        }
+    };
+
     try {
-        let {results} = await ELASTIC.fetch({
-            match: { 
-                is_member_of_exhibit: {
-                    query: id,
-                    operator: "AND"
-                } 
-            }
-        }, sort, null);
-
-        // filter out unpublished items if api key is absent
-        items = results.filter((result) => {
-            return validateKey(key) ? true : result.is_published == 1;
-        });
-
-        // filter out unpublished grid items (in items []) if api key is absent
-        items = items.map((item) => {
-            if(item.items) {  
-                item.items = item.items.filter((item) => {
-                    return validateKey(key) ? true : item.is_published == 1;
-                })
-            }
-
-            return item;
-        });
+        let {results} = await ELASTIC.fetch(query, sort, null);
+        items = results || [];
     }
     catch(error) {
         LOGGER.module().error(`Error retrieving exhibit items: ${error}`);
     }
 
-    await getKalturaData(items);
-    await getRepositoryItemData(items);
-    await getIIIFData(items);
+    // remove unpublished items if not admin request
+    items = items.filter((result) => {
+        return isAdmin ? true : result.is_published == 1;
+    });
+
+    // remove unpublished grid items (in items []) if not admin request
+    items = items.map((item) => {
+        if(item.items) {  
+            item.items = item.items.filter((item) => {
+                return isAdmin ? true : item.is_published == 1;
+            })
+        }
+        return item;
+    });
+
+    if(items.length) {
+        await addMetadataFields(items);
+        await addKalturaData(items);
+        await addRepositoryData(items);
+        await addIIIFData(items);
+    }
 
     return items;
 }
 
-const getRepositoryItemData = async (items) => {
-    let repositoryItemId, data = {};
-    
-    for(let item of items) {
-        if(item.is_repo_item) {
-            repositoryItemId = item.media;
-            data = CACHE.get(repositoryItemId) || false;
+const addMetadataFields = async (items) => {
+    await Promise.all(items.map(async (item) => { // remove, convert to single item input
+        let {
+            media_subjects = null
+        } = item; 
+        
+        // subjects
+        if(media_subjects) {
+            let {subjects = null} = item;
+            if(!subjects) { subjects = [] } 
 
-            if(data == false) {
+            for(let bucket of Object.keys(media_subjects)) {
+                const values = media_subjects[bucket];
+                if(!values || !values.length) continue;
+                subjects = subjects.concat(values);
+            }
+           
+            item.subjects = subjects;
+        }
+
+        if(item.items) {
+            await addMetadataFields(item.items);
+        }
+    }));
+}
+
+const addRepositoryData = async (items) => {
+    let repositoryItemId, repositoryItemData = {};
+    
+    for(let item of items) { 
+        const {
+            is_repo_item = null,
+        } = item;
+
+        if(item.is_repo_item) {
+            const {
+                media = null,
+                subjects = null
+            } = item;
+
+            repositoryItemId = item.media;
+            item.media = null; // remove the repository item id from the media field
+            repositoryItemData = CACHE.get(repositoryItemId) || false;
+
+            // fetch the repository item data
+            if(repositoryItemData == false) {
                 LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
-                data = await REPOSITORY.importItemData({
+                repositoryItemData = await REPOSITORY.importItemData({
                     repositoryItemId,
                 });
 
-                // TODO - can this f() return false? if so, don't set cache here and skip all else in this block
-
-                if(data) {
-                    CACHE.set(repositoryItemId, data);
+                if(repositoryItemData) {
+                    CACHE.set(repositoryItemId, repositoryItemData);
                 }
                 else {
-                    data = {};
+                    repositoryItemData = {};
                 }
             }
 
-            if (data.kaltura_id) {
+            const {
+                subjects:   repositoryItemSubjects = null,
+                kaltura_id: repositoryItemKalturaId = null
+            } = repositoryItemData;
+
+            // assign repository item subjects to the existing item subjects
+            if(repositoryItemSubjects) {
+                if(!item.subjects) item.subjects = [];
+                item.subjects = [...new Set([...item.subjects, ...repositoryItemSubjects])];
+            }
+
+            // flag item as kaltura item if kaltura id is present in the repository data, and assign the kaltura id to the media field for the item
+            if(repositoryItemKalturaId) {
                 item.is_kaltura_item = 1;
-                item.media = data.kaltura_id;
+                item.media = repositoryItemKalturaId;
+            }
+
+            if(enableIIIFItem) {
+                item.media_iiif = {
+                    manifest_url:   `${repositoryIIIFManifestUrl}`.replace("{item_id}", repositoryItemId),
+                    image_url:      `${repositoryIIIFImageUrl}`.replace("{item_id}", repositoryItemId),
+                    service_url:    `${repositoryIIIFServiceUrl}`.replace("{item_id}", repositoryItemId),
+                };
+            }
+            if(enableIIIFThumbnail) {
+                item.thumbnail_iiif = {
+                    thumbnail_url:  `${repositoryIIIFThumbnailUrl}`.replace("{item_id}", repositoryItemId),
+                }
             }
             
-            if (FETCH_REPOSITORY_RESOURCE_FILE) {
+            if (fetchResourceFile) {
                 LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
-                
-                const resourcePath = `${CONFIG.resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
+                const resourcePath = `${resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
                 const resourceFilename = `${item.uuid}_repository_item_media`;
-
-                data.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
+                item.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
                 LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
             }
-            
-            // update media field to point to repository media file or url, if present
-            item.media = data.media || null;
 
-            // append all repository data to the item object in a "repository_data" field so that it is available for use in the frontend if needed
-            item.repository_data = data;
+            item.repository_data = repositoryItemData;
         }
         else if(item.items) {
-            await getRepositoryItemData(item.items);
+            await addRepositoryData(item.items);
         }
     }
 }
 
-const getIIIFData = async (items) => {
-
-    await Promise.all(items.map(async (item) => {
-        const {uuid, media_iiif} = item;
+const addIIIFData = async (items) => {
+    await Promise.all(items.map(async (item) => { 
+        const {
+            uuid, 
+            media_iiif
+        } = item;
 
         if(media_iiif) {
             const {manifest_url = ""} = media_iiif;
@@ -181,33 +264,32 @@ const getIIIFData = async (items) => {
             }
         }
         else if(item.items) {
-            await getIIIFData(item.items)
+            await addIIIFData(item.items)
         }
     }))
 }
 
-const getKalturaData = async (items) => {
-    await Promise.all(items.map((item) => {
-        const {is_kaltura_item, media} = item;
-        if(is_kaltura_item) {
-            item.kaltura_id = media;
+const addKalturaData = async (items) => {
+    await Promise.all(items.map((item) => { 
+        const {
+            kaltura: kalturaData = null, 
+            media = null,
+        } = item;
+
+        if(kalturaData) {
+            const {
+                kaltura_id: kalturaId = null
+            } = kalturaData;
+
+            item.is_kaltura_item = 1;
+            item.kaltura_id = kalturaId || media || null;
+
+            if(!item.kaltura_id) {
+                LOGGER.module().error(`Kaltura id not found in kaltura item: ${item.uuid}`);
+            }
         }
         else if(item.items) {
-            getKalturaData(item.items);
+            addKalturaData(item.items);
         }
-    }))
-}
-
-exports.resourceExists = async (exhibitId, filename) => {
-    let exists;
-    let filePath = `${CONFIG.resourceLocalStorageLocation}/${exhibitId}/${filename}`;
-
-    try {
-        exists = FS.existsSync(filePath);
-    }
-    catch(error) {
-        LOGGER.module().error(`Error verifying file in local storage: ${error} Storage location: ${filePath}`);
-    }
-
-    return exists || false;
+    }));
 }
