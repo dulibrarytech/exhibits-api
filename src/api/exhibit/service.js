@@ -13,7 +13,7 @@ const AGENT = new https.Agent({
   rejectUnauthorized: false
 });
 
-const FETCH_REPOSITORY_RESOURCE_FILE = false;
+const FETCH_REPOSITORY_RESOURCE_FILE = true;
 
 const validateKey = (key) => {
     return key && key == CONFIG.apiKey;
