@@ -167,12 +167,6 @@ exports.query = async (query={}, sort=null, page=null, aggs=null) => {
             }
         });
 
-        // test
-        let objectStructure = util.inspect(query, {showHidden: false, depth: null});
-        if(nodeEnv != "production") {
-            Logger.module().info('INFO: ' + `Elastic search query: ${objectStructure}`);
-        }
-
         let {results, aggregations = null} = HELPER.addNestedResultsAggregations(elasticResponse, "items");
 
         // append elastic results and data to search response object
@@ -211,7 +205,7 @@ exports.query = async (query={}, sort=null, page=null, aggs=null) => {
  * @param {*} page 
  * @returns 
  */
-exports.fetch = async (query={}, sort=null, page=null) => {
+exports.fetch = async (query={}, sort=null, page=null, filter=null) => {
     let response = { results: [], resultCount: 0 };
     let size = page ? RESULTS_PAGE_LENGTH : DEFAULT_RESULTS_SIZE;
     let from = page ? size * (page-1) : 0;
@@ -224,6 +218,7 @@ exports.fetch = async (query={}, sort=null, page=null) => {
                 from,
                 query,
                 sort: sort || undefined,
+                post_filter: filter || undefined
             }
         });
 

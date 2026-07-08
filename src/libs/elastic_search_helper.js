@@ -1,9 +1,9 @@
 /**
  * 
- * Combines the nested results (inner_hits) aggregation buckets and document counts with the main aggregations buckets and document counts
+ * Combines the nested results (inner_hits) aggregation buckets and document count values with the top-level aggregations 
  * 
- * @param {*} elasticResponse - Elastic api query response object
- * @param {*} nestedField - The nested index field (code update required for multiple nested fields)
+ * @param {*} elasticResponse - Initial elastic search query response object, containing top-level aggregations and nested (inner_hits) aggregations
+ * @param {*} nestedField - The nested index field that contains the 'inner_hits' aggregations
  * 
  * @typedef {Object} CombinedResults
  * @property {Array} results - Top level and nested search results
