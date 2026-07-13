@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
   res.sendStatus(403)
 });
 
-app.use('/api/v1', api);
+app.use('/api/v2', api);
 app.use(notFound);
 app.use(errorHandler);
 
