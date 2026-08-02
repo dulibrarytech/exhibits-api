@@ -134,7 +134,6 @@ const addMetadataFields = async (items) => {
             media_subjects = null
         } = item; 
         
-        // subjects
         if(media_subjects) {
             let {subjects = null} = item;
             if(!subjects) { subjects = [] } 
@@ -204,17 +203,36 @@ const addRepositoryData = async (items) => {
                 item.media = repositoryItemKalturaId;
             }
 
+            // adds iiif data to repository item, if not present
             if(enableIIIFItem) {
-                item.media_iiif = {
-                    manifest_url:   `${repositoryIIIFManifestUrl}`.replace("{item_id}", repositoryItemId),
-                    image_url:      `${repositoryIIIFImageUrl}`.replace("{item_id}", repositoryItemId),
-                    service_url:    `${repositoryIIIFServiceUrl}`.replace("{item_id}", repositoryItemId),
+                const {
+                    manifest_url: repositoryItemManifestUrl = null,
+                    image_url: repositoryItemImageUrl = null,
+                    service_url: repositoryItemServiceUrl = null
+                } = item.media_iiif || {};
+
+                // if the item does not have media_iiif data, or if the media_iiif data is missing any of the required fields, assign the repository iiif urls to the item
+                const repository_media_iiif = {
+                    manifest_url:   repositoryItemManifestUrl || `${repositoryIIIFManifestUrl}`.replace("{item_id}", repositoryItemId),
+                    image_url:      repositoryItemImageUrl ||`${repositoryIIIFImageUrl}`.replace("{item_id}", repositoryItemId),
+                    service_url:    repositoryItemServiceUrl || `${repositoryIIIFServiceUrl}`.replace("{item_id}", repositoryItemId),
                 };
+
+                item.media_iiif = repository_media_iiif;
             }
+
+            // adds iiif thumbnail data to repository item, if not present
             if(enableIIIFThumbnail) {
-                item.thumbnail_iiif = {
-                    thumbnail_url:  `${repositoryIIIFThumbnailUrl}`.replace("{item_id}", repositoryItemId),
-                }
+                const {
+                    thumbnail_url: repositoryItemThumbnailUrl = null,
+                } = item.thumbnail_iiif || {};
+
+                // if the item does not have thumbnail_iiif data, or if the thumbnail_iiif data is missing the required field, assign the repository iiif thumbnail url to the item
+                const repository_thumbnail_iiif = {
+                    thumbnail_url: repositoryItemThumbnailUrl || `${repositoryIIIFThumbnailUrl}`.replace("{item_id}", repositoryItemId),
+                };
+
+                item.thumbnail_iiif = repository_thumbnail_iiif;
             }
             
             if (fetchResourceFile) {
