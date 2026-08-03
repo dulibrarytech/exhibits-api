@@ -4,14 +4,27 @@
 
 'use strict'
 
-const util = require('util');
-const Elastic = require('../../libs/elastic_search');
-const Logger = require('../../libs/log4js');
-// const Settings = require('../../config/settings');
-const Configuration = require('../../config/configuration');
-const {getRepositoryThumbnailUri} = require('../repository/helper');
+const ELASTIC = require('../../libs/elastic_search');
+const LOGGER = require('../../libs/log4js');
+const APP_SETTINGS = require('../../config/appSettings.js');
 
-exports.search = async (terms, type=null, facets=null, sort=null, page=null, exhibitId=null) => {
+const {
+    getRepositoryThumbnailUri
+} = require('../repository/helper');
+
+const {
+    search: SEARCH_SETTINGS
+} = APP_SETTINGS;
+
+const {
+    objectTypes: OBJECT_TYPES,
+    itemTypes: ITEM_TYPES,
+    searchFields: SEARCH_FIELDS,
+    aggregationFields: AGGREGATION_FIELDS_ITEM,
+
+} = SEARCH_SETTINGS;
+
+exports.search = async (terms, type=null, facets=null, sort=null, page=null, exhibitId=null) => { 
     let queryData = null;
     let queryType = null;
     let aggsData = {};
@@ -25,59 +38,9 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     let facetQuery = [];
     let nestedFacetQuery = [];
 
-    // let {
-    //     objectTypes:         OBJECT_TYPES,
-    //     itemTypes:           ITEM_TYPES,
-    //     searchFields:        SEARCH_FIELDS,
-    //     aggregationFields:   AGGREGATION_FIELDS_ITEM,
-    //     maxAggregationCount: MAX_AGGREGATION_COUNT
-    // } = Settings;
-
-    //////////////////////////
-    // TODO: move to settings
-    //////////////////////////
-    // object types to include in the search
-    const OBJECT_TYPES = ["exhibit", "item", "grid", "vertical_timeline", "vertical_timeline_2"];
-
-    // item types to include in search
-    const ITEM_TYPES = ["image", "large_image", "audio", "video", "pdf"];
-
-    // fulltext search fields
-    const SEARCH_FIELDS = ["title", "description", "text", "caption", "media_subjects.topics", "media_subjects.genre_form", "media_subjects.places"];
-    
-    // fields to aggregate in search results
-    const AGGREGATION_FIELDS_ITEM = [
-        {
-            "field": "item_type",
-            "path": "item_type.keyword"
-        },
-        {
-            "field": "type",
-            "path": "type.keyword"        
-        },
-        {
-            "field": "subjects",
-            "path": "subjects.keyword"
-        },
-        {
-            "field": "media_subjects.topics",
-            "path": "media_subjects.topics.keyword"
-        },
-        {
-            "field": "media_subjects.genre_form",
-            "path": "media_subjects.genre_form.keyword"
-        },
-        {
-            "field": "media_subjects.places",
-            "path": "media_subjects.places.keyword"
-        },
-    ];
-
+    // module settings
     const MAX_NESTED_ITEMS_RESULTS = 100;
     const MAX_AGGREGATION_COUNT = 100;
-    ////////////////////////
-    // END move to settings
-    ////////////////////////
 
     // object type (top level only (should))
     if(type) {
@@ -110,7 +73,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         }
     });
 
-    // TODO find a better way to detect multi word terms
+    // TODO: find a better way to detect multi word terms
     if(terms.indexOf('\\ ') > 0) {
         queryType = "match_phrase";
         terms = terms.replace('\\', '')
@@ -237,7 +200,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
 
     try {
         // execute the search for top level documents
-        resultsData = await Elastic.query(queryData, sortData, page, aggsData);
+        resultsData = await ELASTIC.query(queryData, sortData, page, aggsData, "items");
 
         // add the aggs bucket for exhibits
         let exhibitAggs = {
@@ -271,7 +234,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
 
         // get the exhibit title
         for(let agg of exhibitAggs.is_member_of_exhibit) {
-            let exhibit = await Elastic.get(agg.key);
+            let exhibit = await ELASTIC.get(agg.key);
             agg.display = exhibit.title;
         }
 
@@ -291,7 +254,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
 
     }
     catch(error) {
-        Logger.module().error(`Error searching index. Elastic response: ${error}`);
+        LOGGER.module().error(`Error searching index. Elastic response: ${error}`);
     }
 
     return resultsData;

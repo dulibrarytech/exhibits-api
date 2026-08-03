@@ -6,6 +6,7 @@
 
 const ROUTER = require('express').Router();
 const CONTROLLER = require('./controller');
+
 const { sanitizeElasticQuery } = require('../../middlewares/exhibits-api.elastic.middleware');
 const { searchIndexValidator } = require('../../middlewares/exhibits-api.search.middleware');
 

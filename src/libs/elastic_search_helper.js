@@ -22,9 +22,10 @@ exports.addNestedResultsAggregations = (elasticResponse, nestedField) => {
     // check if there are inner_hits present on this search result
     if(_.get(result, ['inner_hits', nestedField, 'hits', 'total', 'value']) > 0) {
 
-        for(let field in result.inner_hits) {
+        for(let field in result.inner_hits) { // field will be "items"
 
             for(let innerResult of _.get(result, ['inner_hits', field, 'hits', 'hits'])) {
+
                 // push the inner result for each field to the top level results
                 results.push({
                     container_uuid: result._source.uuid,
@@ -35,16 +36,16 @@ exports.addNestedResultsAggregations = (elasticResponse, nestedField) => {
                 // create an agg bucket for each agg field in the top level search, and push it if the field is present in the nested result
                 for(let aggField in aggregations) {
 
-                    let field = _.get(innerResult, ['_source', aggField]);
-                    if(!field) continue;
+                    // as above, but field can be array of strings, so we need to handle that case
+                    let values = _.get(innerResult, ['_source', ...aggField.split('.')]); // handle aggregation forld path as dot-delimited heirarchy, e.g. "items.is_member_of_exhibit" => ["_source", "items", "is_member_of_exhibit"]
+                    if(!values) continue;
+                    if(typeof values != "object") values = [values]; // TODO: if typeof innerfield == string
 
-                    if(typeof field != "object") field = [field];
-                    for(let value of field) {
-
+                    for(let value of _.uniq(values)) {
                         // find the bucket for this aggregation field if it exists
                         let bucket = aggregations[aggField].buckets.find((bucket) => {
                             return bucket.key == value;
-                        })
+                        });
 
                         if(bucket) {
                             // increment the nested aggregation bucket count
@@ -55,7 +56,7 @@ exports.addNestedResultsAggregations = (elasticResponse, nestedField) => {
                             aggregations[aggField].buckets.push({
                                 key: value,  
                                 doc_count: 1
-                            })
+                            });
                         }
                     }
                 }
@@ -68,6 +69,15 @@ exports.addNestedResultsAggregations = (elasticResponse, nestedField) => {
         results.push({
             score: result._score,
             ...result._source,
+        });
+    }
+  }
+
+  // sort on aggregations[aggField].buckets by doc_count descending
+  if(aggregations) {
+    for(let aggField in aggregations) {
+        aggregations[aggField].buckets = aggregations[aggField].buckets.sort((a, b) => {
+            return b.doc_count - a.doc_count;
         });
     }
   }
