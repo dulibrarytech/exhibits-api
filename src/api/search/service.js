@@ -24,7 +24,6 @@ const {
 
 } = SEARCH_SETTINGS;
 
-// TODO: exhibitId ambiguation: "scope" => {field: value} e.g. {"exhibitId": "12345"}, then convert all exhibitId code below ("exhibitId" specifics are added by frontend)
 exports.search = async (terms, type=null, facets=null, sort=null, page=null, exhibitId=null) => { 
     let queryData = null;
     let queryType = null;
@@ -201,7 +200,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
 
     try {
         // execute the search for top level documents
-        resultsData = await ELASTIC.query(queryData, sortData, page, aggsData);
+        resultsData = await ELASTIC.query(queryData, sortData, page, aggsData, "items");
 
         // add the aggs bucket for exhibits
         let exhibitAggs = {

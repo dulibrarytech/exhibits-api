@@ -137,16 +137,15 @@ exports.fieldSearch = async (field, terms, nested = null) => {
  * combines document level results with nested object results
  * combines all aggregations from the results into one object
  * omits results that contain a nested field
- * 
- * expects nested objects to be in the field 'items[]' 
- * 
+ *  * 
  * @param {*} query 
  * @param {*} sort 
  * @param {*} page 
  * @param {*} aggs 
+ * @param {*} nestedField - the nested field to search for inner_hits
  * @returns 
  */
-exports.query = async (query={}, sort=null, page=null, aggs=null) => {
+exports.query = async (query={}, sort=null, page=null, aggs=null, nestedField=null) => {
     let searchResponse = { 
         results: [], 
         resultCount: 0 
@@ -166,8 +165,8 @@ exports.query = async (query={}, sort=null, page=null, aggs=null) => {
                 aggregations: aggs || undefined,
             }
         });
-
-        let {results, aggregations = null} = HELPER.addNestedResultsAggregations(elasticResponse, "items");
+        
+        let {results, aggregations = null} = HELPER.addNestedResultsAggregations(elasticResponse, nestedField);
 
         // append elastic results and data to search response object
         searchResponse.resultCount = results.length;
