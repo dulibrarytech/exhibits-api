@@ -230,21 +230,23 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         // sort the exhibit aggregations by count descending
         exhibitAggs.is_member_of_exhibit = exhibitAggs.is_member_of_exhibit.sort((a, b) => {
             return b.doc_count - a.doc_count;
-        })
+        });
 
-        // get the exhibit title
+        // get the exhibit title string for each is_member_of_exhibit aggregation "key" (the exhibit id)
         for(let agg of exhibitAggs.is_member_of_exhibit) {
             let exhibit = await ELASTIC.get(agg.key);
             agg.display = exhibit.title;
         }
 
-        // add repository thumbnail uri "thumbnail" field if the field has not been set
+        // add the parent exhibit title string to the search result data (for item results only)
+        const parentExhibitAggs = exhibitAggs.is_member_of_exhibit;
         resultsData.results = resultsData.results.map((result) => {
-            if(result.is_repo_item && !result.thumbnail) {
-                return {...result, thumbnail: getRepositoryThumbnailUri(result.media)};
-            }
-            else {
-                return result;
+            const parentExhibit = parentExhibitAggs.find((exhibit) => {
+                return exhibit.key == result.is_member_of_exhibit;
+            }); 
+            return {
+                ...result,
+                parent_exhibit_title: parentExhibit?.display || undefined, // "display" is the exhibit title from the aggregation data TODO: change this field name to "title"
             }
         });
 
