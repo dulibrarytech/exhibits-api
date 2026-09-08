@@ -7,6 +7,7 @@
 const ELASTIC = require('../../libs/elastic_search');
 const LOGGER = require('../../libs/log4js');
 const APP_SETTINGS = require('../../config/appSettings.js');
+const REPO_SERVICE = require('../repository/service.js');
 
 const {
     getRepositoryThumbnailUri,
@@ -171,6 +172,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         }
     };
 
+    // build aggregation data object
     for(let {field, path} of AGGREGATION_FIELDS_ITEM) {
         aggsData[field] = {
             terms: { 
@@ -199,95 +201,68 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         });
     }
 
+    // add the parent exhibit aggregation field to the aggs object
+    aggsData['is_member_of_exhibit'] = {
+        terms: {
+            field: "is_member_of_exhibit.keyword",
+            size: MAX_AGGREGATION_COUNT
+        }
+    }
+
     try {
-        // execute the search for top level documents
+        // execute the search (the elastic module query() function handles top level and nested documents and returns a flat list of results)
         resultsData = await ELASTIC.query(queryData, sortData, page, aggsData, "items");
 
-        /////////////////////////////////////////////////////
-        // TODO to separate f(): resultsData.results = getRepositoryItemResourceUrls()
-        /////////////////////////////////////////////////////
-        // add repository thumbnail uri "thumbnail" field if the field has not been set
-        resultsData.results = resultsData.results.map((result) => {
-            if(result.is_repo_item) {
-                result = {
-                    ...result, 
-                    thumbnail: getRepositoryThumbnailUri(result.media),
-                    media: getRepositoryResourceUri(result.media),
-                };
-            }
-            return result;
-        });
-        /////////////////////////////////////////////////////
-        // END to separate f()
-        /////////////////////////////////////////////////////
-
-        /////////////////////////////////////////////////////
-        // TODO: to separate f(): exhibitAggs = getCombinedExhibitResultAggregations
-        /////////////////////////////////////////////////////
-        // add the aggs bucket for exhibits
-        let exhibitAggs = {
-            is_member_of_exhibit: []
-        };
-
-        // add the exhibits to the aggregation data
-        for(let {type, is_member_of_exhibit} of resultsData.results) {
-            if(type == "exhibit") continue;
-
-            let exhibitAgg = exhibitAggs.is_member_of_exhibit.find(({key}) => {
-                return key == is_member_of_exhibit;
-            })
-
-            if(!exhibitAgg) {
-                exhibitAggs.is_member_of_exhibit.push({
-                    key: is_member_of_exhibit,
-                    display: "",
-                    doc_count: 1
-                })
-            }
-            else {
-                exhibitAgg.doc_count++;
-            }
-        }
-
-        // sort the exhibit aggregations by count descending
-        exhibitAggs.is_member_of_exhibit = exhibitAggs.is_member_of_exhibit.sort((a, b) => {
-            return b.doc_count - a.doc_count;
-        });
-        /////////////////////////////////////////////////////
-        // END to separate f()
-        /////////////////////////////////////////////////////
-
-        /////////////////////////////////////////////////////
-        // TODO: to sep f():
-        /////////////////////////////////////////////////////
-        // resultsData.results = get parent exhibit title strings
-        // get the exhibit title string for each is_member_of_exhibit aggregation "key" (the exhibit id)
-        for(let agg of exhibitAggs.is_member_of_exhibit) {
-            let exhibit = await ELASTIC.get(agg.key);
-            agg.display = exhibit.title;
-        }
-
-        // add the parent exhibit title string to the search result data (for item results only)
-        const parentExhibitAggs = exhibitAggs.is_member_of_exhibit;
-        resultsData.results = resultsData.results.map((result) => {
-            const parentExhibit = parentExhibitAggs.find((exhibit) => {
-                return exhibit.key == result.is_member_of_exhibit;
-            }); 
-            return {
-                ...result,
-                parent_exhibit_title: parentExhibit?.display || undefined, // "display" is the exhibit title from the aggregation data TODO: change this field name to "title"
-            }
-        });
-        /////////////////////////////////////////////////////
-        // END to separate f()
-        /////////////////////////////////////////////////////
-
-        // append the 'is_member_of_exhibit' aggregations to the main aggregations
-        resultsData.aggregations = {...resultsData.aggregations, ...exhibitAggs}
-        // TODO: resultsData.aggregations = getCombinedExhibitAndItemResultAggregations()
     }
     catch(error) {
         LOGGER.module().error(`Error searching index. Elastic response: ${error}`);
+    }
+
+    try {
+        // add repository data to the result (repository item results)
+        resultsData.results = await Promise.all(resultsData.results.map(async (result) => {
+            if(result.is_repo_item) {
+                result = {
+                    ...result, 
+                    repository_data: await REPO_SERVICE.importItemData({repositoryItemId: result.media}),
+                    thumbnail:       getRepositoryThumbnailUri(result.media),
+                    media:           getRepositoryResourceUri(result.media),
+                };
+            }
+            return result;
+        }));
+    }
+    catch(error) {
+        LOGGER.module().error(`Error retrieving repository item data for search results: ${error}`);
+    }
+
+    try {
+        // add parent exhibit title to the result (item results)
+        resultsData.results = await Promise.all(resultsData.results.map(async (result) => {
+            return {
+                ...result,
+                parent_exhibit_title: await ELASTIC.get(result.is_member_of_exhibit).then((exhibit) => {
+                    return exhibit.title;
+                }).catch((error) => {
+                    LOGGER.module().error(`Error retrieving parent exhibit title for result: ${result.uuid}. Error: ${error}`);
+                    return undefined;
+                })
+            }
+        }));
+    }
+    catch(error) {
+        LOGGER.module().error(`Error retrieving parent exhibit title data for search results: ${error}`);
+    }
+
+    try {
+        // add exhibit titles to the aggregation data (client will display the title in the facet list)
+        for(let agg of resultsData.aggregations.is_member_of_exhibit) {
+            let exhibit = await ELASTIC.get(agg.key);
+            agg.display = exhibit.title;
+        }
+    }
+    catch(error) {
+        LOGGER.module().error(`Error retrieving parent exhibit title data for search result aggregations: ${error}`);
     }
 
     return resultsData;
