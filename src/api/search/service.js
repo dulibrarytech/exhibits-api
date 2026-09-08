@@ -44,7 +44,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     const MAX_NESTED_ITEMS_RESULTS = 100;
     const MAX_AGGREGATION_COUNT = 100;
 
-    // object type (top level only (should))
+    // object type (match in top level documents only)
     if(type) {
         objectTypes.push({
             match: { type }
@@ -56,7 +56,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         })
     }
 
-    // match item type (top level and nested)
+    // match item type (match in top level and nested documents)
     itemTypes = ITEM_TYPES.map((item_type) => {
         return {match: { item_type }}
     });
@@ -75,16 +75,17 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         }
     });
 
-    // TODO: find a better way to detect multi word terms
+    // use match_phrase query for single terms that contain multiple words (terms from request data that were enclosed in double quotes) TODO: find a better way to detect multi word terms
     if(terms.indexOf('\\ ') > 0) {
         queryType = "match_phrase";
         terms = terms.replace('\\', '')
     }
+    // use match query for all other terms
     else {
         queryType = "match";
     }
 
-    // add top level index fields
+    // add top level document and nested document index fields
     searchFields = SEARCH_FIELDS.map((field) => {
         return {
             [queryType]: {
@@ -100,6 +101,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         }
     });
 
+    // add the facet query (top level and nested documents) - one match query for each selected facet item (selected filter value)
     if(facets) {
         for(let key in facets) {
 
@@ -122,6 +124,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         }
     }
 
+    // build the main search query object (top level and nested documents) This query is included eith the 'itemTypes' query in a 'should' clause in the top level query object. This allows the search to return results that match either the top level document or the nested document.
     let mainQuery = [
         {
             bool: {
@@ -158,11 +161,8 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
             }
         }
     ]
-    /*
-     * end main query
-     */
 
-    // build search query object
+    // build the elastic request "query" object - this object is added directly to the "query" field of the elastic search request data
     queryData = {
         bool: {
             must: [
@@ -208,10 +208,14 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
             size: MAX_AGGREGATION_COUNT
         }
     }
+    console.log("test: pre-search aggregation data:", aggsData);
 
     try {
         // execute the search (the elastic module query() function handles top level and nested documents and returns a flat list of results)
         resultsData = await ELASTIC.query(queryData, sortData, page, aggsData, "items");
+
+        //console.log("test: search results:", resultsData.results);
+        console.log("test: search aggregations:", resultsData.aggregations);
 
     }
     catch(error) {
@@ -255,11 +259,14 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     }
 
     try {
-        // add exhibit titles to the aggregation data (client will display the title in the facet list)
-        for(let agg of resultsData.aggregations.is_member_of_exhibit) {
+        // add additional fields to the aggregations data (parent exhibit title for item results)
+        resultsData.aggregations.is_member_of_exhibit = await Promise.all(resultsData.aggregations.is_member_of_exhibit.map(async (agg) => {
             let exhibit = await ELASTIC.get(agg.key);
-            agg.display = exhibit.title;
-        }
+            return {
+                ...agg,
+                display: exhibit.title
+            }
+        }));
     }
     catch(error) {
         LOGGER.module().error(`Error retrieving parent exhibit title data for search result aggregations: ${error}`);
