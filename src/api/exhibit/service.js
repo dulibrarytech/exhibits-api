@@ -121,7 +121,7 @@ exports.getItems = async (id, isAdmin) => {
     if(items.length) {
         await addMetadataFields(items);
         await addKalturaData(items);
-        await addRepositoryData(items);
+        items = await addRepositoryData(items);
         await addIIIFData(items);
     }
 
@@ -154,101 +154,103 @@ const addMetadataFields = async (items) => {
 }
 
 const addRepositoryData = async (items) => {
-    let repositoryItemId, repositoryItemData = {};
+    return await Promise.all(items.map(async (item) => {
+        if(item.items) {
+            item.items = await addRepositoryData(item.items);
+        }
+
+        return await createRepositoryDataObject(item);
+    }));
+}
+
+const createRepositoryDataObject = async (item) => {
     
-    for(let item of items) { 
+    const {
+        is_repo_item = null,
+    } = item;
+
+    if(is_repo_item) { 
+
+        let repositoryItemId = item.media;
+        item.media = null; // remove the repository item id from the media field
+
+        // fetch the repository item data
+        let repositoryItemData = CACHE.get(repositoryItemId) || false;
+        if(repositoryItemData == false) {
+            LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
+            repositoryItemData = await REPOSITORY.importItemData({
+                repositoryItemId,
+            });
+
+            if(repositoryItemData) {
+                CACHE.set(repositoryItemId, repositoryItemData);
+            }
+            else {
+                repositoryItemData = {};
+            }
+        }
+
         const {
-            is_repo_item = null,
-        } = item;
+            subjects:   repositoryItemSubjects = null,
+            kaltura_id: repositoryItemKalturaId = null
+        } = repositoryItemData;
 
-        if(item.is_repo_item) {
-            const {
-                media = null,
-                subjects = null
-            } = item;
-
-            repositoryItemId = item.media;
-            item.media = null; // remove the repository item id from the media field
-            repositoryItemData = CACHE.get(repositoryItemId) || false;
-
-            // fetch the repository item data
-            if(repositoryItemData == false) {
-                LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
-                repositoryItemData = await REPOSITORY.importItemData({
-                    repositoryItemId,
-                });
-
-                if(repositoryItemData) {
-                    CACHE.set(repositoryItemId, repositoryItemData);
-                }
-                else {
-                    repositoryItemData = {};
-                }
-            }
-
-            const {
-                subjects:   repositoryItemSubjects = null,
-                kaltura_id: repositoryItemKalturaId = null
-            } = repositoryItemData;
-
-            // assign repository item subjects to the existing item subjects
-            if(repositoryItemSubjects) {
-                if(!item.subjects) item.subjects = [];
-                item.subjects = [...new Set([...item.subjects, ...repositoryItemSubjects])];
-            }
-
-            // flag item as kaltura item if kaltura id is present in the repository data, and assign the kaltura id to the media field for the item
-            if(repositoryItemKalturaId) {
-                item.is_kaltura_item = 1;
-                item.media = repositoryItemKalturaId;
-            }
-
-            // adds iiif data to repository item, if not present
-            if(enableIIIFItem) {
-                const {
-                    manifest_url: repositoryItemManifestUrl = null,
-                    image_url: repositoryItemImageUrl = null,
-                    service_url: repositoryItemServiceUrl = null
-                } = item.media_iiif || {};
-
-                // if the item does not have media_iiif data, or if the media_iiif data is missing any of the required fields, assign the repository iiif urls to the item
-                const repository_media_iiif = {
-                    manifest_url:   repositoryItemManifestUrl || `${repositoryIIIFManifestUrl}`.replace("{item_id}", repositoryItemId),
-                    image_url:      repositoryItemImageUrl ||`${repositoryIIIFImageUrl}`.replace("{item_id}", repositoryItemId),
-                    service_url:    repositoryItemServiceUrl || `${repositoryIIIFServiceUrl}`.replace("{item_id}", repositoryItemId),
-                };
-
-                item.media_iiif = repository_media_iiif;
-            }
-
-            // adds iiif thumbnail data to repository item, if not present
-            if(enableIIIFThumbnail) {
-                const {
-                    thumbnail_url: repositoryItemThumbnailUrl = null,
-                } = item.thumbnail_iiif || {};
-
-                // if the item does not have thumbnail_iiif data, or if the thumbnail_iiif data is missing the required field, assign the repository iiif thumbnail url to the item
-                const repository_thumbnail_iiif = {
-                    thumbnail_url: repositoryItemThumbnailUrl || `${repositoryIIIFThumbnailUrl}`.replace("{item_id}", repositoryItemId),
-                };
-
-                item.thumbnail_iiif = repository_thumbnail_iiif;
-            }
-            
-            if (fetchResourceFile) {
-                LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
-                const resourcePath = `${resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
-                const resourceFilename = `${item.uuid}_repository_item_media`;
-                item.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
-                LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
-            }
-
-            item.repository_data = repositoryItemData;
+        // assign repository item subjects to the existing item subjects
+        if(repositoryItemSubjects) {
+            if(!item.subjects) item.subjects = [];
+            item.subjects = [...new Set([...item.subjects, ...repositoryItemSubjects])];
         }
-        else if(item.items) {
-            await addRepositoryData(item.items);
+
+        // flag item as kaltura item if kaltura id is present in the repository data, and assign the kaltura id to the media field for the item
+        if(repositoryItemKalturaId) {
+            item.is_kaltura_item = 1;
+            item.media = repositoryItemKalturaId;
         }
+
+        // adds iiif data to repository item, if not present
+        if(enableIIIFItem) {
+            const {
+                manifest_url: repositoryItemManifestUrl = null,
+                image_url: repositoryItemImageUrl = null,
+                service_url: repositoryItemServiceUrl = null
+            } = item.media_iiif || {};
+
+            // if the item does not have media_iiif data, or if the media_iiif data is missing any of the required fields, assign the repository iiif urls to the item
+            const repository_media_iiif = {
+                manifest_url:   repositoryItemManifestUrl || `${repositoryIIIFManifestUrl}`.replace("{item_id}", repositoryItemId),
+                image_url:      repositoryItemImageUrl ||`${repositoryIIIFImageUrl}`.replace("{item_id}", repositoryItemId),
+                service_url:    repositoryItemServiceUrl || `${repositoryIIIFServiceUrl}`.replace("{item_id}", repositoryItemId),
+            };
+
+            item.media_iiif = repository_media_iiif;
+        }
+
+        // adds iiif thumbnail data to repository item, if not present
+        if(enableIIIFThumbnail) {
+            const {
+                thumbnail_url: repositoryItemThumbnailUrl = null,
+            } = item.thumbnail_iiif || {};
+
+            // if the item does not have thumbnail_iiif data, or if the thumbnail_iiif data is missing the required field, assign the repository iiif thumbnail url to the item
+            const repository_thumbnail_iiif = {
+                thumbnail_url: repositoryItemThumbnailUrl || `${repositoryIIIFThumbnailUrl}`.replace("{item_id}", repositoryItemId),
+            };
+
+            item.thumbnail_iiif = repository_thumbnail_iiif;
+        }
+        
+        if (fetchResourceFile) {
+            LOGGER.module().info(`Fetching media file for repository item: ${repositoryItemId}...`);
+            const resourcePath = `${resourceLocalStorageLocation}/${item.is_member_of_exhibit}`;
+            const resourceFilename = `${item.uuid}_repository_item_media`;
+            item.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
+            LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
+        }
+
+        item.repository_data = repositoryItemData;
     }
+
+    return item;
 }
 
 const addIIIFData = async (items) => {
