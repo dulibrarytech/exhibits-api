@@ -208,15 +208,10 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
             size: MAX_AGGREGATION_COUNT
         }
     }
-    console.log("test: pre-search aggregation data:", aggsData);
 
     try {
         // execute the search (the elastic module query() function handles top level and nested documents and returns a flat list of results)
         resultsData = await ELASTIC.query(queryData, sortData, page, aggsData, "items");
-
-        //console.log("test: search results:", resultsData.results);
-        console.log("test: search aggregations:", resultsData.aggregations);
-
     }
     catch(error) {
         LOGGER.module().error(`Error searching index. Elastic response: ${error}`);
