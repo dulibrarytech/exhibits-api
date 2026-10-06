@@ -7,7 +7,7 @@
 const ELASTIC = require('../../libs/elastic_search');
 const LOGGER = require('../../libs/log4js');
 const APP_SETTINGS = require('../../config/appSettings.js');
-const REPO_SERVICE = require('../repository/service.js');
+const EXHIBIT_SERVICE = require('../exhibit/service.js');
 
 const {
     getRepositoryThumbnailUri,
@@ -212,6 +212,8 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
     try {
         // execute the search (the elastic module query() function handles top level and nested documents and returns a flat list of results)
         resultsData = await ELASTIC.query(queryData, sortData, page, aggsData, "items");
+
+        //console.log("test: resultsData", resultsData.results);
     }
     catch(error) {
         LOGGER.module().error(`Error searching index. Elastic response: ${error}`);
@@ -221,12 +223,7 @@ exports.search = async (terms, type=null, facets=null, sort=null, page=null, exh
         // add repository data to the result (repository item results)
         resultsData.results = await Promise.all(resultsData.results.map(async (result) => {
             if(result.is_repo_item) {
-                result = {
-                    ...result, 
-                    repository_data: await REPO_SERVICE.importItemData({repositoryItemId: result.media}),
-                    thumbnail:       getRepositoryThumbnailUri(result.media),
-                    media:           getRepositoryResourceUri(result.media),
-                };
+                await EXHIBIT_SERVICE.getRepositoryItemData(result);
             }
             return result;
         }));

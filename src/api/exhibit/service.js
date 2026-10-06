@@ -158,30 +158,26 @@ const addRepositoryData = async (items) => {
         if(item.items) {
             item.items = await addRepositoryData(item.items);
         }
-
-        return await createRepositoryDataObject(item);
+        return await getRepositoryItemData(item);
     }));
 }
 
-const createRepositoryDataObject = async (item) => {
-    
+const getRepositoryItemData = async (item) => {
     const {
-        is_repo_item = null,
+        is_repo_item: isRepoItem = null,
     } = item;
 
-    if(is_repo_item) { 
-
+    if(isRepoItem) { 
         let repositoryItemId = item.media;
         item.media = null; // remove the repository item id from the media field
 
-        // fetch the repository item data
         let repositoryItemData = CACHE.get(repositoryItemId) || false;
+
+        // fetch the repository item data for the item.repository_data field
         if(repositoryItemData == false) {
             LOGGER.module().info(`Retrieving data from repository for exhibit item: ${item.uuid}`);
-            repositoryItemData = await REPOSITORY.importItemData({
-                repositoryItemId,
-            });
 
+            repositoryItemData = await REPOSITORY.importItemData({repositoryItemId});
             if(repositoryItemData) {
                 CACHE.set(repositoryItemId, repositoryItemData);
             }
@@ -189,6 +185,7 @@ const createRepositoryDataObject = async (item) => {
                 repositoryItemData = {};
             }
         }
+        item.repository_data = repositoryItemData;
 
         const {
             subjects:   repositoryItemSubjects = null,
@@ -246,47 +243,44 @@ const createRepositoryDataObject = async (item) => {
             item.media = await REPOSITORY.importItemResourceFile(repositoryItemId, resourcePath, resourceFilename);
             LOGGER.module().info(`Media file fetch complete for repository item: ${repositoryItemId}`);
         }
-
-        item.repository_data = repositoryItemData;
     }
 
     return item;
 }
+exports.getRepositoryItemData = getRepositoryItemData;
 
-const addIIIFData = async (items) => {
-    await Promise.all(items.map(async (item) => { 
+async function addIIIFData(items) {
+    await Promise.all(items.map(async (item) => {
         const {
-            uuid, 
-            media_iiif
+            uuid, media_iiif
         } = item;
 
-        if(media_iiif) {
-            const {manifest_url = ""} = media_iiif;
+        if (media_iiif) {
+            const { manifest_url = "" } = media_iiif;
 
             // TODO: verify manifest url domain
             // const url = new Url(manifest_url)
             // if url.domain == config.EXHIBITS_IIIF_DOMAIN => do insecure fetch
-
             try {
                 const response = await AXIOS.get(manifest_url, { httpsAgent: AGENT });
-                const {success = null, message = "Unspecified error from IIIF manifest server"} = response.data;
+                const { success = null, message = "Unspecified error from IIIF manifest server" } = response.data;
 
-                if(typeof success != undefined && success === false) {
+                if (typeof success != undefined && success === false) {
                     media_iiif.manifest = null;
                     throw message;
                 }
                 else {
-                    media_iiif.manifest = JSON.stringify(response.data)
+                    media_iiif.manifest = JSON.stringify(response.data);
                 }
             }
-            catch(error) {
+            catch (error) {
                 LOGGER.module().error(`Error fetching iiif manifest: ${error} Item: ${uuid}`);
             }
         }
-        else if(item.items) {
-            await addIIIFData(item.items)
+        else if (item.items) {
+            await addIIIFData(item.items);
         }
-    }))
+    }));
 }
 
 const addKalturaData = async (items) => {
